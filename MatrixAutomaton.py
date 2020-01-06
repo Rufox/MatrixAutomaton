@@ -6,19 +6,22 @@ import random
 #class Cluster:
 
 class Nodo:
-	def __init__(self, padre, profundidad):
+	def __init__(self, padre, x, y, z, profundidad):
 		self.padre = padre
+		self.x = x
+		self.y = y
+		self.z = z
 		self.hijo = []
 		self.profundidad = profundidad
 
-# 	def agregarHijo(self, hijo):
-# 		self.hijo.append(hijo)
+ 	def agregarHijo(self, hijo):
+		self.hijo.append(hijo)
 
 # 	def tieneHijo(self):
 # 		return len(self.hijo) > 0
 	
-# 	def obtenerHijo(self):
-# 		return self.hijo
+ 	def obtenerHijo(self):
+ 		return self.hijo
 
 # 	def obtenerPadre(self):
 # 		return self.padre
@@ -26,8 +29,9 @@ class Nodo:
 # 	def obtenerProfundidad(self):
 # 		return self.profundidad
 
-# 	def __str__(self):
-# 		return str(self.franja)
+ 	def __str__(self):
+ 		return "x: " + str(self.x) + ", y: " + str(self.y) + ", z: " + str(self.z) 
+ 		#return "Padre:"+ str(self.padre)+", Profundidad:"+ str(self.profundidad)
 
 # raiz = Nodo(None,0)
 # franja = []
@@ -47,16 +51,12 @@ def obtenerCoordenadas():
 			if matriz[(z,j,x)] == 1:
 				fila= j;
 	return col,fila
-#obtenerCoordenadas()
 
 def almacenarCoord(a,b):
 	return a,b
 
 #m: matriz, a: coord eje x, b: coord eje y, c: coord eje z
 def buscarVecinos(m,a,b,c):
-	
-	global lista
-	lista =[]
 	if m[(c,b,a-1)] == 0:
 		asignar(m,a-1,b,c)
 		lista.append(almacenarCoord(a-1,b))
@@ -97,9 +97,11 @@ def main():
 	global z
 	global franja
 	global matriz
-	
-	#Para leer inputs txt
+	global lista
+	lista = []
+	franja = []	
 
+	#Para leer inputs txt
 	with open("hola.txt", "r+") as f:
 		data = f.readlines()
 	 
@@ -107,14 +109,6 @@ def main():
 			#split para separar archivo por palabras
 			words = line.split()
 			print words
-
-	# archivo = open("hola.txt", "r+")
-	# for linea in archivo.readlines():
-	# 	print linea
-
-	# archivo.write("Hola") 
-	# archivo.close() 
-
 
                      #reshape(set de numeros, eje x, eje y) 
 	matriz = np.zeros(48, dtype = object).reshape(3,4,4)        # 3d array
@@ -128,18 +122,17 @@ def main():
 
 	print "Coordenadas generadas para primer atomo (z:",z,", x:",x,", y:",y,")"
 	asignar(matriz,x,y,z)
-	# holis = np.where(matriz>0)
-	# print holis
-	# print matriz[holis]
 
-	# for index, x in np.ndenumerate(matriz):
-	#     print(index, x)
+	#Estoy descubriendo como trabajar con las clases D: sdkfnjksdf
+	raiz = Nodo(None,x,y,z,0)
+	nodoActivo = raiz
+
+	print nodoActivo
 
 	print "Sus posibles vecinos (x,y):\n",buscarVecinos(matriz,x,y,z)
 
 	matriz = matriz*0
 
-	franja = []
 	franja.append(almacenarCoord(x,y))
 
 	matriz[(z,y,x)] = "H"
@@ -149,7 +142,6 @@ def main():
 	print matriz
 	copia = matriz.copy()
 	print "Atomos agregados a la franja de solucion: ", franja
-
 
 	n = 5
 	while len(franja) < n:
