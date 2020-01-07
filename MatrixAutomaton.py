@@ -1,5 +1,6 @@
 import numpy as np 
 import random
+from itertools import combinations
 
 #class Atomo:
 
@@ -17,17 +18,17 @@ class Nodo:
  	def agregarHijo(self, hijo):
 		self.hijo.append(hijo)
 
-# 	def tieneHijo(self):
-# 		return len(self.hijo) > 0
+ 	def tieneHijo(self):
+ 		return len(self.hijo) > 0
 	
  	def obtenerHijo(self):
  		return self.hijo
 
-# 	def obtenerPadre(self):
-# 		return self.padre
+ 	def obtenerPadre(self):
+ 		return self.padre
 
-# 	def obtenerProfundidad(self):
-# 		return self.profundidad
+ 	def obtenerProfundidad(self):
+ 		return self.profundidad
 
  	def __str__(self):
  		return "x: " + str(self.x) + ", y: " + str(self.y) + ", z: " + str(self.z) 
@@ -52,44 +53,60 @@ def obtenerCoordenadas():
 				fila= j;
 	return col,fila
 
-def almacenarCoord(a,b):
-	return a,b
+def almacenarCoord(a,b,c):
+	return a,b,c
 
-#m: matriz, a: coord eje x, b: coord eje y, c: coord eje z
 def buscarVecinos(m,a,b,c):
-	if m[(c,b,a-1)] == 0:
-		asignar(m,a-1,b,c)
-		lista.append(almacenarCoord(a-1,b))
-		if m[(c,b-1,a-1)] == 0:
-			asignar(m,a-1,b-1,c)
-			lista.append(almacenarCoord(a-1,b-1))
-			if m[(c,b-1,a)] == 0:
-				asignar(m,a,y-1,z)
-				lista.append(almacenarCoord(a,b-1))
-				if m[(c,b-1,a+1)] == 0:
-					asignar(m,a+1,b-1,c)
-					lista.append(almacenarCoord(a+1,b-1))
-					if m[(c,b,a+1)] == 0:
-						asignar(m,a+1,b,c)
-						lista.append(almacenarCoord(a+1,b))
-						if m[(c,b+1,a+1)] == 0:
-							asignar(m,a+1,b+1,c)
-							lista.append(almacenarCoord(a+1,b+1))
-							if m[(c,b+1,a)] == 0:
-								asignar(m,a,b+1,c)
-								lista.append(almacenarCoord(a,b+1))
-								if m[(c,b+1,a-1)] == 0:
-									asignar(m,a-1,b+1,c)
-									lista.append(almacenarCoord(a-1,b+1))
-									m[(c,b,a)] = 0
+	equis = [a,a+1,a-1]
+	ygriega = [b,b+1,b-1]
+	zeta = [c,c+1,c-1]
+	for i in equis:
+		for j in ygriega:
+			for k in zeta:
+				if a == i and b == j and c == k:
+					pass
+				elif i < 0 or i > 3 or j < 0 or j > 3 or k < 0 or k > 2:
+					pass
+				else:
+					lista.append(almacenarCoord(i,j,k))				
 	return lista
 
+#m: matriz, a: coord eje x, b: coord eje y, c: coord eje z
+# def buscarVecinos(m,a,b,c):
+# 	if m[(c,b,a-1)] == 0 and almacenarCoord(a-1,b) not in lista:
+# 		asignar(m,a-1,b,c)
+# 		lista.append(almacenarCoord(a-1,b))
+# 		if m[(c,b-1,a-1)] == 0 and almacenarCoord(a-1,b-1) not in lista:
+# 			asignar(m,a-1,b-1,c)
+# 			lista.append(almacenarCoord(a-1,b-1))
+# 			if m[(c,b-1,a)] == 0 and almacenarCoord(a,b-1) not in lista:
+# 				asignar(m,a,y-1,z)
+# 				lista.append(almacenarCoord(a,b-1))
+# 				if m[(c,b-1,a+1)] == 0 and almacenarCoord(a+1,b-1) not in lista:
+# 					asignar(m,a+1,b-1,c)
+# 					lista.append(almacenarCoord(a+1,b-1))
+# 					if m[(c,b,a+1)] == 0 and almacenarCoord(a+1,b) not in lista:
+# 						asignar(m,a+1,b,c)
+# 						lista.append(almacenarCoord(a+1,b))
+# 						if m[(c,b+1,a+1)] == 0 and almacenarCoord(a+1,b+1) not in lista:
+# 							asignar(m,a+1,b+1,c)
+# 							lista.append(almacenarCoord(a+1,b+1))
+# 							if m[(c,b+1,a)] == 0 and almacenarCoord(a,b+1) not in lista:
+# 								asignar(m,a,b+1,c)
+# 								lista.append(almacenarCoord(a,b+1))
+# 								if m[(c,b+1,a-1)] == 0 and almacenarCoord(a-1,b+1) not in lista:
+# 									asignar(m,a-1,b+1,c)
+# 									lista.append(almacenarCoord(a-1,b+1))
+# 									m[(c,b,a)] = 0
+# 	return lista
+
 def escogerVecinos():
-	global vecinoEscogido
-	vecinoEscogido = random.choice(lista)
-	matriz[(z,vecinoEscogido[1],vecinoEscogido[0])] = "O"
-	franja.append(almacenarCoord(vecinoEscogido[0],vecinoEscogido[1]))
-	return vecinoEscogido
+	global vecino_escogido
+	vecino_escogido = random.choice(lista)
+	if vecino_escogido not in franja:
+		matriz[(vecino_escogido[2],vecino_escogido[1],vecino_escogido[0])] = "O"
+		franja.append(almacenarCoord(vecino_escogido[0],vecino_escogido[1],vecino_escogido[2]))
+	return vecino_escogido
 
 def main():
 	global x
@@ -98,6 +115,7 @@ def main():
 	global franja
 	global matriz
 	global lista
+
 	lista = []
 	franja = []	
 
@@ -120,20 +138,20 @@ def main():
 	y=indices[1]
 	z=random.randint(0,2)
 
+
+
 	print "Coordenadas generadas para primer atomo (z:",z,", x:",x,", y:",y,")"
 	asignar(matriz,x,y,z)
 
 	#Estoy descubriendo como trabajar con las clases D: sdkfnjksdf
 	raiz = Nodo(None,x,y,z,0)
-	nodoActivo = raiz
+	nodo_activo = raiz
 
-	print nodoActivo
+	print nodo_activo
+			
+	print "Sus posibles vecinos (x,y,z):\n",buscarVecinos(matriz,x,y,z)
 
-	print "Sus posibles vecinos (x,y):\n",buscarVecinos(matriz,x,y,z)
-
-	matriz = matriz*0
-
-	franja.append(almacenarCoord(x,y))
+	franja.append(almacenarCoord(x,y,z))
 
 	matriz[(z,y,x)] = "H"
 	print "Atomos agregados a la franja de solucion: ", franja
@@ -143,12 +161,13 @@ def main():
 	copia = matriz.copy()
 	print "Atomos agregados a la franja de solucion: ", franja
 
-	n = 5
+	n = 20
 	while len(franja) < n:
-		print "Posibles vecinos para el siguiente atomo: ", buscarVecinos(copia,vecinoEscogido[0],vecinoEscogido[1],z)
+		print "Sus posibles vecinos (x,y,z):\n",buscarVecinos(matriz,vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
 		print "Coordenadas del vecino escogido (x,y):", escogerVecinos()
 		print matriz
 		print "Atomos agregados a la franja de solucion: ", franja
+
     
 if __name__=="__main__":
     main();
