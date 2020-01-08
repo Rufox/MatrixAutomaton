@@ -65,7 +65,7 @@ def buscarVecinos(m,a,b,c):
 			for k in zeta:
 				if a == i and b == j and c == k:
 					pass
-				elif i < 0 or i > 3 or j < 0 or j > 3 or k < 0 or k > 2:
+				elif i < 0 or i > 6 or j < 0 or j > 6 or k < 0 or k > 3:
 					pass
 				elif almacenarCoord(i,j,k) not in lista:
 					lista.append(almacenarCoord(i,j,k))				
@@ -105,11 +105,22 @@ def escogerVecinos():
 
 	vecino_escogido = random.choice(lista)
 	
-	if vecino_escogido not in franja:
+	if vecino_escogido in franja:
+		pass
+	else:
 		franja.append(almacenarCoord(vecino_escogido[0],vecino_escogido[1],vecino_escogido[2]))
 		matriz[(vecino_escogido[2],vecino_escogido[1],vecino_escogido[0])] = elementos.pop()
-		if vecino_escogido != "None":
+		if vecino_escogido == "None":
+			pass
+		else:
 			return vecino_escogido
+
+def guardar(fr):
+	elementos.reverse()
+	f = open ('hola.txt','r+')
+	for i in range(len(fr)):
+		f.write(repr(elementos[i]+' '+repr(fr[i][0])+' '+repr(fr[i][1])+' '+repr(fr[i][2]))+'\n')
+	f.close()
 
 def main():
 	global x
@@ -121,7 +132,6 @@ def main():
 	global elementos 
 	lista = []
 	franja = []	
-	elementos = ["C","N","N","N","Be","Be"]
 	
 	
 	#Para leer inputs txt
@@ -134,46 +144,62 @@ def main():
 	# 		print words
 
                      #reshape(set de numeros, eje x, eje y) 
-	matriz = np.zeros(48, dtype = object).reshape(3,4,4)        # 3d array
-
-	#eleccion de posicion random para primer elemento
-	indices =  np.random.randint(0, high=3, size=3)
-
-	x=indices[0]
-	y=indices[1]
-	z=random.randint(0,2)
-
-
-
-	print "Coordenadas generadas para primer atomo ( x:",x,", y:",y,", z:",z,")"
-	asignar(matriz,x,y,z)
-
-	#Estoy descubriendo como trabajar con las clases D: sdkfnjksdf
-	raiz = Nodo(None,x,y,z,0)
-	nodo_activo = raiz
-
-	#print nodo_activo
-
-	franja.append(almacenarCoord(x,y,z))
-
-	matriz[(z,y,x)] = elementos.pop()
-	print "Coordenadas de atomo agregado a la franja de solucion: ", franja
-	print matriz
-	print "Sus posibles vecinos (x,y,z):\n",buscarVecinos(matriz,x,y,z)
-	print "Coordenadas del vecino escogido aleatoriamente (x,y):", escogerVecinos()
-
-	print "Coordenadas de atomos agregados a la franja de solucion: ", franja
-	print matriz
 	
-	n = 6
-	while len(franja) < n:
 
-		print "Coordenadas del vecino escogido aleatoriamente (x,y):", escogerVecinos()
-	
-		print "Sus posibles vecinos (x,y,z):\n",buscarVecinos(matriz,vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
+
+	iteraciones = 200
+	while iteraciones > 0:
+		matriz = np.zeros(196, dtype = object).reshape(4,7,7)        # 3d array
+		elementos = ["Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C"]
+		elementos.reverse()
+		#eleccion de posicion random para primer elemento
+		indices =  np.random.randint(0, high=3, size=3)
+
+		x=indices[0]
+		y=indices[1]
+		z=random.randint(0,2)
+
+
+
+		print "Coordenadas generadas para primer atomo ( x:",x,", y:",y,", z:",z,")"
+		asignar(matriz,x,y,z)
+
+		#Estoy descubriendo como trabajar con las clases D: sdkfnjksdf
+		raiz = Nodo(None,x,y,z,0)
+		nodo_activo = raiz
+
+		#print nodo_activo
+
+		franja.append(almacenarCoord(x,y,z))
+
+		matriz[(z,y,x)] = elementos.pop()
+		#print "Coordenadas de atomo agregado a la franja de solucion: ", franja
+		#print matriz
+		#print "Sus posibles vecinos (x,y,z):\n",
+		buscarVecinos(matriz,x,y,z)
+		#print "Coordenadas del vecino escogido aleatoriamente (x,y):", 
+		escogerVecinos()
+		#print "Coordenadas de atomos agregados a la franja de solucion: ", franja
+		#print matriz
+		guardar(franja)
+		n = 102
+
+		while len(franja) < n:
+
+			#print "Coordenadas del vecino escogido aleatoriamente (x,y):", 
+			escogerVecinos()
+			#print "Sus posibles vecinos (x,y,z):\n",
+			buscarVecinos(matriz,vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
+			#print matriz
+			#print "Atomos agregados a la franja de solucion: ", franja
+		iteraciones = iteraciones - 1
 		print matriz
-		print "Atomos agregados a la franja de solucion: ", franja
+		matriz = matriz*0
+		copia = franja
+		guardar(copia)
+		franja = []
+		lista = []
 
-    
+
 if __name__=="__main__":
     main();
