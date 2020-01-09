@@ -42,10 +42,6 @@ def obtenerCoordenadaGaussian(file):
 	for line in rline[start+5 : end] :
 	    words = line.split()[1],line.split()[3],line.split()[4],line.split()[5]
 	    coords.append(words)
-	
-	#print "TOTAL: ", coords
-	#print "Primero ", 		coords[0]
-	#print "Y segundo ", 		coords[1][2]
 	return coords
 
 #def obtenerEnergiaGaussian():
