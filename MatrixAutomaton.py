@@ -116,11 +116,16 @@ def escogerVecinos():
 			return vecino_escogido
 
 def guardar(fr):
-	elementos.reverse()
-	f = open ('hola.txt','r+')
+	global n
+
+	f=open ('hola.xyz','a')
+
+	f.write(str(n) +'\nMatrix\n')
 	for i in range(len(fr)):
-		f.write(repr(elementos[i]+' '+repr(fr[i][0])+' '+repr(fr[i][1])+' '+repr(fr[i][2]))+'\n')
+		f.write(str(elementos[i])+' '+str(fr[i][0])+' '+str(fr[i][1])+' '+str(fr[i][2])+'\n')
+
 	f.close()
+	
 
 def main():
 	global x
@@ -130,27 +135,23 @@ def main():
 	global matriz
 	global lista
 	global elementos 
+	global iteraciones
+	global n
+	global el 
+
+	f=open ('hola.xyz','w+')
+	
+
 	lista = []
 	franja = []	
+	elementos = ["H","O","O","N","N","C","Be","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C"]
 	
-	
-	#Para leer inputs txt
-	# with open("hola.txt", "r+") as f:
-	# 	data = f.readlines()
-	 
-	# 	for line in data:
-	# 		#split para separar archivo por palabras
-	# 		words = line.split()
-	# 		print words
+	n = 6
 
-                     #reshape(set de numeros, eje x, eje y) 
-	
-
-
-	iteraciones = 200
+	iteraciones = 5
 	while iteraciones > 0:
+
 		matriz = np.zeros(196, dtype = object).reshape(4,7,7)        # 3d array
-		elementos = ["Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C","Be","Be","N","N","N","C"]
 		elementos.reverse()
 		#eleccion de posicion random para primer elemento
 		indices =  np.random.randint(0, high=3, size=3)
@@ -181,8 +182,7 @@ def main():
 		escogerVecinos()
 		#print "Coordenadas de atomos agregados a la franja de solucion: ", franja
 		#print matriz
-		guardar(franja)
-		n = 102
+				
 
 		while len(franja) < n:
 
@@ -192,13 +192,16 @@ def main():
 			buscarVecinos(matriz,vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
 			#print matriz
 			#print "Atomos agregados a la franja de solucion: ", franja
+			
 		iteraciones = iteraciones - 1
-		print matriz
-		matriz = matriz*0
 		copia = franja
 		guardar(copia)
+		print matriz
+		matriz = matriz*0
+		
 		franja = []
 		lista = []
+		elementos.reverse()
 
 
 if __name__=="__main__":
