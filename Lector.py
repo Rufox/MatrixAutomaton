@@ -23,6 +23,7 @@ def leerArchivoParametros():
 def agregarVariableGlobal(key, dato):
 	var.Big_variable[key]=dato
 
+# Busca inforamcion coordenadas de archivo gaussian de salida. En caso de error retorna 0
 def obtenerCoordenadaGaussian(file):
 	start=0
 	archivo = open(file,"r")
@@ -41,8 +42,27 @@ def obtenerCoordenadaGaussian(file):
 	coords=[]
 	for line in rline[start+5 : end] :
 	    words = line.split()[1],line.split()[3],line.split()[4],line.split()[5]
-	    coords.append(words)
+	    L=list(words)
+	    coords.append(L)
 	return coords
 
-#def obtenerEnergiaGaussian():
-#def obtenerFrecuenciaGaussian():
+# Busca inforamcion energetica de archivo gaussian de salida. En caso de error retorna 0
+def obtenerEnergiaGaussian(file):
+	energy=0
+	archivo = open(file,"r")
+	rline = archivo.readlines()
+	for i in range (len(rline)):
+	    if "SCF Done:" in rline[i]:
+	        energy = rline[i].split()[4]
+	return energy
+
+# EL programa original toma las coordenadas de la frecuencias y le SUMA dicha correccion
+# a las coordenadas originales
+def obtenerFrecuenciaGaussian(file):
+	freq=0
+	archivo = open(file,"r")
+	rline = archivo.readlines()
+	for i in range (len(rline)):
+	    if "Zero-point correction" in rline[i]:
+	        freq = rline[i].split()[2]
+	return freq
