@@ -1,0 +1,31 @@
+[GENERAL]
+numb_conf = 50
+
+mutations = YES
+crossing_over = YES
+
+clever_automata = NO
+
+maximun_cycles = 30
+maximun_energy = 100
+
+[CLUSTER]
+
+box_size = 
+
+chemical_formula = C 10
+
+[SOFTWARE]
+software = gaussian
+
+core = 4
+memory = 4
+
+charge_multi = 0 1
+
+header = PBE1PBE/SDDAll scf=(maxcycle=512) opt=(cartesian,maxcycle=512)
+
+#header = AUX LARGE AM1
+
+## Lammps (ReaxFF file)
+#header = reaxxFF.Carbon
