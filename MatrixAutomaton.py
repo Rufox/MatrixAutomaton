@@ -1,15 +1,15 @@
 import numpy as np 
 import random
 import itertools
-from math import ceil
 
 class Atomo:
-    def __init__(self, elemento, radio_atomico):
+    def __init__(self, elemento, radio_atomico, escala):
         self.elemento = elemento
         self.radio_atomico = radio_atomico
+        self.escala = escala
 
     def __str__(self):
-    	return "Elemento: {}, Atomic Radii: {}\n".format(self.elemento, self.radio_atomico)
+    	return "Elemento: {}, Atomic Radii: {}, Escala: {}\n".format(self.elemento, self.radio_atomico, self.escala)
         #return str(self.elemento)+ "dd"+ str(self.radio_atomico)
     def __repr__(self):
     	return str(self)
@@ -46,20 +46,42 @@ def almacenarCoord(a,b,c):
 	return a,b,c
 
 def buscarVecinos(m,a,b,c):
-	#str(aux[k].elemento)
-	equis = [a,a+1,a-1]
-	y_griega = [b,b+1,b-1]
-	zeta = [c,c+1,c-1]
-	for i in equis:
-		for j in y_griega:
-			for k in zeta:
-				if a == i and b == j and c == k:
-					pass
-				elif i < 0 or i > 6 or j < 0 or j > 6 or k < 0 or k > 3:
-					pass
-				elif almacenarCoord(i,j,k) not in lista:
-					lista.append(almacenarCoord(i,j,k))				
+	obtenerListaEscalamiento()
+	conv3 = map(int,espacios)
+	for l in conv3:
+		equis = [a,a+l,a-l]
+		y_griega = [b,b+l,b-l]
+		zeta = [c,c+l,c-l]
+		for i in equis:
+			for j in y_griega:
+				for k in zeta:
+					if a == i and b == j and c == k:
+						pass
+					elif i < 0 or i > 6 or j < 0 or j > 6 or k < 0 or k > 3:
+						pass
+					elif almacenarCoord(i,j,k) not in lista:
+						lista.append(almacenarCoord(i,j,k))
+						matriz[(k,j,i)]=1
+	print lista								
 	return lista
+
+def obtenerListaEscalamiento():
+	global espacios
+	global espacio
+	espacios = []
+	espacio = []
+	conv = map(int,conversion)
+	conv2 = map(str, conv)
+
+	indices_conversion = [test.index(x) for x in el]
+	#print el, indices_conversion, conversion[indices_conversion[0]],conversion[indices_conversion[1]],conversion[indices_conversion[2]]
+	for j in range(len(el)):
+		#espacio.append(j+' ')
+		espacio.append(conv2[indices_conversion[j]]+' ')
+		espacios.append(espacio[j].split()*int(num[j]))
+		espacios = list(itertools.chain(*espacios))
+	print espacios
+	return espacios 
 
 def escogerVecinos():
 	global vecino_escogido
@@ -90,12 +112,16 @@ def obtenerElementos():
 	global radios
 	global aux
 	global conversion
+	global el
+	global num
+	global test
 	radios=[]
 	elementos=[]
 	el=[]
 	num=[]
 	aux=[]
 	conversion=[]
+	test = []
 
 	with open ('Config.in', 'rt') as Config: 
 	    for lineas in Config:
@@ -111,22 +137,26 @@ def obtenerElementos():
 	    				el.append(i+' ')
 	    		for j in range(len(el)):
 					elementos.append(el[j].split()*int(num[j]))
-					aux.append(Atomo(el[j].strip(),atomic_radii[el[j].strip()]))
+					aux.append(Atomo(el[j].strip(),atomic_radii[el[j].strip()],0))
 					el[j] = el[j].strip()
 			aux.sort(key=lambda aux: aux.radio_atomico)
 			print aux
 			for l in range(len(aux)):
 				if l == 0:
 					conversion.append(1.0)
-					print str(aux[l].elemento), str(aux[l].radio_atomico)
+					aux[l].escala = 1.0
+					test.append(aux[l].elemento)
+					print str(aux[l].elemento), str(aux[l].radio_atomico), str(aux[l].escala)
 				else:
 					tmp= float(aux[l].radio_atomico)/float(aux[0].radio_atomico)
 					tmp=round(int(tmp))
 					conversion.append(tmp)
-					print str(aux[l].elemento), str(aux[l].radio_atomico)
+					test.append(aux[l].elemento)
+					aux[l].escala = tmp
+					print str(aux[l].elemento), str(aux[l].radio_atomico), str(aux[l].escala)
 			print conversion
 			elementos = list(itertools.chain(*elementos))
-			print el
+			print el, test, elementos
 
 	return elementos
 
@@ -225,12 +255,14 @@ def main():
 		nodo_activo = raiz
 
 		franja.append(almacenarCoord(x,y,z))
-
+		
 		matriz[(z,y,x)] = elementos.pop()
+
 		#print "Coordenadas de atomo agregado a la franja de solucion: ", franja
 		#print matriz
 		#print "Sus posibles vecinos (x,y,z):\n",
 		buscarVecinos(matriz,x,y,z)
+		print matriz
 		#print "Coordenadas del vecino escogido aleatoriamente (x,y):", 
 		escogerVecinos()
 		#print "Coordenadas de atomos agregados a la franja de solucion: ", franja
@@ -242,7 +274,7 @@ def main():
 			escogerVecinos()
 			#print "Sus posibles vecinos (x,y,z):\n",
 			buscarVecinos(matriz,vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
-			#print matriz
+			print matriz
 			#print "Atomos agregados a la franja de solucion: ", franja
 			
 		iteraciones = iteraciones - 1
