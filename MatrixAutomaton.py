@@ -47,11 +47,11 @@ def almacenarCoord(a,b,c):
 
 def buscarVecinos(m,a,b,c):
 	obtenerListaEscalamiento()
-	conv3 = map(int, espacios)
-	for l in conv3:
-		equis = [a,a+l,a-l]
-		y_griega = [b,b+l,b-l]
-		zeta = [c,c+l,c-l]
+	conv3 = map(int, lista_espacios)
+	for cantidad_espacios in conv3:
+		equis = [a,a+cantidad_espacios,a-cantidad_espacios]
+		y_griega = [b,b+cantidad_espacios,b-cantidad_espacios]
+		zeta = [c,c+cantidad_espacios,c-cantidad_espacios]
 		for i in equis:
 			for j in y_griega:
 				for k in zeta:
@@ -59,16 +59,16 @@ def buscarVecinos(m,a,b,c):
 						pass
 					elif i < 0 or i > 6 or j < 0 or j > 6 or k < 0 or k > 3:
 						pass
-					elif almacenarCoord(i,j,k) not in lista:
+					elif almacenarCoord(i,j,k) not in lista :
 						lista.append(almacenarCoord(i,j,k))
 						#matriz[(k,j,i)]=1
 	print lista								
 	return lista
 
 def obtenerListaEscalamiento():
-	global espacios
+	global lista_espacios
 	global espacio
-	espacios = []
+	lista_espacios = []
 	espacio = []
 	conv = map(int, escala)
 	conv2 = map(str, conv)
@@ -76,10 +76,10 @@ def obtenerListaEscalamiento():
 	indices_conversion = [elementos_escalados.index(x) for x in elementos]
 	for i in range(len(elementos)):
 		espacio.append(conv2[indices_conversion[i]]+' ')
-		espacios.append(espacio[i].split()*int(numeros[i]))
-		espacios = list(itertools.chain(*espacios))
-	print espacios
-	return espacios 
+		lista_espacios.append(espacio[i].split()*int(numeros[i]))
+		lista_espacios = list(itertools.chain(*lista_espacios))
+	print lista_espacios
+	return lista_espacios 
 
 def escogerVecinos():
 	global vecino_escogido
@@ -261,7 +261,7 @@ def main():
 		#print "Coordenadas del vecino escogido aleatoriamente (x,y):", 
 		escogerVecinos()
 		#print "Coordenadas de atomos agregados a la franja de solucion: ", franja
-		#print matriz				
+		print matriz				
 
 		while len(franja) < n:
 
@@ -274,7 +274,7 @@ def main():
 			
 		iteraciones = iteraciones - 1
 		guardar(franja)
-		
+		print franja
 		#print matriz
 		matriz = matriz*0
 		
