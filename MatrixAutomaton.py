@@ -61,7 +61,7 @@ def buscarVecinos(m,a,b,c):
 						pass
 					elif almacenarCoord(i,j,k) not in lista:
 						lista.append(almacenarCoord(i,j,k))
-						matriz[(k,j,i)]=1
+						#matriz[(k,j,i)]=1
 	print lista								
 	return lista
 
@@ -73,26 +73,24 @@ def obtenerListaEscalamiento():
 	conv = map(int,conversion)
 	conv2 = map(str, conv)
 
-	indices_conversion = [test.index(x) for x in el]
-	#print el, indices_conversion, conversion[indices_conversion[0]],conversion[indices_conversion[1]],conversion[indices_conversion[2]]
-	for j in range(len(el)):
-		#espacio.append(j+' ')
-		espacio.append(conv2[indices_conversion[j]]+' ')
-		espacios.append(espacio[j].split()*int(num[j]))
+	indices_conversion = [test.index(x) for x in elementos]
+	for i in range(len(elementos)):
+		espacio.append(conv2[indices_conversion[i]]+' ')
+		espacios.append(espacio[i].split()*int(numeros[i]))
 		espacios = list(itertools.chain(*espacios))
 	print espacios
 	return espacios 
 
 def escogerVecinos():
 	global vecino_escogido
-	global elementos
+	global lista_elementos
 
 	vecino_escogido = random.choice(lista)
 	if vecino_escogido in franja:
 		pass
 	else:
 		franja.append(almacenarCoord(vecino_escogido[0],vecino_escogido[1],vecino_escogido[2]))
-		matriz[(vecino_escogido[2],vecino_escogido[1],vecino_escogido[0])] = elementos.pop()
+		matriz[(vecino_escogido[2],vecino_escogido[1],vecino_escogido[0])] = lista_elementos.pop()
 		if vecino_escogido == "None":
 			pass
 		else:
@@ -108,18 +106,16 @@ def guardar(fr):
 	f.close() 
 
 def obtenerElementos():
-	global elementos
-	global radios
-	global aux
+	global lista_elementos
+	global atomos
 	global conversion
-	global el
-	global num
+	global elementos
+	global numeros
 	global test
-	radios=[]
+	lista_elementos=[]
 	elementos=[]
-	el=[]
-	num=[]
-	aux=[]
+	numeros=[]
+	atomos=[]
 	conversion=[]
 	test = []
 
@@ -132,33 +128,33 @@ def obtenerElementos():
 	    		input_elementos.remove("=")
 	    		for i in input_elementos:
 	    			if i.isdigit():
-	    				num.append(i)
+	    				numeros.append(i)
 	    			else:
-	    				el.append(i+' ')
-	    		for j in range(len(el)):
-					elementos.append(el[j].split()*int(num[j]))
-					aux.append(Atomo(el[j].strip(),atomic_radii[el[j].strip()],0))
-					el[j] = el[j].strip()
-			aux.sort(key=lambda aux: aux.radio_atomico)
-			print aux
-			for l in range(len(aux)):
+	    				elementos.append(i+' ')
+	    		for j in range(len(elementos)):
+					lista_elementos.append(elementos[j].split()*int(numeros[j]))
+					atomos.append(Atomo(elementos[j].strip(),atomic_radii[elementos[j].strip()],0))
+					elementos[j] = elementos[j].strip()
+			atomos.sort(key=lambda atomos: atomos.radio_atomico)
+			print atomos
+			for l in range(len(atomos)):
 				if l == 0:
 					conversion.append(1.0)
-					aux[l].escala = 1.0
-					test.append(aux[l].elemento)
-					print str(aux[l].elemento), str(aux[l].radio_atomico), str(aux[l].escala)
+					atomos[l].escala = 1.0
+					test.append(atomos[l].elemento)
+					print str(atomos[l].elemento), str(atomos[l].radio_atomico), str(atomos[l].escala)
 				else:
-					tmp= float(aux[l].radio_atomico)/float(aux[0].radio_atomico)
+					tmp= float(atomos[l].radio_atomico)/float(atomos[0].radio_atomico)
 					tmp=round(int(tmp))
 					conversion.append(tmp)
-					test.append(aux[l].elemento)
-					aux[l].escala = tmp
-					print str(aux[l].elemento), str(aux[l].radio_atomico), str(aux[l].escala)
+					atomos[l].escala = tmp
+					test.append(atomos[l].elemento)
+					print str(atomos[l].elemento), str(atomos[l].radio_atomico), str(atomos[l].escala)
 			print conversion
-			elementos = list(itertools.chain(*elementos))
-			print el, test, elementos
+			lista_elementos = list(itertools.chain(*lista_elementos))
+			print elementos, test, lista_elementos
 
-	return elementos
+	return lista_elementos
 
 
 def main():
@@ -171,6 +167,11 @@ def main():
 	global iteraciones
 	global n
 	global atomic_radii
+	lista = []
+	franja = []	
+
+	n = 6
+	iteraciones = 5
 
 	atomic_radii = {'H':'0.31', 'He':'0.28', 'Li':'1.28', 'Be':'0.96',
                     'B' :'0.84', 'C' :'0.76', 'N' :'0.71', 'O' :'0.66',
@@ -225,20 +226,14 @@ def main():
                     'No' :'259.000' ,'Rf':'261'     ,'Lr' :'262'     ,'Db' :'262',
                     'Bh' :'264.000' ,'Sg':'266'     ,'Mt' :'268'     ,'Hs' :'277'}
 
-	lista = []
-	franja = []	
-
-	n = 6
-	iteraciones = 5
-
 	f=open('hola.xyz','w+')
 	
 	while iteraciones > 0:
 
-		elementos = obtenerElementos()
-		elementos.reverse()
+		lista_elementos = obtenerElementos()
+		lista_elementos.reverse()
 
-		#print elementos
+		#print lista_elementos
 
 		matriz = np.zeros(196, dtype = object).reshape(4,7,7)        # 3d array
 		
@@ -256,13 +251,13 @@ def main():
 
 		franja.append(almacenarCoord(x,y,z))
 		
-		matriz[(z,y,x)] = elementos.pop()
+		matriz[(z,y,x)] = lista_elementos.pop()
 
 		#print "Coordenadas de atomo agregado a la franja de solucion: ", franja
-		#print matriz
+		print matriz
 		#print "Sus posibles vecinos (x,y,z):\n",
 		buscarVecinos(matriz,x,y,z)
-		print matriz
+		
 		#print "Coordenadas del vecino escogido aleatoriamente (x,y):", 
 		escogerVecinos()
 		#print "Coordenadas de atomos agregados a la franja de solucion: ", franja
@@ -280,7 +275,7 @@ def main():
 		iteraciones = iteraciones - 1
 		guardar(franja)
 		
-		print matriz
+		#print matriz
 		matriz = matriz*0
 		
 		franja = []
