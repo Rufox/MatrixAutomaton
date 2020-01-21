@@ -47,7 +47,7 @@ def almacenarCoord(a,b,c):
 
 def buscarVecinos(m,a,b,c):
 	obtenerListaEscalamiento()
-	conv3 = map(int,espacios)
+	conv3 = map(int, espacios)
 	for l in conv3:
 		equis = [a,a+l,a-l]
 		y_griega = [b,b+l,b-l]
@@ -70,10 +70,10 @@ def obtenerListaEscalamiento():
 	global espacio
 	espacios = []
 	espacio = []
-	conv = map(int,conversion)
+	conv = map(int, escala)
 	conv2 = map(str, conv)
 
-	indices_conversion = [test.index(x) for x in elementos]
+	indices_conversion = [elementos_escalados.index(x) for x in elementos]
 	for i in range(len(elementos)):
 		espacio.append(conv2[indices_conversion[i]]+' ')
 		espacios.append(espacio[i].split()*int(numeros[i]))
@@ -108,16 +108,16 @@ def guardar(fr):
 def obtenerElementos():
 	global lista_elementos
 	global atomos
-	global conversion
+	global escala
 	global elementos
 	global numeros
-	global test
-	lista_elementos=[]
-	elementos=[]
-	numeros=[]
-	atomos=[]
-	conversion=[]
-	test = []
+	global elementos_escalados
+	lista_elementos = []
+	elementos = []
+	numeros = []
+	atomos = []
+	escala = []
+	elementos_escalados = []
 
 	with open ('Config.in', 'rt') as Config: 
 	    for lineas in Config:
@@ -136,23 +136,23 @@ def obtenerElementos():
 					atomos.append(Atomo(elementos[j].strip(),atomic_radii[elementos[j].strip()],0))
 					elementos[j] = elementos[j].strip()
 			atomos.sort(key=lambda atomos: atomos.radio_atomico)
-			print atomos
-			for l in range(len(atomos)):
-				if l == 0:
-					conversion.append(1.0)
-					atomos[l].escala = 1.0
-					test.append(atomos[l].elemento)
-					print str(atomos[l].elemento), str(atomos[l].radio_atomico), str(atomos[l].escala)
+			
+			for k in range(len(atomos)):
+				if k == 0:
+					escala.append(1.0)
+					atomos[k].escala = 1.0
+					elementos_escalados.append(atomos[k].elemento)
+					print str(atomos[k].elemento), str(atomos[k].radio_atomico), str(atomos[k].escala)
 				else:
-					tmp= float(atomos[l].radio_atomico)/float(atomos[0].radio_atomico)
+					tmp= float(atomos[k].radio_atomico)/float(atomos[0].radio_atomico)
 					tmp=round(int(tmp))
-					conversion.append(tmp)
-					atomos[l].escala = tmp
-					test.append(atomos[l].elemento)
-					print str(atomos[l].elemento), str(atomos[l].radio_atomico), str(atomos[l].escala)
-			print conversion
+					escala.append(tmp)
+					atomos[k].escala = tmp
+					elementos_escalados.append(atomos[k].elemento)
+					print str(atomos[k].elemento), str(atomos[k].radio_atomico), str(atomos[k].escala)
+			#print escala
 			lista_elementos = list(itertools.chain(*lista_elementos))
-			print elementos, test, lista_elementos
+			print elementos, elementos_escalados, lista_elementos
 
 	return lista_elementos
 
@@ -239,9 +239,9 @@ def main():
 		
 		#eleccion de posicion random para primer elemento
 		indices =  np.random.randint(0, high=3, size=3)
-		x=indices[0]
-		y=indices[1]
-		z=random.randint(0,3)
+		x = indices[0]
+		y = indices[1]
+		z = random.randint(0,3)
 
 		print "Coordenadas generadas para primer atomo ( x:",x,", y:",y,", z:",z,")"
 
