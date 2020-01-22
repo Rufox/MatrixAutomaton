@@ -47,11 +47,11 @@ def almacenarCoord(a,b,c):
 
 def buscarVecinos(m,a,b,c):
 	obtenerListaEscalamiento()
-	conv3 = map(int, lista_espacios)
-	for cantidad_espacios in conv3:
-		equis = [a,a+cantidad_espacios,a-cantidad_espacios]
-		y_griega = [b,b+cantidad_espacios,b-cantidad_espacios]
-		zeta = [c,c+cantidad_espacios,c-cantidad_espacios]
+	conv3 = map(int,espacios)
+	for l in conv3:
+		equis = [a,a+l,a-l]
+		y_griega = [b,b+l,b-l]
+		zeta = [c,c+l,c-l]
 		for i in equis:
 			for j in y_griega:
 				for k in zeta:
@@ -59,27 +59,27 @@ def buscarVecinos(m,a,b,c):
 						pass
 					elif i < 0 or i > 6 or j < 0 or j > 6 or k < 0 or k > 3:
 						pass
-					elif almacenarCoord(i,j,k) not in lista :
+					elif almacenarCoord(i,j,k) not in lista:
 						lista.append(almacenarCoord(i,j,k))
 						#matriz[(k,j,i)]=1
 	print lista								
 	return lista
 
 def obtenerListaEscalamiento():
-	global lista_espacios
+	global espacios
 	global espacio
-	lista_espacios = []
+	espacios = []
 	espacio = []
-	conv = map(int, escala)
+	conv = map(int,conversion)
 	conv2 = map(str, conv)
 
-	indices_conversion = [elementos_escalados.index(x) for x in elementos]
+	indices_conversion = [test.index(x) for x in elementos]
 	for i in range(len(elementos)):
 		espacio.append(conv2[indices_conversion[i]]+' ')
-		lista_espacios.append(espacio[i].split()*int(numeros[i]))
-		lista_espacios = list(itertools.chain(*lista_espacios))
-	print lista_espacios
-	return lista_espacios 
+		espacios.append(espacio[i].split()*int(numeros[i]))
+		espacios = list(itertools.chain(*espacios))
+	print espacios
+	return espacios 
 
 def escogerVecinos():
 	global vecino_escogido
@@ -108,16 +108,16 @@ def guardar(fr):
 def obtenerElementos():
 	global lista_elementos
 	global atomos
-	global escala
+	global conversion
 	global elementos
 	global numeros
-	global elementos_escalados
-	lista_elementos = []
-	elementos = []
-	numeros = []
-	atomos = []
-	escala = []
-	elementos_escalados = []
+	global test
+	lista_elementos=[]
+	elementos=[]
+	numeros=[]
+	atomos=[]
+	conversion=[]
+	test = []
 
 	with open ('Config.in', 'rt') as Config: 
 	    for lineas in Config:
@@ -136,23 +136,23 @@ def obtenerElementos():
 					atomos.append(Atomo(elementos[j].strip(),atomic_radii[elementos[j].strip()],0))
 					elementos[j] = elementos[j].strip()
 			atomos.sort(key=lambda atomos: atomos.radio_atomico)
-			
-			for k in range(len(atomos)):
-				if k == 0:
-					escala.append(1.0)
-					atomos[k].escala = 1.0
-					elementos_escalados.append(atomos[k].elemento)
-					print str(atomos[k].elemento), str(atomos[k].radio_atomico), str(atomos[k].escala)
+			print atomos
+			for l in range(len(atomos)):
+				if l == 0:
+					conversion.append(1.0)
+					atomos[l].escala = 1.0
+					test.append(atomos[l].elemento)
+					print str(atomos[l].elemento), str(atomos[l].radio_atomico), str(atomos[l].escala)
 				else:
-					tmp= float(atomos[k].radio_atomico)/float(atomos[0].radio_atomico)
+					tmp= float(atomos[l].radio_atomico)/float(atomos[0].radio_atomico)
 					tmp=round(int(tmp))
-					escala.append(tmp)
-					atomos[k].escala = tmp
-					elementos_escalados.append(atomos[k].elemento)
-					print str(atomos[k].elemento), str(atomos[k].radio_atomico), str(atomos[k].escala)
-			#print escala
+					conversion.append(tmp)
+					atomos[l].escala = tmp
+					test.append(atomos[l].elemento)
+					print str(atomos[l].elemento), str(atomos[l].radio_atomico), str(atomos[l].escala)
+			print conversion
 			lista_elementos = list(itertools.chain(*lista_elementos))
-			print elementos, elementos_escalados, lista_elementos
+			print elementos, test, lista_elementos
 
 	return lista_elementos
 
@@ -239,9 +239,9 @@ def main():
 		
 		#eleccion de posicion random para primer elemento
 		indices =  np.random.randint(0, high=3, size=3)
-		x = indices[0]
-		y = indices[1]
-		z = random.randint(0,3)
+		x=indices[0]
+		y=indices[1]
+		z=random.randint(0,3)
 
 		print "Coordenadas generadas para primer atomo ( x:",x,", y:",y,", z:",z,")"
 
@@ -261,7 +261,7 @@ def main():
 		#print "Coordenadas del vecino escogido aleatoriamente (x,y):", 
 		escogerVecinos()
 		#print "Coordenadas de atomos agregados a la franja de solucion: ", franja
-		print matriz				
+		#print matriz				
 
 		while len(franja) < n:
 
@@ -274,7 +274,7 @@ def main():
 			
 		iteraciones = iteraciones - 1
 		guardar(franja)
-		print franja
+		
 		#print matriz
 		matriz = matriz*0
 		
