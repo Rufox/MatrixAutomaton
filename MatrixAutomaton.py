@@ -46,8 +46,10 @@ def almacenarCoord(a,b,c):
 	return a,b,c
 
 def buscarVecinos(m,a,b,c):
+
 	obtenerListaEscalamiento()
-	conv3 = map(int,espacios)
+	conv3 = map(int, espacios)
+	new = []
 	for l in conv3:
 		equis = [a,a+l,a-l]
 		y_griega = [b,b+l,b-l]
@@ -57,13 +59,22 @@ def buscarVecinos(m,a,b,c):
 				for k in zeta:
 					if a == i and b == j and c == k:
 						pass
-					elif i < 0 or i > 6 or j < 0 or j > 6 or k < 0 or k > 3:
+					elif i < 0 or i > sum(numeros2) or j < 0 or j > sum(numeros2) or k < 0 or k > 3:
 						pass
 					elif almacenarCoord(i,j,k) not in lista:
-						lista.append(almacenarCoord(i,j,k))
-						#matriz[(k,j,i)]=1
-	print lista								
+						if l == 1:
+							lista.append(almacenarCoord(i,j,k))
+							
+						elif a >= i+l or b >= j+l or c >= k+l:
+							#lista = lista2
+							lista2.append(almacenarCoord(i,j,k))
+							return lista2							
+							#matriz[(k,j,i)]=1
+							#print lista2				
+
 	return lista
+									
+	
 
 def obtenerListaEscalamiento():
 	global espacios
@@ -78,7 +89,7 @@ def obtenerListaEscalamiento():
 		espacio.append(conv2[indices_conversion[i]]+' ')
 		espacios.append(espacio[i].split()*int(numeros[i]))
 		espacios = list(itertools.chain(*espacios))
-	print espacios
+	#print espacios
 	return espacios 
 
 def escogerVecinos():
@@ -136,7 +147,7 @@ def obtenerElementos():
 					atomos.append(Atomo(elementos[j].strip(),atomic_radii[elementos[j].strip()],0))
 					elementos[j] = elementos[j].strip()
 			atomos.sort(key=lambda atomos: atomos.radio_atomico)
-			print atomos
+
 			for l in range(len(atomos)):
 				if l == 0:
 					conversion.append(1.0)
@@ -150,7 +161,7 @@ def obtenerElementos():
 					atomos[l].escala = tmp
 					test.append(atomos[l].elemento)
 					print str(atomos[l].elemento), str(atomos[l].radio_atomico), str(atomos[l].escala)
-			print conversion
+			#print conversion
 			lista_elementos = list(itertools.chain(*lista_elementos))
 			print elementos, test, lista_elementos
 
@@ -163,15 +174,16 @@ def main():
 	global z
 	global matriz
 	global lista
+	global lista2
 	global franja
 	global iteraciones
 	global n
 	global atomic_radii
+	global numeros2
+
+	lista2 = []
 	lista = []
 	franja = []	
-
-	n = 6
-	iteraciones = 5
 
 	atomic_radii = {'H':'0.31', 'He':'0.28', 'Li':'1.28', 'Be':'0.96',
                     'B' :'0.84', 'C' :'0.76', 'N' :'0.71', 'O' :'0.66',
@@ -227,15 +239,17 @@ def main():
                     'Bh' :'264.000' ,'Sg':'266'     ,'Mt' :'268'     ,'Hs' :'277'}
 
 	f=open('hola.xyz','w+')
+	iteraciones = 5
 	
 	while iteraciones > 0:
 
 		lista_elementos = obtenerElementos()
 		lista_elementos.reverse()
-
+		numeros2 = map(int, numeros)
+		n = sum(numeros2)
 		#print lista_elementos
 
-		matriz = np.zeros(196, dtype = object).reshape(4,7,7)        # 3d array
+		matriz = np.zeros((n+1)**2*4, dtype = object).reshape(4,n+1,n+1)        # 3d array
 		
 		#eleccion de posicion random para primer elemento
 		indices =  np.random.randint(0, high=3, size=3)
@@ -254,7 +268,7 @@ def main():
 		matriz[(z,y,x)] = lista_elementos.pop()
 
 		#print "Coordenadas de atomo agregado a la franja de solucion: ", franja
-		print matriz
+		#print matriz
 		#print "Sus posibles vecinos (x,y,z):\n",
 		buscarVecinos(matriz,x,y,z)
 		
@@ -269,17 +283,19 @@ def main():
 			escogerVecinos()
 			#print "Sus posibles vecinos (x,y,z):\n",
 			buscarVecinos(matriz,vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
-			print matriz
+			print vecino_escogido
+
+			#print matriz
 			#print "Atomos agregados a la franja de solucion: ", franja
 			
 		iteraciones = iteraciones - 1
 		guardar(franja)
 		
-		#print matriz
-		matriz = matriz*0
-		
-		franja = []
+		print matriz
+		#matriz = matriz*0
 		lista = []
+		franja = []
+		
 
 if __name__=="__main__":
     main();
