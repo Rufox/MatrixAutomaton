@@ -13,7 +13,7 @@ maximun_energy = 100
 
 box_size = 
 
-chemical_formula = Be 2 N 3 C 1
+chemical_formula = Be 2 La 3 Sc 1
 
 [SOFTWARE]
 software = gaussian
