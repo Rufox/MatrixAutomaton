@@ -46,35 +46,26 @@ def almacenarCoord(a,b,c):
 	return a,b,c
 
 def buscarVecinos(m,a,b,c):
-
+	global new
 	obtenerListaEscalamiento()
 	conv3 = map(int, espacios)
 	new = []
 	for l in conv3:
-		equis = [a,a+l,a-l]
-		y_griega = [b,b+l,b-l]
-		zeta = [c,c+l,c-l]
-		for i in equis:
-			for j in y_griega:
-				for k in zeta:
+		for i in [a,a+l,a-l]:
+			for j in [b,b+l,b-l]:
+				for k in [c,c+l,c-l]:
 					if a == i and b == j and c == k:
 						pass
 					elif i < 0 or i > sum(numeros2) or j < 0 or j > sum(numeros2) or k < 0 or k > 3:
 						pass
 					elif almacenarCoord(i,j,k) not in lista:
-						if l == 1:
-							lista.append(almacenarCoord(i,j,k))
-							
-						elif a >= i+l or b >= j+l or c >= k+l:
-							#lista = lista2
+						if l == 1: lista.append(almacenarCoord(i,j,k))	
+						elif a >= i+l or b >= j+l or c >= k+l or matriz[(k,j,i)] != 0:
 							lista2.append(almacenarCoord(i,j,k))
-							return lista2							
-							#matriz[(k,j,i)]=1
-							#print lista2				
-
-	return lista
+							
+	new = lista + lista2						
+	return new
 									
-	
 
 def obtenerListaEscalamiento():
 	global espacios
@@ -96,7 +87,7 @@ def escogerVecinos():
 	global vecino_escogido
 	global lista_elementos
 
-	vecino_escogido = random.choice(lista)
+	vecino_escogido = random.choice(new)
 	if vecino_escogido in franja:
 		pass
 	else:
@@ -280,10 +271,11 @@ def main():
 		while len(franja) < n:
 
 			#print "Coordenadas del vecino escogido aleatoriamente (x,y):", 
-			escogerVecinos()
 			#print "Sus posibles vecinos (x,y,z):\n",
 			buscarVecinos(matriz,vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
-			print vecino_escogido
+			escogerVecinos()
+			
+			#print vecino_escogido
 
 			#print matriz
 			#print "Atomos agregados a la franja de solucion: ", franja
