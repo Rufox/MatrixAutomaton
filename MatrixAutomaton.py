@@ -58,14 +58,15 @@ def buscarVecinos(m,a,b,c):
 						pass
 					elif i < 0 or i > sum(numeros2) or j < 0 or j > sum(numeros2) or k < 0 or k > 3:
 						pass
-					elif almacenarCoord(i,j,k) not in lista:
-						if l == 1: lista.append(almacenarCoord(i,j,k))	
-						elif a >= i+l or b >= j+l or c >= k+l or matriz[(k,j,i)] != 0:
+					elif almacenarCoord(i,j,k) not in lista or almacenarCoord(i,j,k) not in lista2:
+						if l == 1: 
+							lista.append(almacenarCoord(i,j,k))
+							new = lista
+						else:
 							lista2.append(almacenarCoord(i,j,k))
-							
-	new = lista + lista2						
-	return new
-									
+							new = lista2
+	return new							
+										
 
 def obtenerListaEscalamiento():
 	global espacios
@@ -80,19 +81,38 @@ def obtenerListaEscalamiento():
 		espacio.append(conv2[indices_conversion[i]]+' ')
 		espacios.append(espacio[i].split()*int(numeros[i]))
 		espacios = list(itertools.chain(*espacios))
-	#print espacios
+	print espacios
 	return espacios 
 
 def escogerVecinos():
 	global vecino_escogido
 	global lista_elementos
+	
+	statement= False
+	while statement == False:
+		vecino_escogido = random.choice(new)
+		#if vecino_escogido in franja:
+		#	pass
+		#else:
+		for l in atomos:
+			if matriz[(vecino_escogido[2],vecino_escogido[1],vecino_escogido[0])] == l.elemento:
+				if l.escala == 2:
+					for i in [vecino_escogido[0],vecino_escogido[0]+1,vecino_escogido[0]-1]:
+						for j in [vecino_escogido[1],vecino_escogido[1]+1,vecino_escogido[1]-1]:
+							for k in [vecino_escogido[2],vecino_escogido[2]+1,vecino_escogido[2]-1]:
+								if vecino_escogido[0] == i and vecino_escogido[1] == j and vecino_escogido[2] == k:
+									pass
+								elif i < 0 or i > sum(numeros2) or j < 0 or j > sum(numeros2) or k < 0 or k > 3:
+									pass
+								elif matriz[(k,j,i)] != 0:
+									
+		
+		#else:
+			franja.append(almacenarCoord(vecino_escogido[0],vecino_escogido[1],vecino_escogido[2]))
+			matriz[(vecino_escogido[2],vecino_escogido[1],vecino_escogido[0])] = lista_elementos.pop()
+		
+		
 
-	vecino_escogido = random.choice(new)
-	if vecino_escogido in franja:
-		pass
-	else:
-		franja.append(almacenarCoord(vecino_escogido[0],vecino_escogido[1],vecino_escogido[2]))
-		matriz[(vecino_escogido[2],vecino_escogido[1],vecino_escogido[0])] = lista_elementos.pop()
 		if vecino_escogido == "None":
 			pass
 		else:
@@ -262,7 +282,7 @@ def main():
 		#print matriz
 		#print "Sus posibles vecinos (x,y,z):\n",
 		buscarVecinos(matriz,x,y,z)
-		
+		print new
 		#print "Coordenadas del vecino escogido aleatoriamente (x,y):", 
 		escogerVecinos()
 		#print "Coordenadas de atomos agregados a la franja de solucion: ", franja
