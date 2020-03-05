@@ -1,40 +1,40 @@
 6
 Matrix
-Be 0 1 3
-Be 0 3 1
-La 1 0 3
-La 0 1 1
-La 1 0 1
-Sc 0 2 1
+Be 2 0 2
+Be 2 1 3
+La 3 2 2
+La 2 1 2
+La 3 1 2
+Sc 1 1 1
 6
 Matrix
-Be 0 2 3
-Be 2 3 1
-La 3 4 1
-La 2 1 1
+Be 0 1 2
+Be 0 0 1
+La 1 1 1
+La 2 0 2
+La 2 1 3
+Sc 1 0 1
+6
+Matrix
+Be 2 0 2
+Be 1 0 3
+La 3 0 1
+La 3 0 0
+La 2 1 0
+Sc 3 0 2
+6
+Matrix
+Be 0 2 0
+Be 0 3 0
+La 1 3 0
 La 0 4 1
-Sc 2 0 1
+La 1 4 1
+Sc 2 4 1
 6
 Matrix
-Be 2 0 1
-Be 2 1 1
-La 2 2 1
-La 3 2 0
-La 2 3 0
-Sc 0 2 3
-6
-Matrix
-Be 1 2 3
-Be 5 0 2
-La 3 2 3
-La 1 4 3
-La 5 2 3
-Sc 4 1 2
-6
-Matrix
-Be 1 2 3
-Be 0 5 2
-La 0 1 1
-La 1 0 3
-La 0 2 1
-Sc 1 6 1
+Be 2 1 2
+Be 1 0 2
+La 1 1 1
+La 0 0 1
+La 2 1 3
+Sc 0 3 2
