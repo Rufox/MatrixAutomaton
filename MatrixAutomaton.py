@@ -14,132 +14,17 @@ class Atomo:
     def __repr__(self):
     	return str(self)
 
-class Nodo:
-	def __init__(self, padre, x, y, z, profundidad):
-		self.padre = padre
-		self.x = x
-		self.y = y
-		self.z = z
-		self.hijo = []
-		self.profundidad = profundidad
-
- 	def agregarHijo(self, hijo):
-		self.hijo.append(hijo)
-
- 	def tieneHijo(self):
- 		return len(self.hijo) > 0
-	
- 	def obtenerHijo(self):
- 		return self.hijo
-
- 	def obtenerPadre(self):
- 		return self.padre
-
- 	def obtenerProfundidad(self):
- 		return self.profundidad
-
- 	def __str__(self):
- 		return "x: " + str(self.x) + ", y: " + str(self.y) + ", z: " + str(self.z) 
- 		#return "Padre:"+ str(self.padre)+", Profundidad:"+ str(self.profundidad)
-
 def almacenarCoord(a,b,c):
 	return a,b,c
 
-def buscarVecinos(m,a,b,c):
-	global new
-	obtenerListaEscalamiento()
-	conv3 = map(int, espacios)
-	new = []
-	for l in conv3:
-		for i in [a,a+l,a-l]:
-			for j in [b,b+l,b-l]:
-				for k in [c,c+l,c-l]:
-					if a == i and b == j and c == k:
-						pass
-					elif i < 0 or i > sum(numeros2) or j < 0 or j > sum(numeros2) or k < 0 or k > 3:
-						pass
-					elif almacenarCoord(i,j,k) not in lista or almacenarCoord(i,j,k) not in lista2:
-						if l == 1: 
-							lista.append(almacenarCoord(i,j,k))
-							new = lista
-						else:
-							lista2.append(almacenarCoord(i,j,k))
-							new = lista2
-	return new							
-										
-
-def obtenerListaEscalamiento():
-	global espacios
-	global espacio
-	espacios = []
-	espacio = []
-	conv = map(int,conversion)
-	conv2 = map(str, conv)
-
-	indices_conversion = [test.index(x) for x in elementos]
-	for i in range(len(elementos)):
-		espacio.append(conv2[indices_conversion[i]]+' ')
-		espacios.append(espacio[i].split()*int(numeros[i]))
-		espacios = list(itertools.chain(*espacios))
-	print espacios
-	return espacios 
-
-def escogerVecinos():
-	global vecino_escogido
-	global lista_elementos
-	
-	statement= False
-	while statement == False:
-		vecino_escogido = random.choice(new)
-		#if vecino_escogido in franja:
-		#	pass
-		#else:
-		for l in atomos:
-			if matriz[(vecino_escogido[2],vecino_escogido[1],vecino_escogido[0])] == l.elemento:
-				if l.escala == 2:
-					for i in [vecino_escogido[0],vecino_escogido[0]+1,vecino_escogido[0]-1]:
-						for j in [vecino_escogido[1],vecino_escogido[1]+1,vecino_escogido[1]-1]:
-							for k in [vecino_escogido[2],vecino_escogido[2]+1,vecino_escogido[2]-1]:
-								if vecino_escogido[0] == i and vecino_escogido[1] == j and vecino_escogido[2] == k:
-									pass
-								elif i < 0 or i > sum(numeros2) or j < 0 or j > sum(numeros2) or k < 0 or k > 3:
-									pass
-								elif matriz[(k,j,i)] != 0:
-									
-		
-		#else:
-			franja.append(almacenarCoord(vecino_escogido[0],vecino_escogido[1],vecino_escogido[2]))
-			matriz[(vecino_escogido[2],vecino_escogido[1],vecino_escogido[0])] = lista_elementos.pop()
-		
-		
-
-		if vecino_escogido == "None":
-			pass
-		else:
-			return vecino_escogido
-
-def guardar(fr):
-	global n
-
-	f=open ('hola.xyz','a')
-	f.write(str(n) +'\nMatrix\n')
-	for i in range(len(fr)):
-		f.write(str(matriz[fr[i][2],fr[i][1],fr[i][0]])+' '+str(fr[i][0])+' '+str(fr[i][1])+' '+str(fr[i][2])+'\n')
-	f.close() 
-
 def obtenerElementos():
-	global lista_elementos
-	global atomos
-	global conversion
-	global elementos
-	global numeros
-	global test
+	global lista_elementos, atomos, conversion, elementos, numeros, elementos_escalados
 	lista_elementos=[]
 	elementos=[]
 	numeros=[]
 	atomos=[]
 	conversion=[]
-	test = []
+	elementos_escalados = []
 
 	with open ('Config.in', 'rt') as Config: 
 	    for lineas in Config:
@@ -163,36 +48,76 @@ def obtenerElementos():
 				if l == 0:
 					conversion.append(1.0)
 					atomos[l].escala = 1.0
-					test.append(atomos[l].elemento)
-					print str(atomos[l].elemento), str(atomos[l].radio_atomico), str(atomos[l].escala)
+					elementos_escalados.append(atomos[l].elemento)
+					#print str(atomos[l].elemento), str(atomos[l].radio_atomico), str(atomos[l].escala)
 				else:
-					tmp= float(atomos[l].radio_atomico)/float(atomos[0].radio_atomico)
+					tmp=float(atomos[l].radio_atomico)/float(atomos[0].radio_atomico)
 					tmp=round(int(tmp))
 					conversion.append(tmp)
 					atomos[l].escala = tmp
-					test.append(atomos[l].elemento)
-					print str(atomos[l].elemento), str(atomos[l].radio_atomico), str(atomos[l].escala)
+					elementos_escalados.append(atomos[l].elemento)
+					#print str(atomos[l].elemento), str(atomos[l].radio_atomico), str(atomos[l].escala)
 			#print conversion
 			lista_elementos = list(itertools.chain(*lista_elementos))
-			print elementos, test, lista_elementos
+			#print elementos, numeros, elementos_escalados, lista_elementos
 
 	return lista_elementos
 
+# def obtenerListaEscalamiento():
+# 	global espacios, espacio
+# 	espacios = []
+# 	espacio = []
+# 	conv = map(int,conversion)
+# 	conv2 = map(str, conv)
+
+# 	indices_conversion = [elementos_escalados.index(x) for x in elementos]
+# 	for i in range(len(elementos)):
+# 		espacio.append(conv2[indices_conversion[i]]+' ')
+# 		espacios.append(espacio[i].split()*int(numeros[i]))
+# 		espacios = list(itertools.chain(*espacios))
+# 	#print espacios
+# 	return espacios 
+
+def buscarVecinos(m,a,b,c):
+	global posibles_vecinos
+	
+	for i in [a,a+espaciado,a-espaciado]:
+		for j in [b,b+espaciado,b-espaciado]:
+			for k in [c,c+espaciado,c-espaciado]:
+				if a == i and b == j and c == k:
+					pass
+				elif i < 0 or i > sum(numeros2) or j < 0 or j > sum(numeros2) or k < 0 or k > 3:
+					pass
+				elif almacenarCoord(i,j,k) not in lista and almacenarCoord(i,j,k) not in franja:
+					lista.append(almacenarCoord(i,j,k))
+					posibles_vecinos = lista
+					#print (i,j,k)
+	return posibles_vecinos
+
+def existenVecinosDirectos(m,a,b,c):
+	new =[]
+	
+	for i in [a,a+1,a-1]:
+		for j in [b,b+1,b-1]:
+			for k in [c,c+1,c-1]:
+				if a == i and b == j and c == k:
+					pass
+				elif i < 0 or i > sum(numeros2) or j < 0 or j > sum(numeros2) or k < 0 or k > 3:
+					pass
+				elif almacenarCoord(i,j,k) not in new and almacenarCoord(i,j,k) not in franja:
+					#print (i,j,k), matriz[(k,j,i)]
+					if matriz[(k,j,i)] != 0:
+						return True
+	return False
 
 def main():
-	global x
-	global y
-	global z
-	global matriz
-	global lista
-	global lista2
-	global franja
-	global iteraciones
-	global n
+	global x, y, z, matriz, franja
+	global iteraciones, n
 	global atomic_radii
 	global numeros2
-
-	lista2 = []
+	global lista
+	global espaciado
+	
 	lista = []
 	franja = []	
 
@@ -270,44 +195,64 @@ def main():
 
 		print "Coordenadas generadas para primer atomo ( x:",x,", y:",y,", z:",z,")"
 
-		#Estoy descubriendo como trabajar con las clases D: sdkfnjksdf
-		raiz = Nodo(None,x,y,z,0)
-		nodo_activo = raiz
-
 		franja.append(almacenarCoord(x,y,z))
 		
 		matriz[(z,y,x)] = lista_elementos.pop()
-
-		#print "Coordenadas de atomo agregado a la franja de solucion: ", franja
-		#print matriz
-		#print "Sus posibles vecinos (x,y,z):\n",
+		
+		espaciado = 1
 		buscarVecinos(matriz,x,y,z)
-		print new
-		#print "Coordenadas del vecino escogido aleatoriamente (x,y):", 
-		escogerVecinos()
-		#print "Coordenadas de atomos agregados a la franja de solucion: ", franja
-		#print matriz				
+	 	#print 'Posibles vecinos: ', posibles_vecinos
+	 	#print matriz
 
 		while len(franja) < n:
 
-			#print "Coordenadas del vecino escogido aleatoriamente (x,y):", 
-			#print "Sus posibles vecinos (x,y,z):\n",
-			buscarVecinos(matriz,vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
-			escogerVecinos()
-			
-			#print vecino_escogido
-
-			#print matriz
-			#print "Atomos agregados a la franja de solucion: ", franja
-			
-		iteraciones = iteraciones - 1
-		guardar(franja)
-		
+			while len(lista_elementos):
+				#print posibles_vecinos
+				vecino_candidato = random.choice(posibles_vecinos)
+				if vecino_candidato in franja:
+					pass
+				else:
+					#print vecino_candidato
+					matriz[(vecino_candidato[2],vecino_candidato[1],vecino_candidato[0])]=lista_elementos.pop()
+					
+					for i in atomos:
+						if matriz[(vecino_candidato[2],vecino_candidato[1],vecino_candidato[0])] == i.elemento:
+							espaciado=int(i.escala)
+						else:
+							continue
+					
+					if espaciado > 1:
+						while existenVecinosDirectos(matriz,vecino_candidato[0],vecino_candidato[1],vecino_candidato[2]):
+							
+							lista_elementos.append(matriz[(vecino_candidato[2],vecino_candidato[1],vecino_candidato[0])])
+							matriz[(vecino_candidato[2],vecino_candidato[1],vecino_candidato[0])] = 0
+							posibles_vecinos.remove((vecino_candidato[0],vecino_candidato[1],vecino_candidato[2]))
+							#print vecino_candidato, posibles_vecinos
+							nuevo_candidato = random.choice(posibles_vecinos)
+							vecino_candidato = nuevo_candidato
+							#print lista_elementos
+							
+						else:
+							#print existenVecinosDirectos(matriz, vecino_candidato[0],vecino_candidato[1],vecino_candidato[2])
+							vecino_escogido = vecino_candidato
+							franja.append(vecino_escogido)
+							#print espaciado
+							#print 'Vecino escogido: ',(vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
+							buscarVecinos(matriz,vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
+							#print 'Posibles vecinos: ', posibles_vecinos
+							#print matriz
+					else:
+						vecino_escogido = vecino_candidato
+						franja.append(vecino_escogido)
+						#print espaciado
+						#print 'Vecino escogido: ',(vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
+						buscarVecinos(matriz,vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
+						#print 'Posibles vecinos: ', posibles_vecinos
 		print matriz
-		#matriz = matriz*0
-		lista = []
-		franja = []
+		print franja
+		iteraciones = iteraciones - 1
 		
+		franja = []	
 
 if __name__=="__main__":
     main();
