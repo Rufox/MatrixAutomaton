@@ -2,6 +2,17 @@ import numpy as np
 import random
 import itertools
 
+class GrupoAtomico:
+	def __init__(self, n):
+		self.atomos = []
+		self.n = n
+
+	def __str__(self):
+		return "N: {}, Atomos: {}\n".format(self.n, self.atomos)
+
+	def __repr__(self):
+		return str(self)
+
 class Atomo:
     def __init__(self, elemento, radio_atomico, escala):
         self.elemento = elemento
@@ -57,26 +68,11 @@ def obtenerElementos():
 					atomos[l].escala = tmp
 					elementos_escalados.append(atomos[l].elemento)
 					#print str(atomos[l].elemento), str(atomos[l].radio_atomico), str(atomos[l].escala)
-			#print conversion
+			print conversion
 			lista_elementos = list(itertools.chain(*lista_elementos))
 			#print elementos, numeros, elementos_escalados, lista_elementos
 
 	return lista_elementos
-
-# def obtenerListaEscalamiento():
-# 	global espacios, espacio
-# 	espacios = []
-# 	espacio = []
-# 	conv = map(int,conversion)
-# 	conv2 = map(str, conv)
-
-# 	indices_conversion = [elementos_escalados.index(x) for x in elementos]
-# 	for i in range(len(elementos)):
-# 		espacio.append(conv2[indices_conversion[i]]+' ')
-# 		espacios.append(espacio[i].split()*int(numeros[i]))
-# 		espacios = list(itertools.chain(*espacios))
-# 	#print espacios
-# 	return espacios 
 
 def buscarVecinos(m,a,b,c):
 	global posibles_vecinos
@@ -110,9 +106,18 @@ def existenVecinosDirectos(m,a,b,c):
 						return True
 	return False
 
+def guardar(fr):
+	global grupo_atomico
+
+	f=open ('hola.xyz','a')
+	f.write(str(grupo_atomico.n) +'\nMatrix\n')
+	for i in range(len(fr)):
+		f.write(str(matriz[fr[i][2],fr[i][1],fr[i][0]])+' '+str(fr[i][0])+' '+str(fr[i][1])+' '+str(fr[i][2])+'\n')
+	f.close()
+
 def main():
 	global x, y, z, matriz, franja
-	global iteraciones, n
+	global iteraciones, grupo_atomico
 	global atomic_radii
 	global numeros2
 	global lista
@@ -182,10 +187,10 @@ def main():
 		lista_elementos = obtenerElementos()
 		lista_elementos.reverse()
 		numeros2 = map(int, numeros)
-		n = sum(numeros2)
-		#print lista_elementos
-
-		matriz = np.zeros((n+1)**2*4, dtype = object).reshape(4,n+1,n+1)        # 3d array
+		grupo_atomico = GrupoAtomico(sum(numeros2))
+		atomos_ga = [grupo_atomico.atomos.insert(0,x) for x in lista_elementos]
+		print grupo_atomico
+		matriz = np.zeros((grupo_atomico.n+1)**2*4, dtype = object).reshape(4,grupo_atomico.n+1,grupo_atomico.n+1)        # 3d array
 		
 		#eleccion de posicion random para primer elemento
 		indices =  np.random.randint(0, high=3, size=3)
@@ -204,7 +209,7 @@ def main():
 	 	#print 'Posibles vecinos: ', posibles_vecinos
 	 	#print matriz
 
-		while len(franja) < n:
+		while len(franja) < grupo_atomico.n:
 
 			while len(lista_elementos):
 				#print posibles_vecinos
@@ -251,6 +256,7 @@ def main():
 		print matriz
 		print franja
 		iteraciones = iteraciones - 1
+		guardar(franja)
 		
 		franja = []	
 
