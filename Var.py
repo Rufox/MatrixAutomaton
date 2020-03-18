@@ -35,7 +35,20 @@ atomic_radii = {'H':0.31, 'He':0.28, 'Li':1.28, 'Be':0.96,
 #Porcentaje de atomos que sufriran unmovimiento aleatorio como mutacion.
 #Valores entre 0 y 1
 PcentAtomosMutadosMovimiento = 0.9
+maxConvergencia = 9
+
 def init():
 	global Big_variable
 	Big_variable = {}
 	
+def formulaQuimicaAHash():
+     data = Big_variable["chemical_formula"].split(' ')
+     valores = {}
+     atomos = 0
+     for i in range(len(data)):
+          if i%2 == 0:
+               valores[data[i]]=int(data[i+1])
+               atomos+=int(data[i+1])
+          pass
+     valores["all"] = atomos
+     return valores#["Si"]

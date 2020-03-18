@@ -21,6 +21,92 @@ Lector.leerArchivoParametros()
 
 print (list(var.Big_variable))
 
+#Llamado programa isisdora, se obtiene algo
+
+# Primer ciclo indica si se encontro el mejor
+# Sea la variable convergenciaObtenida la medidora de ello.
+# Sea maxConvergencia aquella establecida como quiebre.
+
+
+# automata, mutados, combinados
+
+convergenciaObtenida = 0
+calculosterminados = 0 
+hashtotal = var.formulaQuimicaAHash()
+print hashtotal
+while (var.maxConvergencia != convergenciaObtenida):
+	
+	#ZONA 1
+	# Creacion de inputs: 
+	# 1 isidora, 2 genetic, 3 mutacion
+	
+	
+	if calculosterminados != 0:
+		plano = Genetic.createRandomPlane()
+		Genetic.centrarMolecula(mio)
+		#HAY QUE FORMAR ESTE HASH ANTES
+		hashtotal = {"Bi":3,"Sn":3,"Ge":3,"all":9}
+		Genetic.posicionEnPlano(plano,love)
+		Genetic.posicionEnPlano(plano,love2)
+		finalCoords= Genetic.combinarMolecula(love,love2,hashtotal)
+
+
+
+
+
+	#ZONA 2
+	# Formacion de inputs en formato gaussian u otro programa
+
+	# Zona 3
+	# Envio de inputs al programa necesario, espera a termino correcto de calculo
+
+	#Zona 4
+	# Recopilacion de datos.
+
+	#ZOna 5
+	# distribucion de la energia, cual es el mejor, contador del minimo global actual
+
+	# Nuemro final que pasan a siguiente vuelta.
+
+	convergenciaObtenida+=1
+	#print convergenciaObtenida
+	pass
+
+exit(0)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 print (var.Big_variable["numb_conf"])
 love=[['Ge',      -0.333821000 ,     1.303262000  ,    2.341189000,32],
 ['Sn' ,      2.730896000 ,     0.020517000 ,  -0.840340000,50],
