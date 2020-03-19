@@ -33,26 +33,44 @@ print (list(var.Big_variable))
 convergenciaObtenida = 0
 calculosterminados = 0 
 hashtotal = var.formulaQuimicaAHash()
-print hashtotal
+#print hashtotal
+
+
 while (var.maxConvergencia != convergenciaObtenida):
 	
-	#ZONA 1
+	sistemas = []
+
+	# mutados = var.PcentToMutate * 
+	# ZONA 1
 	# Creacion de inputs: 
 	# 1 isidora, 2 genetic, 3 mutacion
 	
-	
 	if calculosterminados != 0:
-		plano = Genetic.createRandomPlane()
-		Genetic.centrarMolecula(mio)
+		mutados = 0
+		cruzados = 0
+		nuevos = 0#var.Big_variable["numb_conf"]
+		sistemas = 
+	else:
+		mutados = int(round(var.PcentToMutate * float(var.Big_variable["numb_conf"])))
+		cruzados = int(round(var.PcentToRecombine * float(var.Big_variable["numb_conf"])))
+		nuevos = 0
+
+	for x in xrange(0,mutados):
+		pass
+#	for x in xrange(0,cruzados):
+#		plano = Genetic.createRandomPlane()
+#		Genetic.centrarMolecula(mio)
 		#HAY QUE FORMAR ESTE HASH ANTES
-		hashtotal = {"Bi":3,"Sn":3,"Ge":3,"all":9}
-		Genetic.posicionEnPlano(plano,love)
-		Genetic.posicionEnPlano(plano,love2)
-		finalCoords= Genetic.combinarMolecula(love,love2,hashtotal)
+		#hashtotal = {"Bi":3,"Sn":3,"Ge":3,"all":9}
+#		Genetic.posicionEnPlano(plano,love)
+#		Genetic.posicionEnPlano(plano,love2)
+#		finalCoords= Genetic.combinarMolecula(love,love2,hashtotal)
+		
+#		sistemas.append(finalCoords)
 
-
-
-
+#	for x in xrange(0,nuevos):
+#		isidora
+#		pass	
 
 	#ZONA 2
 	# Formacion de inputs en formato gaussian u otro programa
@@ -141,6 +159,9 @@ Impresora.escribirInputGaussian("Diego",2,mio)
 
 transformarNumeroASimbolo(mio)
 
+for i in mio:
+	print i
+print "ASDADDDDDDDDDDDDDDDDDDDD"
 Impresora.escribirInputGaussian("Diego",2,mio)
 
 open("Conganas.xyz","w")
@@ -160,25 +181,37 @@ Genetic.posicionEnPlano(plano,love)
 Genetic.posicionEnPlano(plano,love2)
 finalCoords= Genetic.combinarMolecula(love,love2,hashtotal)
 
+for i in finalCoords:
+	print i
+
 #Genetic.rotarMolecula(love)
+print "AHSTA ACA"
 print love
 #ESTO VA ACA
 cordinates = np.array([[row[4],row[1], row[2], row[3]] for row in love])
 
-print cordinates
+#print cordinates
+print "EMPIEZA cordinates"
+for i in cordinates:
+	print i
+print "FIN DE COORDINATES"
 for i in love:
-		print i[0],i[1],i[2],i[3]
+		print i[0],i[1],i[2],i[3],i[4]
 print "preDS"
-#shufleguy = Genetic.mutacionMovimientoAleatorio(cordinates)
+
+shufleguy = Genetic.mutacionMovimientoAleatorio(love)
 
 #Xchange = Genetic.mutacionIntercambio(cordinates)
 #print "ds"
-#for i in shufleguy:
-#		print i[0],i[1],i[2],i[3]
+for i in shufleguy:
+		#print i[0],i[1],i[2],i[3]
+		print i
+print "MOVIMIENTO ALEATORIO FIN "
 
-Xchange = Genetic.mutacionIntercambio(cordinates)
+#Xchange = Genetic.mutacionIntercambio(cordinates)
+Xchange = Genetic.mutacionIntercambio(love)
 for i in Xchange:
-		print i[0],i[1],i[2],i[3]
+		print i[0],i[1],i[2],i[3],i[4]
 
 
 # print "1"

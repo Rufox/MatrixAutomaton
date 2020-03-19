@@ -72,9 +72,14 @@ def posicionEnPlano(plane, coordsSist):
 	#  			break
 
 	#print "BELOW"
+	
 	for i in coordsSist:
 	# 	if(i[5]<0):
-	 	print (i[0],i[1],i[2],i[3])
+	 	#print (i[0],i[1],i[2],i[3])
+	 	i.pop()						# Elimina valor porducto punto
+	 	#print i
+	
+	print "\n"
 	return coordsSist
 
 def combinarMolecula(sistema_1, sistema_2, hashTotal):
@@ -97,7 +102,7 @@ def combinarMolecula(sistema_1, sistema_2, hashTotal):
 def mutacionMovimientoAleatorio(cordinates):
 	np.random.shuffle(cordinates)
 	for i in range(0, int(round(len(cordinates)*var.PcentAtomosMutadosMovimiento))):
-		radii = var.atomic_radii[var.atomic_number[(int(cordinates[i][0]))-1]]
+		radii = var.atomic_radii[var.atomic_number[(int(cordinates[i][4]))-1]]
 		patada_X = radii *np.random.randint(0,21)/10.0 - radii
 		patada_Y = radii *np.random.randint(0,21)/10.0 - radii
 		patada_Z = radii *np.random.randint(0,21)/10.0 - radii
@@ -111,11 +116,11 @@ def mutacionMovimientoAleatorio(cordinates):
 def mutacionIntercambio(cordinates):
 	np.random.shuffle(cordinates)
 	#print cordinates,"\n"
-	primero = cordinates[0][0]
+	primero, ultimo = cordinates[0][0], cordinates[0][-1]
 	for i in range(0,len(cordinates)-1):
-		cordinates[i][0] = cordinates[i+1][0]
+		cordinates[i][0], cordinates[i][-1] = cordinates[i+1][0], cordinates[i+1][-1]
 	
-	cordinates[-1][0] = primero
+	cordinates[-1][0], cordinates[-1][-1] = primero, ultimo
 	return cordinates
 	#print cambiado
 

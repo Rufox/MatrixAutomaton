@@ -37,6 +37,11 @@ atomic_radii = {'H':0.31, 'He':0.28, 'Li':1.28, 'Be':0.96,
 PcentAtomosMutadosMovimiento = 0.9
 maxConvergencia = 9
 
+PcentToMutate = 0.2
+PcentToRecombine =0.2
+PcentToCreate =0.6
+
+
 def init():
 	global Big_variable
 	Big_variable = {}
