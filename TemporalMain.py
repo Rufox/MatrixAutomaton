@@ -4,9 +4,10 @@ import Impresora
 import Var as var
 import Genetic
 import numpy as np
+import math
 def transformarNumeroASimbolo(coords):
 	nuevo=coords
-	print (var.atomic_number[2])
+	#print (var.atomic_number[2])
 	for line in nuevo:
 		#si es numero
 		line.append(line[0])
@@ -31,63 +32,134 @@ print (list(var.Big_variable))
 # automata, mutados, combinados
 
 convergenciaObtenida = 0
-calculosterminados = 0 
+calculosterminados = 1 
 hashtotal = var.formulaQuimicaAHash()
 #print hashtotal
 
-
+generation = 0
 while (var.maxConvergencia != convergenciaObtenida):
 	
-	sistemas = []
-
+	sistemasNombre = []
+	sistemasLanzar = []
 	# mutados = var.PcentToMutate * 
 	# ZONA 1
 	# Creacion de inputs: 
 	# 1 isidora, 2 genetic, 3 mutacion
 	
 	if calculosterminados != 0:
+		fitness = []
+		coords = []
+		energia = []
 		mutados = 0
 		cruzados = 0
-		nuevos = 0#var.Big_variable["numb_conf"]
-		sistemas = 
+		nuevos = 0#var.Big_variable["numb_conf"]  #CHANGE
+		sistemasNombre = ["job01","job02","job03","job04","job05", #CHANGE
+				"job06","job07","job08","job09","job10","job11"]
 	else:
+		print "SEEGUNDA BUELTAs"
 		mutados = int(round(var.PcentToMutate * float(var.Big_variable["numb_conf"])))
 		cruzados = int(round(var.PcentToRecombine * float(var.Big_variable["numb_conf"])))
-		nuevos = 0
+		nuevos = 0 # total - mutados -cruzados CHANGE
 
-	for x in xrange(0,mutados):
-		pass
-#	for x in xrange(0,cruzados):
-#		plano = Genetic.createRandomPlane()
-#		Genetic.centrarMolecula(mio)
-		#HAY QUE FORMAR ESTE HASH ANTES
-		#hashtotal = {"Bi":3,"Sn":3,"Ge":3,"all":9}
-#		Genetic.posicionEnPlano(plano,love)
-#		Genetic.posicionEnPlano(plano,love2)
-#		finalCoords= Genetic.combinarMolecula(love,love2,hashtotal)
-		
-#		sistemas.append(finalCoords)
+##########################################
+	# CROSSING OVER
+	if cruzados != 0:
+		for Crossing in xrange(len(indexsAboveCurfew)):
+			#print Crossing
+			np.random.shuffle(indexsAboveCurfew)
+			#print indexsAboveCurfew
+			plano = Genetic.createRandomPlane()
+			#print coords[indexsAboveCurfew[0]]
+			Genetic.posicionEnPlano(plano,coords[indexsAboveCurfew[0]])
+			#print coords[indexsAboveCurfew[0]]
+			Genetic.posicionEnPlano(plano,coords[indexsAboveCurfew[1]])
+			finalCoords= Genetic.combinarMolecula(coords[indexsAboveCurfew[0]],coords[indexsAboveCurfew[1]],hashtotal)
+			sistemasLanzar.append(finalCoords)
+			sistemasNombre.append("Child"+str(generation)+"_")
+			#for i in finalCoords:
+			#	print i[4],i[1],i[2],i[3]
 
-#	for x in xrange(0,nuevos):
-#		isidora
-#		pass	
+			pass
+	# MUTACIONES 0.2 y 0.2 de cualquiera de los alpha
+	if mutados != 0:
+		print "HAPENS"
+		for muting in range(0 ,mutados):
+			#print muting
+			np.random.shuffle(indexsAboveCurfew)
+			# Muta el primero con dezplazamiento, muta el ultimo con intercambio
+			mutDesp = Genetic.mutacionMovimientoAleatorio(coords[indexsAboveCurfew[0]])
+			mutInt = Genetic.mutacionIntercambio(coords[indexsAboveCurfew[-1]])
+			sistemasNombre.append("MutD"+str(generation)+"_")
+			sistemasLanzar.append(mutDesp)
+			sistemasNombre.append("MutI"+str(generation)+"_")
+			sistemasLanzar.append(mutInt)
+#####################################
 
 	#ZONA 2
 	# Formacion de inputs en formato gaussian u otro programa
-
+	for iden in range(len(sistemasLanzar)):
+		Impresora.escribirInputGaussian(sistemasNombre[iden],iden,sistemasLanzar[iden])
+		sistemasNombre[iden]=sistemasNombre[iden]+str(iden)
+#####################################
 	# Zona 3
 	# Envio de inputs al programa necesario, espera a termino correcto de calculo
-
+#####################################
 	#Zona 4
 	# Recopilacion de datos.
 
+	for file in sistemasNombre:
+		tmp = Lector.obtenerCoordenadaGaussian(file+".out")
+		energy= float(Lector.obtenerEnergiaGaussian(file+".out"))
+		print file ," esto da ", energy
+		transformarNumeroASimbolo(tmp)
+		#print tmp
+		coords.append(tmp)
+		energia.append(energy)
+	#for x in xrange(len(coords)):
+	#	print energia[x]
+		#for i in coords[x]:
+		#	print i
+	#	pass
+######################################
 	#ZOna 5
 	# distribucion de la energia, cual es el mejor, contador del minimo global actual
+	#esto sale en la linea 3398
+	energiaMenor = min(energia)
+	energiaMayor = max(energia)
+	difEner = energiaMayor - energiaMenor
 
+	for energy in energia:
+		prob = (energy - energiaMenor) / difEner
+		print energy," -> " ,prob
+		tmp_fit = math.exp(-prob * var.alphaNumber) 
+		fitness.append(tmp_fit)
+	#for w in fitness:
+	#	print w
+	sortedIndexs = np.argsort(fitness)
+	aux = 0
+	index=[]
+	for data in sortedIndexs:
+		if fitness[data] < var.PcentBestFitness:
+			#print "PASO", fitness[data] , data
+			index.append(aux)
+		aux+=1
+	#print index
+	print sortedIndexs
+	indexsAboveCurfew = np.delete(sortedIndexs,index)
+	#print indexsAboveCurfew
+	#print energia
+	#print fitness[sortedIndexs]
+	#for x in fitness[sortedIndexs]:
+	#	print x
+	#	pass
 	# Nuemro final que pasan a siguiente vuelta.
 
+	# IMPRESION DE COSAS
 	convergenciaObtenida+=1
+	calculosterminados = 0
+	#exit(0)
 	#print convergenciaObtenida
+	generation+=1
 	pass
 
 exit(0)

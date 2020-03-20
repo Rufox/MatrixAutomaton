@@ -26,25 +26,30 @@ def agregarVariableGlobal(key, dato):
 # Busca inforamcion coordenadas de archivo gaussian de salida. En caso de error retorna 0
 def obtenerCoordenadaGaussian(file):
 	start=0
-	archivo = open(file,"r")
-	rline = archivo.readlines()
-	for i in range (len(rline)):
-	    if "Standard orientation:" in rline[i]:
-	        start = i
+	try:
+		archivo = open(file,"r")
+		rline = archivo.readlines()
+		for i in range (len(rline)):
+		    if "Standard orientation:" in rline[i]:
+		        start = i
 
-	for m in range (start + 5, len(rline)):
-	    if "---" in rline[m]:
-	        end = m
-	        break
-	if start==0:
-		return 0
+		for m in range (start + 5, len(rline)):
+		    if "---" in rline[m]:
+		        end = m
+		        break
+		if start==0:
+			return 0
 
-	coords=[]
-	for line in rline[start+5 : end] :
-	    words = int(line.split()[1]),float(line.split()[3]),float(line.split()[4]),float(line.split()[5])
-	    L=list(words)
-	    coords.append(L)
-	return coords
+		coords=[]
+		for line in rline[start+5 : end] :
+		    words = int(line.split()[1]),float(line.split()[3]),float(line.split()[4]),float(line.split()[5])
+		    L=list(words)
+		    coords.append(L)
+		return coords
+	except (OSError, IOError):
+		print "Archivo no encontrado --> ",file
+		exit(1)
+
 
 # Busca inforamcion energetica de archivo gaussian de salida. En caso de error retorna 0
 def obtenerEnergiaGaussian(file):
