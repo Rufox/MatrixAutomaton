@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 
+GaussianCall = "Gaussian16.b01"
 NumberConfig=177
 Numero=20
 # Diccionarios, no cambiar
@@ -38,7 +39,7 @@ atomic_radii = {'H':0.31, 'He':0.28, 'Li':1.28, 'Be':0.96,
 PcentAtomosMutadosMovimiento = 0.9
 
 # NUmero maximo de ciclos que se deben mantener para encontrar GM
-maxConvergencia = 2
+maxConvergencia = 4
 
 # % de N a mutar (patada e intercambio)
 PcentToMutate = 0.2

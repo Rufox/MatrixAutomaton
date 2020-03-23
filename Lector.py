@@ -10,10 +10,11 @@ import Var as var
 # nombre de archivo de configuracion entregado por terminal
 # verificacion que todas las variables de dicho archivo de configuracon existan en realidad
 # verificacioes que todas los datos de cada variable corresponda a algo real.
-def leerArchivoParametros():
+
+def leerArchivoParametros(configs):
 	config = configparser.ConfigParser()
 
-	config.read('Config.in')
+	config.read(configs)
 
 	for secciones in config.sections():
 		for (variable, valor) in config.items(secciones):
@@ -60,7 +61,23 @@ def obtenerEnergiaGaussian(file):
 	    if "SCF Done:" in rline[i]:
 	        energy = rline[i].split()[4]
 	return energy
-
+def obtenerTermination(file):
+	print "llamasdo a",file
+	try:
+		archivo = open(file,"r")
+		rline = archivo.readlines()
+		correcto = 1
+		for i in range(len(rline)):
+			if "Error termination" in rline[i]:
+				correcto = 2
+				break
+			if "termination" in rline[i]:
+				correcto = 0
+				break
+		return correcto
+	except (OSError, IOError):
+		return 1
+	#return archivo.read().splitlines()[-1]
 # EL programa original toma las coordenadas de la frecuencias y le SUMA dicha correccion
 # a las coordenadas originales
 def obtenerFrecuenciaGaussian(file):

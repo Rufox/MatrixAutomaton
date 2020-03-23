@@ -3,8 +3,11 @@ import Lector
 import Impresora
 import Var as var
 import Genetic
+import Lanzador as go
 import numpy as np
 import math
+import sys
+import time
 def transformarNumeroASimbolo(coords):
 	nuevo=coords
 	#print (var.atomic_number[2])
@@ -16,8 +19,13 @@ def transformarNumeroASimbolo(coords):
 	return nuevo
 		
 
+
+
+queue = sys.argv[2]
+print queue
+
 var.init()
-Lector.leerArchivoParametros()
+Lector.leerArchivoParametros(sys.argv[1])
 
 
 print (list(var.Big_variable))
@@ -37,10 +45,12 @@ hashtotal = var.formulaQuimicaAHash()
 #print hashtotal
 
 generation = 0
+MinEnergyEver = 0
 while (var.maxConvergencia != convergenciaObtenida):
 	
 	sistemasNombre = []
 	sistemasLanzar = []
+	lines = []
 	# mutados = var.PcentToMutate * 
 	# ZONA 1
 	# Creacion de inputs: 
@@ -53,8 +63,9 @@ while (var.maxConvergencia != convergenciaObtenida):
 		mutados = 0
 		cruzados = 0
 		nuevos = 0#var.Big_variable["numb_conf"]  #CHANGE
+		lines = [1,1,1,1,1,1,1,1,1,1] #CHANGE
 		sistemasNombre = ["job01","job02","job03","job04","job05", #CHANGE
-				"job06","job07","job08","job09","job10","job11"]
+				"job06","job07","job08","job09","job10"]#,#"job11"]
 	else:
 		print "SEEGUNDA BUELTAs"
 		mutados = int(round(var.PcentToMutate * float(var.Big_variable["numb_conf"])))
@@ -100,8 +111,48 @@ while (var.maxConvergencia != convergenciaObtenida):
 	for iden in range(len(sistemasLanzar)):
 		Impresora.escribirInputGaussian(sistemasNombre[iden],iden,sistemasLanzar[iden])
 		sistemasNombre[iden]=sistemasNombre[iden]+str(iden)
+	# IMpresion data
+	#for cont in range(len(sistemasLanzar)):
+		Impresora.escribirArchivoXYZ("PreCoords_"+str(generation),hashtotal["all"],sistemasNombre[iden],sistemasLanzar[iden])
+
 #####################################
 	# Zona 3
+	#finished = 0
+	#while True:
+	#lines = [1,1,1,1,1,1,1,1,1,1,1]
+	for iden in range(len(sistemasLanzar)):
+		go.envioCluster(var.GaussianCall,sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
+		lines.append(1)
+	#pass
+	#
+
+	#indes = lines.index(1)
+	#print "dsadasda",indes
+	while True and len(sistemasLanzar):
+		for i in range(len(sistemasLanzar)):
+			lines[i] = Lector.obtenerTermination(sistemasNombre[i]+".out")
+			print lines
+			#print sistemasNombre[i] ,Lector.obtenerUltimaLinea(sistemasNombre[i]+".out"),"\n"
+			#if ("Normal termination" in line):
+			#	finished+=1
+		if(1 in lines):
+			#break
+			print "ESTOY ACA"
+			#print sistemasLanzar
+			print lines
+			time.sleep(10.0)
+		elif (2 in lines):
+			print "Casos erroenos"
+			time.sleep(1.0)
+			for i in range(len(lines)):
+				if (2 ==lines[i]):
+					print "Malos sera: ",sistemasNombre[i]
+					go.envioCluster(var.GaussianCall,sistemasNombre[i],sistemasNombre[i]+".com",var.Big_variable["core"],queue)
+					lines[i] = 1
+		else:
+			break
+		pass
+	
 	# Envio de inputs al programa necesario, espera a termino correcto de calculo
 #####################################
 	#Zona 4
@@ -155,6 +206,17 @@ while (var.maxConvergencia != convergenciaObtenida):
 	# Nuemro final que pasan a siguiente vuelta.
 
 	# IMPRESION DE COSAS
+	for cont in range(len(sistemasNombre)):
+		Impresora.escribirArchivoXYZ("PostCoords_"+str(generation),hashtotal["all"],sistemasNombre[cont]+"\tE = "+str(energia[cont])+" H",coords[cont])
+	#
+	# Caso del mejor
+	#mejorEnergiaCiclo = energia[sortedIndexs[-1]]
+	#print mejorEnergiaCiclo
+	if(energia[sortedIndexs[-1]] < MinEnergyEver):
+		MinEnergyEver = energia[sortedIndexs[-1]]
+		Impresora.escribirArchivoXYZ("01FinalsCoords",hashtotal["all"],sistemasNombre[sortedIndexs[-1]]+"\tE = "+str(energia[sortedIndexs[-1]])+" H",coords[sortedIndexs[-1]])
+		convergenciaObtenida = 0
+	#
 	convergenciaObtenida+=1
 	calculosterminados = 0
 	#exit(0)

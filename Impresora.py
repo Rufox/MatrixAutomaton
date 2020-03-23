@@ -21,5 +21,7 @@ def escribirArchivoXYZ(name, numeroAtomo, title, coordsList):
 	input.write(title+"\n")
 	for line in coordsList:
 		#print (line)
-		input.write(' '.join(map(str, line))+"\n")
+		#line.pop()
+		#input.write(' '.join(map(str, line))+"\n")
+		input.write(line[0]+"\t"+str(line[1])+"\t"+str(line[2])+"\t"+str(line[3])+"\n")
 	
