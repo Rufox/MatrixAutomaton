@@ -92,6 +92,7 @@ def combinarMolecula(sistema_1, sistema_2, hashTotal):
 	finalCoords = []
 	for i in range(0,hashTotal["all"]*2):
 		if( verificador[listaCombinada[i][0]] < hashTotal[listaCombinada[i][0]]):
+			#print "Atomo: ",listaCombinada[i][0],"Hay ",verificador[listaCombinada[i][0]] ,"<", hashTotal[listaCombinada[i][0]],"Se necesita"
 			finalCoords.append(listaCombinada[i])
 			verificador[listaCombinada[i][0]]+=1
 			verificador["all"]+=1
@@ -100,27 +101,44 @@ def combinarMolecula(sistema_1, sistema_2, hashTotal):
 				return finalCoords
 	
 def mutacionMovimientoAleatorio(cordinates):
-	np.random.shuffle(cordinates)
-	for i in range(0, int(round(len(cordinates)*var.PcentAtomosMutadosMovimiento))):
-		radii = var.atomic_radii[var.atomic_number[(int(cordinates[i][4]))-1]]
+	#print cordinates
+	#dt = np.dtype([('value',np.unicode_,16),('x',np.float64),('y',np.float64),('z',np.float64),('natom',np.int_)])
+	#dt = np.dtype([('name', np.unicode_, 16), ('grades', np.float64, (2,))])
+	###[('name', '<U16'), ('grades', '<f8', (2,))]
+	#x = np.array([('Sarah', (-0.0, 7.0)), ('John', (6.0, 7.0))], dtype=dt)
+	#print x
+	work = np.asarray(cordinates)#,dtype=dt)
+	#print type(work)
+	#print work.dtype
+	#print dt
+	#work = np.array([["H", 3.2, 33.2, 0.2, 1]],dtype =dt)
+	np.random.shuffle(work)
+	#print work
+	for i in range(0, int(round(len(work)*var.PcentAtomosMutadosMovimiento))):
+		radii = var.atomic_radii[var.atomic_number[(int(work[i][4]))-1]]
 		patada_X = radii *np.random.randint(0,21)/10.0 - radii
 		patada_Y = radii *np.random.randint(0,21)/10.0 - radii
 		patada_Z = radii *np.random.randint(0,21)/10.0 - radii
-		cordinates[i][1]+=patada_X
-		cordinates[i][2]+=patada_Y
-		cordinates[i][3]+=patada_Z
+		#work[i][1]+=patada_X
+		#print patada_X,patada_Y,patada_Z
+		work[i][1] = float(work[i][1]) + patada_X
+		work[i][2]= float(work[i][2]) + patada_Y
+		work[i][3]= float(work[i][3]) + patada_Z
+		#print work[i]
+		#exit(0)
 		#print cordinates[i], radii ,patada_X, patada_Y, patada_Z
 
-	return cordinates
+	return work
 
 def mutacionIntercambio(cordinates):
-	np.random.shuffle(cordinates)
+	work = np.asarray(cordinates)
+	np.random.shuffle(work)
 	#print cordinates,"\n"
-	primero, ultimo = cordinates[0][0], cordinates[0][-1]
-	for i in range(0,len(cordinates)-1):
-		cordinates[i][0], cordinates[i][-1] = cordinates[i+1][0], cordinates[i+1][-1]
+	primero, ultimo = work[0][0], work[0][-1]
+	for i in range(0,len(work)-1):
+		work[i][0], work[i][-1] = work[i+1][0], work[i+1][-1]
 	
-	cordinates[-1][0], cordinates[-1][-1] = primero, ultimo
-	return cordinates
+	work[-1][0], work[-1][-1] = primero, ultimo
+	return work
 	#print cambiado
 

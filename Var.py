@@ -36,7 +36,7 @@ atomic_radii = {'H':0.31, 'He':0.28, 'Li':1.28, 'Be':0.96,
 
 #Porcentaje de atomos que sufriran unmovimiento aleatorio como mutacion.
 #Valores entre 0 y 1
-PcentAtomosMutadosMovimiento = 0.9
+PcentAtomosMutadosMovimiento = 0.3
 
 # NUmero maximo de ciclos que se deben mantener para encontrar GM
 maxConvergencia = 4

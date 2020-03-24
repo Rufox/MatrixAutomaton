@@ -25,6 +25,7 @@ queue = sys.argv[2]
 print queue
 
 var.init()
+Impresora.crearArchivos()
 Lector.leerArchivoParametros(sys.argv[1])
 
 
@@ -46,6 +47,7 @@ hashtotal = var.formulaQuimicaAHash()
 
 generation = 0
 MinEnergyEver = 0
+Impresora.escribirArchivoLog("Iniciado el programa")
 while (var.maxConvergencia != convergenciaObtenida):
 	
 	sistemasNombre = []
@@ -82,9 +84,13 @@ while (var.maxConvergencia != convergenciaObtenida):
 			plano = Genetic.createRandomPlane()
 			#print coords[indexsAboveCurfew[0]]
 			Genetic.posicionEnPlano(plano,coords[indexsAboveCurfew[0]])
-			#print coords[indexsAboveCurfew[0]]
+	#		print coords[indexsAboveCurfew[0]]
 			Genetic.posicionEnPlano(plano,coords[indexsAboveCurfew[1]])
+			#print coords[indexsAboveCurfew[0]],"\n+\n", coords[indexsAboveCurfew[1]],"\nhash de ", hashtotal			
 			finalCoords= Genetic.combinarMolecula(coords[indexsAboveCurfew[0]],coords[indexsAboveCurfew[1]],hashtotal)
+	#		print "Child",str(generation),"_"
+	#		for k in finalCoords:
+	#			print k
 			sistemasLanzar.append(finalCoords)
 			sistemasNombre.append("Child"+str(generation)+"_")
 			#for i in finalCoords:
@@ -92,6 +98,8 @@ while (var.maxConvergencia != convergenciaObtenida):
 
 			pass
 	# MUTACIONES 0.2 y 0.2 de cualquiera de los alpha
+	#for i in sistemasLanzar:
+	#	print i
 	if mutados != 0:
 		print "HAPENS"
 		for muting in range(0 ,mutados):
@@ -102,12 +110,22 @@ while (var.maxConvergencia != convergenciaObtenida):
 			mutInt = Genetic.mutacionIntercambio(coords[indexsAboveCurfew[-1]])
 			sistemasNombre.append("MutD"+str(generation)+"_")
 			sistemasLanzar.append(mutDesp)
+			#for i in sistemasLanzar:
+			#	print i
+			#exit(0)
 			sistemasNombre.append("MutI"+str(generation)+"_")
 			sistemasLanzar.append(mutInt)
 #####################################
 
 	#ZONA 2
 	# Formacion de inputs en formato gaussian u otro programa
+	#print sistemasLanzar
+	#for i in sistemasLanzar:
+	#	for j in i:
+	#		print j
+	#	print "\n"
+
+
 	for iden in range(len(sistemasLanzar)):
 		Impresora.escribirInputGaussian(sistemasNombre[iden],iden,sistemasLanzar[iden])
 		sistemasNombre[iden]=sistemasNombre[iden]+str(iden)
@@ -130,8 +148,9 @@ while (var.maxConvergencia != convergenciaObtenida):
 	#print "dsadasda",indes
 	while True and len(sistemasLanzar):
 		for i in range(len(sistemasLanzar)):
-			lines[i] = Lector.obtenerTermination(sistemasNombre[i]+".out")
-			print lines
+			if lines[i] != 0:
+				lines[i] = Lector.obtenerTermination(sistemasNombre[i]+".out")
+				print lines
 			#print sistemasNombre[i] ,Lector.obtenerUltimaLinea(sistemasNombre[i]+".out"),"\n"
 			#if ("Normal termination" in line):
 			#	finished+=1
@@ -216,15 +235,20 @@ while (var.maxConvergencia != convergenciaObtenida):
 		MinEnergyEver = energia[sortedIndexs[-1]]
 		Impresora.escribirArchivoXYZ("01FinalsCoords",hashtotal["all"],sistemasNombre[sortedIndexs[-1]]+"\tE = "+str(energia[sortedIndexs[-1]])+" H",coords[sortedIndexs[-1]])
 		convergenciaObtenida = 0
+		Impresora.escribirArchivoLog("Nuevo Minimo! -> "+sistemasNombre[sortedIndexs[-1]])
+		Impresora.escribirArchivoLog("Energia :"+str(energia[sortedIndexs[-1]])+" H")
 	#
 	convergenciaObtenida+=1
+	Impresora.escribirArchivoLog("Convergencia "+str(convergenciaObtenida)+" de "+str(var.maxConvergencia))
 	calculosterminados = 0
 	#exit(0)
 	#print convergenciaObtenida
 	generation+=1
+	del sistemasLanzar[:]
+	del sistemasNombre[:]
 	pass
 
-exit(0)
+# exit(0)
 
 
 
@@ -259,97 +283,97 @@ exit(0)
 
 
 
-print (var.Big_variable["numb_conf"])
-love=[['Ge',      -0.333821000 ,     1.303262000  ,    2.341189000,32],
-['Sn' ,      2.730896000 ,     0.020517000 ,  -0.840340000,50],
-['Bi'  ,    -1.764684000 ,     1.508150000  ,   -0.128406000,83],
-['Sn'  ,     1.156037000 ,    -2.280837000  ,    0.182246000,50],
-['Sn'  ,     1.146004000 ,     2.296151000  ,    0.230184000,50],
-['Bi'  ,     0.022383000 ,    -0.025529000  ,   -2.058139000,83],
-['Ge'  ,    -0.299796000 ,    -1.337354000  ,    2.353758000,32],
-['Ge'  ,    1.885563000 ,     0.001446000  ,    1.853211000,32],
-['Bi'  ,    -1.772267000 ,    -1.491619000  ,   -0.080269000,83]]
+# print (var.Big_variable["numb_conf"])
+# love=[['Ge',      -0.333821000 ,     1.303262000  ,    2.341189000,32],
+# ['Sn' ,      2.730896000 ,     0.020517000 ,  -0.840340000,50],
+# ['Bi'  ,    -1.764684000 ,     1.508150000  ,   -0.128406000,83],
+# ['Sn'  ,     1.156037000 ,    -2.280837000  ,    0.182246000,50],
+# ['Sn'  ,     1.146004000 ,     2.296151000  ,    0.230184000,50],
+# ['Bi'  ,     0.022383000 ,    -0.025529000  ,   -2.058139000,83],
+# ['Ge'  ,    -0.299796000 ,    -1.337354000  ,    2.353758000,32],
+# ['Ge'  ,    1.885563000 ,     0.001446000  ,    1.853211000,32],
+# ['Bi'  ,    -1.772267000 ,    -1.491619000  ,   -0.080269000,83]]
 
-love2=[['Ge',   -1.374186000,   0.991545000,   1.929067000,32],
-['Bi',   -0.000097000,  -1.192952000,  -1.823965000,83],
-['Sn',    0.000143000,   2.639297000,   0.112343000,50],
-['Sn',    1.607674000,  -1.821066000,   0.703644000,50],
-['Bi',   -2.122988000,   0.712313000,  -0.831255000,83],
-['Sn',   -1.607759000,  -1.821064000,   0.703474000,50],
-['Ge',    1.374437000,   0.991180000,   1.929002000,32],
-['Ge',   -0.000180000,  -1.016175000,   2.811114000,32],
-['Bi',    2.123023000,   0.712109000,  -0.831370000,83]]
-#mio = Lector.obtenerCoordenadaGaussian("Cell2D_1_000007.out")
-#mio = Lector.obtenerCoordenadaGaussian("Cell2D_1_000000.out")
-mio = Lector.obtenerCoordenadaGaussian("frequencies.out")
+# love2=[['Ge',   -1.374186000,   0.991545000,   1.929067000,32],
+# ['Bi',   -0.000097000,  -1.192952000,  -1.823965000,83],
+# ['Sn',    0.000143000,   2.639297000,   0.112343000,50],
+# ['Sn',    1.607674000,  -1.821066000,   0.703644000,50],
+# ['Bi',   -2.122988000,   0.712313000,  -0.831255000,83],
+# ['Sn',   -1.607759000,  -1.821064000,   0.703474000,50],
+# ['Ge',    1.374437000,   0.991180000,   1.929002000,32],
+# ['Ge',   -0.000180000,  -1.016175000,   2.811114000,32],
+# ['Bi',    2.123023000,   0.712109000,  -0.831370000,83]]
+# #mio = Lector.obtenerCoordenadaGaussian("Cell2D_1_000007.out")
+# #mio = Lector.obtenerCoordenadaGaussian("Cell2D_1_000000.out")
+# mio = Lector.obtenerCoordenadaGaussian("frequencies.out")
 
-energy= Lector.obtenerEnergiaGaussian("frequencies.out")
-freq = Lector.obtenerFrecuenciaGaussian("frequencies.out")
+# energy= Lector.obtenerEnergiaGaussian("frequencies.out")
+# freq = Lector.obtenerFrecuenciaGaussian("frequencies.out")
 
-print ("Energia es de:", energy)
-print ("Frecuencia es de:", freq)
+# print ("Energia es de:", energy)
+# print ("Frecuencia es de:", freq)
 
-Impresora.escribirInputGaussian("Diego",2,mio)
+# Impresora.escribirInputGaussian("Diego",2,mio)
 
-transformarNumeroASimbolo(mio)
+# transformarNumeroASimbolo(mio)
 
-for i in mio:
-	print i
-print "ASDADDDDDDDDDDDDDDDDDDDD"
-Impresora.escribirInputGaussian("Diego",2,mio)
+# for i in mio:
+# 	print i
+# print "ASDADDDDDDDDDDDDDDDDDDDD"
+# Impresora.escribirInputGaussian("Diego",2,mio)
 
-open("Conganas.xyz","w")
-#Impresora.escribirArchivoXYZ("Conganas",3,"Veamos",transformado)
-#Impresora.escribirArchivoXYZ("Conganas",3,"Veamos2",transformado)
+# open("Conganas.xyz","w")
+# #Impresora.escribirArchivoXYZ("Conganas",3,"Veamos",transformado)
+# #Impresora.escribirArchivoXYZ("Conganas",3,"Veamos2",transformado)
 
-#######################################################
-#print "WWWWWW",mio
-plano = Genetic.createRandomPlane()
-#Genetic.rotarMolecula(mio)
-#print "CENTRANDO"
-Genetic.centrarMolecula(mio)
+# #######################################################
+# #print "WWWWWW",mio
+# plano = Genetic.createRandomPlane()
+# #Genetic.rotarMolecula(mio)
+# #print "CENTRANDO"
+# Genetic.centrarMolecula(mio)
 
-#HAY QUE FORMAR ESTE HASH ANTES
-hashtotal = {"Bi":3,"Sn":3,"Ge":3,"all":9}
-Genetic.posicionEnPlano(plano,love)
-Genetic.posicionEnPlano(plano,love2)
-finalCoords= Genetic.combinarMolecula(love,love2,hashtotal)
+# #HAY QUE FORMAR ESTE HASH ANTES
+# hashtotal = {"Bi":3,"Sn":3,"Ge":3,"all":9}
+# Genetic.posicionEnPlano(plano,love)
+# Genetic.posicionEnPlano(plano,love2)
+# finalCoords= Genetic.combinarMolecula(love,love2,hashtotal)
 
-for i in finalCoords:
-	print i
+# for i in finalCoords:
+# 	print i
 
-#Genetic.rotarMolecula(love)
-print "AHSTA ACA"
-print love
-#ESTO VA ACA
-cordinates = np.array([[row[4],row[1], row[2], row[3]] for row in love])
+# #Genetic.rotarMolecula(love)
+# print "AHSTA ACA"
+# print love
+# #ESTO VA ACA
+# cordinates = np.array([[row[4],row[1], row[2], row[3]] for row in love])
 
-#print cordinates
-print "EMPIEZA cordinates"
-for i in cordinates:
-	print i
-print "FIN DE COORDINATES"
-for i in love:
-		print i[0],i[1],i[2],i[3],i[4]
-print "preDS"
+# #print cordinates
+# print "EMPIEZA cordinates"
+# for i in cordinates:
+# 	print i
+# print "FIN DE COORDINATES"
+# for i in love:
+# 		print i[0],i[1],i[2],i[3],i[4]
+# print "preDS"
 
-shufleguy = Genetic.mutacionMovimientoAleatorio(love)
+# shufleguy = Genetic.mutacionMovimientoAleatorio(love)
 
-#Xchange = Genetic.mutacionIntercambio(cordinates)
-#print "ds"
-for i in shufleguy:
-		#print i[0],i[1],i[2],i[3]
-		print i
-print "MOVIMIENTO ALEATORIO FIN "
+# #Xchange = Genetic.mutacionIntercambio(cordinates)
+# #print "ds"
+# for i in shufleguy:
+# 		#print i[0],i[1],i[2],i[3]
+# 		print i
+# print "MOVIMIENTO ALEATORIO FIN "
 
-#Xchange = Genetic.mutacionIntercambio(cordinates)
-Xchange = Genetic.mutacionIntercambio(love)
-for i in Xchange:
-		print i[0],i[1],i[2],i[3],i[4]
+# #Xchange = Genetic.mutacionIntercambio(cordinates)
+# Xchange = Genetic.mutacionIntercambio(love)
+# for i in Xchange:
+# 		print i[0],i[1],i[2],i[3],i[4]
 
 
-# print "1"
-# var.PcentAtomosMutadosMovimiento=0.1
+# # print "1"
+# # var.PcentAtomosMutadosMovimiento=0.1
 # shufleguy = Genetic.mutacionMovimientoAleatorio(love)
 # print "2"
 # var.PcentAtomosMutadosMovimiento=0.2
