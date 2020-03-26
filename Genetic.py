@@ -79,7 +79,7 @@ def posicionEnPlano(plane, coordsSist):
 	 	i.pop()						# Elimina valor porducto punto
 	 	#print i
 	
-	print "\n"
+	#print "\n"
 	return coordsSist
 
 def combinarMolecula(sistema_1, sistema_2, hashTotal):

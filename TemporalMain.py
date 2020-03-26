@@ -4,6 +4,8 @@ import Impresora
 import Var as var
 import Genetic
 import Lanzador as go
+import MatrixAutomaton as Mat
+
 import numpy as np
 import math
 import sys
@@ -22,7 +24,7 @@ def transformarNumeroASimbolo(coords):
 
 
 queue = sys.argv[2]
-print queue
+#print queue
 
 var.init()
 Impresora.crearArchivos()
@@ -68,6 +70,10 @@ while (var.maxConvergencia != convergenciaObtenida):
 		lines = [1,1,1,1,1,1,1,1,1,1] #CHANGE
 		sistemasNombre = ["job01","job02","job03","job04","job05", #CHANGE
 				"job06","job07","job08","job09","job10"]#,#"job11"]
+		test = Mat.obtenerCoordenadas(coords)
+		print test
+
+		exit(1)
 	else:
 		print "SEEGUNDA BUELTAs"
 		mutados = int(round(var.PcentToMutate * float(var.Big_variable["numb_conf"])))
@@ -101,7 +107,7 @@ while (var.maxConvergencia != convergenciaObtenida):
 	#for i in sistemasLanzar:
 	#	print i
 	if mutados != 0:
-		print "HAPENS"
+#		print "HAPENS"
 		for muting in range(0 ,mutados):
 			#print muting
 			np.random.shuffle(indexsAboveCurfew)
@@ -150,13 +156,13 @@ while (var.maxConvergencia != convergenciaObtenida):
 		for i in range(len(sistemasLanzar)):
 			if lines[i] != 0:
 				lines[i] = Lector.obtenerTermination(sistemasNombre[i]+".out")
-				print lines
+#				print lines
 			#print sistemasNombre[i] ,Lector.obtenerUltimaLinea(sistemasNombre[i]+".out"),"\n"
 			#if ("Normal termination" in line):
 			#	finished+=1
 		if(1 in lines):
 			#break
-			print "ESTOY ACA"
+#			print "ESTOY ACA"
 			#print sistemasLanzar
 			print lines
 			time.sleep(10.0)
@@ -176,11 +182,14 @@ while (var.maxConvergencia != convergenciaObtenida):
 #####################################
 	#Zona 4
 	# Recopilacion de datos.
-
+	del fitness[:]
+	del coords[:]
+	del energia[:]
+		
 	for file in sistemasNombre:
 		tmp = Lector.obtenerCoordenadaGaussian(file+".out")
 		energy= float(Lector.obtenerEnergiaGaussian(file+".out"))
-		print file ," esto da ", energy
+#		print file ," esto da ", energy
 		transformarNumeroASimbolo(tmp)
 		#print tmp
 		coords.append(tmp)
@@ -200,7 +209,7 @@ while (var.maxConvergencia != convergenciaObtenida):
 
 	for energy in energia:
 		prob = (energy - energiaMenor) / difEner
-		print energy," -> " ,prob
+#		print energy," -> " ,prob
 		tmp_fit = math.exp(-prob * var.alphaNumber) 
 		fitness.append(tmp_fit)
 	#for w in fitness:
@@ -214,7 +223,7 @@ while (var.maxConvergencia != convergenciaObtenida):
 			index.append(aux)
 		aux+=1
 	#print index
-	print sortedIndexs
+#	print sortedIndexs
 	indexsAboveCurfew = np.delete(sortedIndexs,index)
 	#print indexsAboveCurfew
 	#print energia

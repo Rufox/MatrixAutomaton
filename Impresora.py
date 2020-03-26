@@ -24,14 +24,14 @@ def crearArchivos():
 			os.remove(mut)
 			pass
 		except:
-			print "No MUT"
+			pass
 	com = glob.glob("*.com")
-	for data in xyz:
+	for data in com:
 		try:
 			os.remove(com)
 			pass
 		except:
-			print "No Coms"
+			pass
 	open("LOGS","w+")
 
 def escribirInputGaussian(name,number,origincoords):

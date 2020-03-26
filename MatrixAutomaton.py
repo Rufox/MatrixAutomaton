@@ -1,7 +1,7 @@
 import numpy as np 
 import random
 import itertools
-
+import Var as var
 class GrupoAtomico:
 	def __init__(self, n):
 		self.atomos = []
