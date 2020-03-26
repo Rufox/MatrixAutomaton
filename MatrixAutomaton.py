@@ -117,15 +117,16 @@ def guardar(fr):
 
 def obtenerCoordenadas(fr):
 	arreglo = np.array(fr)
-	arreglo = arreglo*float(atomos[0].radio_atomico)
+	arreglo = arreglo*float(atomos[0].radio_atomico)*2
 	for i in range(len(fr)):
 		coords_list.append(str(matriz[fr[i][2],fr[i][1],fr[i][0]])+' '+str(round(arreglo[i][0],2))+' '+str(round(arreglo[i][1],2))+' '+str(round(arreglo[i][2],2)))
 	coords_list2.append(coords_list)
 	return coords_list2
 
-def main():
+#def main():
+def Llamar(iteraciones):
 	global x, y, z, matriz, franja, coords_list, coords_list2
-	global iteraciones, grupo_atomico
+	global grupo_atomico
 	global atomic_radii
 	global numeros2
 	global lista
@@ -190,7 +191,7 @@ def main():
                     'Bh' :'264.000' ,'Sg':'266'     ,'Mt' :'268'     ,'Hs' :'277'}
 
 	f=open('hola.xyz','w+')
-	iteraciones = 5
+	#iteraciones = 8
 	
 	while iteraciones > 0:
 
@@ -274,6 +275,7 @@ def main():
 		coords_list = []
 	
 	print coords_list2
+	return coords_list2
 	#MatrixAutomaton.obtenerCoordenadas(franja)
 		
 

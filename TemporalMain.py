@@ -66,24 +66,36 @@ while (var.maxConvergencia != convergenciaObtenida):
 		energia = []
 		mutados = 0
 		cruzados = 0
-		nuevos = 0#var.Big_variable["numb_conf"]  #CHANGE
-		lines = [1,1,1,1,1,1,1,1,1,1] #CHANGE
-		sistemasNombre = ["job01","job02","job03","job04","job05", #CHANGE
-				"job06","job07","job08","job09","job10"]#,#"job11"]
-		test = Mat.obtenerCoordenadas(coords)
-		print test
+		nuevos = var.Big_variable["numb_conf"]  #CHANGE
+		#lines = [1,1,1,1,1,1,1,1,1,1] #CHANGE
+		#sistemasNombre = ["job01","job02","job03","job04","job05", #CHANGE
+		#		"job06","job07","job08","job09","job10"]#,#"job11"]
 
-		exit(1)
+#		exit(1)
 	else:
 		print "SEEGUNDA BUELTAs"
 		mutados = int(round(var.PcentToMutate * float(var.Big_variable["numb_conf"])))
 		cruzados = int(round(var.PcentToRecombine * float(var.Big_variable["numb_conf"])))
-		nuevos = 0 # total - mutados -cruzados CHANGE
+		nuevos =  int(var.Big_variable["numb_conf"]) - mutados -cruzados #CHANGE
 
+	test = Mat.Llamar(int(nuevos))
+	print "\nEsto Es lo que entrega el programa de MATRICES:\n"
+	for primer in test:
+		print primer
+		aux = 0
+		for i in primer:
+			#print i
+			j=i.split(" ")
+			primer[aux] = j
+			#print j
+			aux+=1
+		sistemasLanzar.append(primer)
+		sistemasNombre.append("Original"+str(generation)+"_")
+	print "\n",test
 ##########################################
 	# CROSSING OVER
 	if cruzados != 0:
-		for Crossing in xrange(len(indexsAboveCurfew)):
+		for Crossing in range(0, cruzados):
 			#print Crossing
 			np.random.shuffle(indexsAboveCurfew)
 			#print indexsAboveCurfew
@@ -173,6 +185,7 @@ while (var.maxConvergencia != convergenciaObtenida):
 				if (2 ==lines[i]):
 					print "Malos sera: ",sistemasNombre[i]
 					go.envioCluster(var.GaussianCall,sistemasNombre[i],sistemasNombre[i]+".com",var.Big_variable["core"],queue)
+					print "Enviado"
 					lines[i] = 1
 		else:
 			break
