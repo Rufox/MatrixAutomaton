@@ -49,15 +49,15 @@ def escribirInputGaussian(name,number,origincoords):
 	input.write("\n")		#Porque Gaussian es espcial
 	input.close()
 
+# Escribe solo 1 sistema a un archivo xyz, si el archivo xyz se llama varia veces se agregaran mas sistemas.
 def escribirArchivoXYZ(name, numeroAtomo, title, coordsList):
 	input = open(name+".xyz","a")
 	input.write(str(numeroAtomo)+"\n")
 	input.write(title+"\n")
 	for line in coordsList:
-		#print (line)
-		#line.pop()
-		#input.write(' '.join(map(str, line))+"\n")
 		input.write(line[0]+"\t"+str(line[1])+"\t"+str(line[2])+"\t"+str(line[3])+"\n")
+
+# Impresion LOG, funcion simple que imprime cualquier informacion en un archivo de texto
 def escribirArchivoLog(info):
 	input = open("LOGS","a")
 	input.write(str(info)+"\n")

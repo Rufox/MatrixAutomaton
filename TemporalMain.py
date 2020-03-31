@@ -10,56 +10,50 @@ import numpy as np
 import math
 import sys
 import time
+
+# Caso especial cuando los atomos vienen en formato de numero atomico.
 def transformarNumeroASimbolo(coords):
 	nuevo=coords
-	#print (var.atomic_number[2])
 	for line in nuevo:
 		#si es numero
 		line.append(line[0])
 		line[0]=var.atomic_number[line[0]-1]
 	nuevo=[coords,nuevo]
 	return nuevo
-		
 
-
-
+# Cola a enviar
 queue = sys.argv[2]
-#print queue
 
+# Inicializacion de variables globales
 var.init()
+# Verificacion y elminacion de archivos innecesarios (otras pruebas)
 Impresora.crearArchivos()
+# Lectura de archivo de configuracion
 Lector.leerArchivoParametros(sys.argv[1])
 
 
-print (list(var.Big_variable))
+#print (list(var.Big_variable))
 
-#Llamado programa isisdora, se obtiene algo
-
-# Primer ciclo indica si se encontro el mejor
-# Sea la variable convergenciaObtenida la medidora de ello.
-# Sea maxConvergencia aquella establecida como quiebre.
-
-
-# automata, mutados, combinados
-
+# Inicializaicon de variables locales
 convergenciaObtenida = 0
 calculosterminados = 1 
 hashtotal = var.formulaQuimicaAHash()
-#print hashtotal
-
 generation = 0
 MinEnergyEver = 0
+
+#Impresion LOG
 Impresora.escribirArchivoLog("Iniciado el programa")
+# Ciclo principal de vida, funciona mientras se alcance un nivel de energia constante en un numero de ciclos
 while (var.maxConvergencia != convergenciaObtenida):
 	
 	sistemasNombre = []
 	sistemasLanzar = []
 	lines = []
-	# mutados = var.PcentToMutate * 
 	# ZONA 1
 	# Creacion de inputs: 
-	# 1 isidora, 2 genetic, 3 mutacion
+	# 1 MatrixAutomaton, 2 Recombinacion, 3 Mutacion
 	
+	#Caso especial ciclo 0
 	if calculosterminados != 0:
 		fitness = []
 		coords = []
@@ -71,13 +65,13 @@ while (var.maxConvergencia != convergenciaObtenida):
 		#sistemasNombre = ["job01","job02","job03","job04","job05", #CHANGE
 		#		"job06","job07","job08","job09","job10"]#,#"job11"]
 
-#		exit(1)
+	# Ciclos 2+
 	else:
-		print "SEEGUNDA BUELTAs"
 		mutados = int(round(var.PcentToMutate * float(var.Big_variable["numb_conf"])))
 		cruzados = int(round(var.PcentToRecombine * float(var.Big_variable["numb_conf"])))
 		nuevos =  int(var.Big_variable["numb_conf"]) - mutados -cruzados #CHANGE
 
+	# Matrix Automaton
 	test = Mat.Llamar(int(nuevos))
 	print "\nEsto Es lo que entrega el programa de MATRICES:\n"
 	for primer in test:
@@ -96,97 +90,62 @@ while (var.maxConvergencia != convergenciaObtenida):
 	# CROSSING OVER
 	if cruzados != 0:
 		for Crossing in range(0, cruzados):
-			#print Crossing
 			np.random.shuffle(indexsAboveCurfew)
-			#print indexsAboveCurfew
 			plano = Genetic.createRandomPlane()
-			#print coords[indexsAboveCurfew[0]]
 			Genetic.posicionEnPlano(plano,coords[indexsAboveCurfew[0]])
-	#		print coords[indexsAboveCurfew[0]]
 			Genetic.posicionEnPlano(plano,coords[indexsAboveCurfew[1]])
-			#print coords[indexsAboveCurfew[0]],"\n+\n", coords[indexsAboveCurfew[1]],"\nhash de ", hashtotal			
 			finalCoords= Genetic.combinarMolecula(coords[indexsAboveCurfew[0]],coords[indexsAboveCurfew[1]],hashtotal)
-	#		print "Child",str(generation),"_"
-	#		for k in finalCoords:
-	#			print k
 			sistemasLanzar.append(finalCoords)
 			sistemasNombre.append("Child"+str(generation)+"_")
-			#for i in finalCoords:
-			#	print i[4],i[1],i[2],i[3]
-
 			pass
+
 	# MUTACIONES 0.2 y 0.2 de cualquiera de los alpha
-	#for i in sistemasLanzar:
-	#	print i
 	if mutados != 0:
-#		print "HAPENS"
 		for muting in range(0 ,mutados):
-			#print muting
 			np.random.shuffle(indexsAboveCurfew)
 			# Muta el primero con dezplazamiento, muta el ultimo con intercambio
 			mutDesp = Genetic.mutacionMovimientoAleatorio(coords[indexsAboveCurfew[0]])
 			mutInt = Genetic.mutacionIntercambio(coords[indexsAboveCurfew[-1]])
 			sistemasNombre.append("MutD"+str(generation)+"_")
 			sistemasLanzar.append(mutDesp)
-			#for i in sistemasLanzar:
-			#	print i
-			#exit(0)
 			sistemasNombre.append("MutI"+str(generation)+"_")
 			sistemasLanzar.append(mutInt)
 #####################################
 
 	#ZONA 2
 	# Formacion de inputs en formato gaussian u otro programa
-	#print sistemasLanzar
-	#for i in sistemasLanzar:
-	#	for j in i:
-	#		print j
-	#	print "\n"
-
-
 	for iden in range(len(sistemasLanzar)):
 		Impresora.escribirInputGaussian(sistemasNombre[iden],iden,sistemasLanzar[iden])
 		sistemasNombre[iden]=sistemasNombre[iden]+str(iden)
-	# IMpresion data
-	#for cont in range(len(sistemasLanzar)):
+		# Impresion data
 		Impresora.escribirArchivoXYZ("PreCoords_"+str(generation),hashtotal["all"],sistemasNombre[iden],sistemasLanzar[iden])
 
 #####################################
 	# Zona 3
-	#finished = 0
-	#while True:
-	#lines = [1,1,1,1,1,1,1,1,1,1,1]
+	# Envio de input a programa de calculo
 	for iden in range(len(sistemasLanzar)):
 		go.envioCluster(var.GaussianCall,sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 		lines.append(1)
 	#pass
-	#
-
-	#indes = lines.index(1)
-	#print "dsadasda",indes
 	while True and len(sistemasLanzar):
 		for i in range(len(sistemasLanzar)):
 			if lines[i] != 0:
 				lines[i] = Lector.obtenerTermination(sistemasNombre[i]+".out")
-#				print lines
-			#print sistemasNombre[i] ,Lector.obtenerUltimaLinea(sistemasNombre[i]+".out"),"\n"
-			#if ("Normal termination" in line):
-			#	finished+=1
+
 		if(1 in lines):
-			#break
-#			print "ESTOY ACA"
-			#print sistemasLanzar
 			print lines
 			time.sleep(10.0)
 		elif (2 in lines):
-			print "Casos erroenos"
-			time.sleep(1.0)
-			for i in range(len(lines)):
-				if (2 ==lines[i]):
+			print "Casos erroneos"
+			time.sleep(5.0)
+			for i in range(len(sistemasLanzar)):
+				if (lines[i] == 2):
 					print "Malos sera: ",sistemasNombre[i]
 					go.envioCluster(var.GaussianCall,sistemasNombre[i],sistemasNombre[i]+".com",var.Big_variable["core"],queue)
 					print "Enviado"
+					print lines
 					lines[i] = 1
+					time.sleep(1.0)
 		else:
 			break
 		pass
@@ -202,57 +161,36 @@ while (var.maxConvergencia != convergenciaObtenida):
 	for file in sistemasNombre:
 		tmp = Lector.obtenerCoordenadaGaussian(file+".out")
 		energy= float(Lector.obtenerEnergiaGaussian(file+".out"))
-#		print file ," esto da ", energy
 		transformarNumeroASimbolo(tmp)
-		#print tmp
 		coords.append(tmp)
 		energia.append(energy)
-	#for x in xrange(len(coords)):
-	#	print energia[x]
-		#for i in coords[x]:
-		#	print i
-	#	pass
 ######################################
 	#ZOna 5
 	# distribucion de la energia, cual es el mejor, contador del minimo global actual
-	#esto sale en la linea 3398
 	energiaMenor = min(energia)
 	energiaMayor = max(energia)
 	difEner = energiaMayor - energiaMenor
 
 	for energy in energia:
 		prob = (energy - energiaMenor) / difEner
-#		print energy," -> " ,prob
 		tmp_fit = math.exp(-prob * var.alphaNumber) 
 		fitness.append(tmp_fit)
-	#for w in fitness:
-	#	print w
 	sortedIndexs = np.argsort(fitness)
 	aux = 0
 	index=[]
 	for data in sortedIndexs:
 		if fitness[data] < var.PcentBestFitness:
-			#print "PASO", fitness[data] , data
 			index.append(aux)
 		aux+=1
-	#print index
-#	print sortedIndexs
 	indexsAboveCurfew = np.delete(sortedIndexs,index)
-	#print indexsAboveCurfew
-	#print energia
-	#print fitness[sortedIndexs]
-	#for x in fitness[sortedIndexs]:
-	#	print x
-	#	pass
-	# Nuemro final que pasan a siguiente vuelta.
 
+######################################
+	# Zona 6
 	# IMPRESION DE COSAS
 	for cont in range(len(sistemasNombre)):
 		Impresora.escribirArchivoXYZ("PostCoords_"+str(generation),hashtotal["all"],sistemasNombre[cont]+"\tE = "+str(energia[cont])+" H",coords[cont])
 	#
 	# Caso del mejor
-	#mejorEnergiaCiclo = energia[sortedIndexs[-1]]
-	#print mejorEnergiaCiclo
 	if(energia[sortedIndexs[-1]] < MinEnergyEver):
 		MinEnergyEver = energia[sortedIndexs[-1]]
 		Impresora.escribirArchivoXYZ("01FinalsCoords",hashtotal["all"],sistemasNombre[sortedIndexs[-1]]+"\tE = "+str(energia[sortedIndexs[-1]])+" H",coords[sortedIndexs[-1]])
@@ -263,174 +201,10 @@ while (var.maxConvergencia != convergenciaObtenida):
 	convergenciaObtenida+=1
 	Impresora.escribirArchivoLog("Convergencia "+str(convergenciaObtenida)+" de "+str(var.maxConvergencia))
 	calculosterminados = 0
-	#exit(0)
-	#print convergenciaObtenida
+	
 	generation+=1
 	del sistemasLanzar[:]
 	del sistemasNombre[:]
 	pass
 
 # exit(0)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# print (var.Big_variable["numb_conf"])
-# love=[['Ge',      -0.333821000 ,     1.303262000  ,    2.341189000,32],
-# ['Sn' ,      2.730896000 ,     0.020517000 ,  -0.840340000,50],
-# ['Bi'  ,    -1.764684000 ,     1.508150000  ,   -0.128406000,83],
-# ['Sn'  ,     1.156037000 ,    -2.280837000  ,    0.182246000,50],
-# ['Sn'  ,     1.146004000 ,     2.296151000  ,    0.230184000,50],
-# ['Bi'  ,     0.022383000 ,    -0.025529000  ,   -2.058139000,83],
-# ['Ge'  ,    -0.299796000 ,    -1.337354000  ,    2.353758000,32],
-# ['Ge'  ,    1.885563000 ,     0.001446000  ,    1.853211000,32],
-# ['Bi'  ,    -1.772267000 ,    -1.491619000  ,   -0.080269000,83]]
-
-# love2=[['Ge',   -1.374186000,   0.991545000,   1.929067000,32],
-# ['Bi',   -0.000097000,  -1.192952000,  -1.823965000,83],
-# ['Sn',    0.000143000,   2.639297000,   0.112343000,50],
-# ['Sn',    1.607674000,  -1.821066000,   0.703644000,50],
-# ['Bi',   -2.122988000,   0.712313000,  -0.831255000,83],
-# ['Sn',   -1.607759000,  -1.821064000,   0.703474000,50],
-# ['Ge',    1.374437000,   0.991180000,   1.929002000,32],
-# ['Ge',   -0.000180000,  -1.016175000,   2.811114000,32],
-# ['Bi',    2.123023000,   0.712109000,  -0.831370000,83]]
-# #mio = Lector.obtenerCoordenadaGaussian("Cell2D_1_000007.out")
-# #mio = Lector.obtenerCoordenadaGaussian("Cell2D_1_000000.out")
-# mio = Lector.obtenerCoordenadaGaussian("frequencies.out")
-
-# energy= Lector.obtenerEnergiaGaussian("frequencies.out")
-# freq = Lector.obtenerFrecuenciaGaussian("frequencies.out")
-
-# print ("Energia es de:", energy)
-# print ("Frecuencia es de:", freq)
-
-# Impresora.escribirInputGaussian("Diego",2,mio)
-
-# transformarNumeroASimbolo(mio)
-
-# for i in mio:
-# 	print i
-# print "ASDADDDDDDDDDDDDDDDDDDDD"
-# Impresora.escribirInputGaussian("Diego",2,mio)
-
-# open("Conganas.xyz","w")
-# #Impresora.escribirArchivoXYZ("Conganas",3,"Veamos",transformado)
-# #Impresora.escribirArchivoXYZ("Conganas",3,"Veamos2",transformado)
-
-# #######################################################
-# #print "WWWWWW",mio
-# plano = Genetic.createRandomPlane()
-# #Genetic.rotarMolecula(mio)
-# #print "CENTRANDO"
-# Genetic.centrarMolecula(mio)
-
-# #HAY QUE FORMAR ESTE HASH ANTES
-# hashtotal = {"Bi":3,"Sn":3,"Ge":3,"all":9}
-# Genetic.posicionEnPlano(plano,love)
-# Genetic.posicionEnPlano(plano,love2)
-# finalCoords= Genetic.combinarMolecula(love,love2,hashtotal)
-
-# for i in finalCoords:
-# 	print i
-
-# #Genetic.rotarMolecula(love)
-# print "AHSTA ACA"
-# print love
-# #ESTO VA ACA
-# cordinates = np.array([[row[4],row[1], row[2], row[3]] for row in love])
-
-# #print cordinates
-# print "EMPIEZA cordinates"
-# for i in cordinates:
-# 	print i
-# print "FIN DE COORDINATES"
-# for i in love:
-# 		print i[0],i[1],i[2],i[3],i[4]
-# print "preDS"
-
-# shufleguy = Genetic.mutacionMovimientoAleatorio(love)
-
-# #Xchange = Genetic.mutacionIntercambio(cordinates)
-# #print "ds"
-# for i in shufleguy:
-# 		#print i[0],i[1],i[2],i[3]
-# 		print i
-# print "MOVIMIENTO ALEATORIO FIN "
-
-# #Xchange = Genetic.mutacionIntercambio(cordinates)
-# Xchange = Genetic.mutacionIntercambio(love)
-# for i in Xchange:
-# 		print i[0],i[1],i[2],i[3],i[4]
-
-
-# # print "1"
-# # var.PcentAtomosMutadosMovimiento=0.1
-# shufleguy = Genetic.mutacionMovimientoAleatorio(love)
-# print "2"
-# var.PcentAtomosMutadosMovimiento=0.2
-# shufleguy = Genetic.mutacionMovimientoAleatorio(love)
-# print "3"
-# var.PcentAtomosMutadosMovimiento=0.3
-# shufleguy = Genetic.mutacionMovimientoAleatorio(love)
-# print "4"
-# var.PcentAtomosMutadosMovimiento=0.4
-# shufleguy = Genetic.mutacionMovimientoAleatorio(love)
-# print "5"
-# var.PcentAtomosMutadosMovimiento=0.5
-# shufleguy = Genetic.mutacionMovimientoAleatorio(love)
-# print "6"
-# var.PcentAtomosMutadosMovimiento=0.6
-# shufleguy = Genetic.mutacionMovimientoAleatorio(love)
-# print "7"
-# var.PcentAtomosMutadosMovimiento=0.7
-# shufleguy = Genetic.mutacionMovimientoAleatorio(love)
-# print "8"
-# var.PcentAtomosMutadosMovimiento=0.8
-# shufleguy = Genetic.mutacionMovimientoAleatorio(love)
-# print "9"
-# var.PcentAtomosMutadosMovimiento=0.9
-# shufleguy = Genetic.mutacionMovimientoAleatorio(love)
-# print "preDS"
-# var.PcentAtomosMutadosMovimiento=1.0
-# shufleguy = Genetic.mutacionMovimientoAleatorio(love)
-# print "preDS"
-#Genetic.centrarMolecula(love)
-#for i in love:
-#		print i[0],i[1],i[2],i[3]
-
-#print "wola"
-#Genetic.centrarMolecula(love)
-#for i in finalCoords:
-#		print i[0],i[1],i[2],i[3]
-

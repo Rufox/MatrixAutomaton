@@ -1,7 +1,7 @@
 import configparser
 import Var as var
 
-#Este programa en particular sera el encargado de extraer (leer) cualquier informaicon de algun archivo de texto.
+#Este programa en particular sera el encargado de extraer (leer) cualquier informacion de algun archivo de texto.
 
 # Leer archivo de configuracion "Config.in" y guarda todas sus variables
 # Archivo de configuracon DEBE ir con [SECCIONES]
@@ -18,7 +18,6 @@ def leerArchivoParametros(configs):
 
 	for secciones in config.sections():
 		for (variable, valor) in config.items(secciones):
-			#print variable, valor
 			agregarVariableGlobal(variable, valor)
 
 def agregarVariableGlobal(key, dato):
