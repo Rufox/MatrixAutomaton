@@ -2,6 +2,8 @@ import numpy as np
 import random
 import itertools
 import Var as var
+
+
 class GrupoAtomico:
 	def __init__(self, n):
 		self.atomos = []
@@ -25,11 +27,15 @@ class Atomo:
     def __repr__(self):
     	return str(self)
 
+
 def almacenarCoord(a,b,c):
 	return a,b,c
 
+#en esta funcion se obtiene la lista de elementos y se realiza el escalamiento de los 
+#elementos en funcion de los valores de radio atómico
 def obtenerElementos():
 	global lista_elementos, atomos, conversion, elementos, numeros, elementos_escalados
+	
 	lista_elementos=[]
 	elementos=[]
 	numeros=[]
@@ -45,23 +51,42 @@ def obtenerElementos():
 	    		input_elementos.remove("chemical_formula")
 	    		input_elementos.remove("=")
 	    		for i in input_elementos:
+	    			#si en la linea de chemical_formula se encuentra un numero 
+	    			#se añade a la lista numeros, si no, a la lista elementos.
 	    			if i.isdigit():
 	    				numeros.append(i)
 	    			else:
 	    				elementos.append(i+' ')
 	    		for j in range(len(elementos)):
+					#en lista_elementos se agregan los elementos, las veces que determinen los numeros
+					#p/e: H 2 O 1 se traduce en lista_elementos = [H, H, O]
 					lista_elementos.append(elementos[j].split()*int(numeros[j]))
+					
+					#la lista atomos es una lista de la clase Atomo, en esta lista
+					#se almacenan diferentes atributos: los elementos, su radio atomico y la escala
+					#por ahora se inicializa en 0, la escala se utiliza para el espaciado del vecindario 
 					atomos.append(Atomo(elementos[j].strip(),atomic_radii[elementos[j].strip()],0))
+					
 					elementos[j] = elementos[j].strip()
+			#con el siguiente sort se ordenan los atomos en orden ascendente
+			#dependiendo del radio atomico
 			atomos.sort(key=lambda atomos: atomos.radio_atomico)
 
 			for l in range(len(atomos)):
+
+				#para el l = 0, o sea para el primero atomo, el de menor radio atomico
 				if l == 0:
+					#creo que esta lista conversion no sirve de mucho XD
 					conversion.append(1.0)
+					#se asigna la escala de valor 1, lo que significa que en una funcion posterior
+					#se buscarán sus vecinos directos.
 					atomos[l].escala = 1.0
+					#en esta lista se almacenan los elementos ya escalados
 					elementos_escalados.append(atomos[l].elemento)
 					#print str(atomos[l].elemento), str(atomos[l].radio_atomico), str(atomos[l].escala)
 				else:
+					#para los demas atomos con radio atomicos mayores se realiza 
+					#la regla de 3 
 					tmp=float(atomos[l].radio_atomico)/float(atomos[0].radio_atomico)
 					tmp=round(int(tmp))
 					conversion.append(tmp)
@@ -71,25 +96,34 @@ def obtenerElementos():
 			print conversion
 			lista_elementos = list(itertools.chain(*lista_elementos))
 			#print elementos, numeros, elementos_escalados, lista_elementos
-
+	#se retorna la lista de elementos en este estilo : lista_elementos = [H, H, O]
 	return lista_elementos
 
 def buscarVecinos(m,a,b,c):
+	#lista que almacena los posibles vecinos
 	global posibles_vecinos
 	
+	#combinatoria que busca todos los vecinos posibles en 3d
+	#el espaciado esta definido por el elemento actual, como se explico antes
 	for i in [a,a+espaciado,a-espaciado]:
 		for j in [b,b+espaciado,b-espaciado]:
 			for k in [c,c+espaciado,c-espaciado]:
+				#si son las mismas coordenadas del atomo; pass.
 				if a == i and b == j and c == k:
 					pass
+				#si es un numero negativo o supera los bordes de la matriz: pass.
 				elif i < 0 or i > sum(numeros2) or j < 0 or j > sum(numeros2) or k < 0 or k > 3:
 					pass
+				#si las coordenadas no estan en la lista y no estan en la franja, almacena las coordenadas en
+				#la lista, y almacena eso en posibles_vecinos	
 				elif almacenarCoord(i,j,k) not in lista and almacenarCoord(i,j,k) not in franja:
 					lista.append(almacenarCoord(i,j,k))
 					posibles_vecinos = lista
 					#print (i,j,k)
+	#se retorna la lista con los posibles vecinos del atomo actual
 	return posibles_vecinos
 
+# lo mismo que la anterior pero solo con vecinos directos
 def existenVecinosDirectos(m,a,b,c):
 	new =[]
 	
@@ -106,6 +140,7 @@ def existenVecinosDirectos(m,a,b,c):
 						return True
 	return False
 
+#esta funcion era para guardar la informacion en el output .xyz
 def guardar(fr):
 	global grupo_atomico
 
@@ -194,74 +229,114 @@ def Llamar(iteraciones):
 	#iteraciones = 8
 	
 	while iteraciones > 0:
-
+		#Se guardan los elementos en lista_elementos, el funcionamiento de 
+		#obtenerElementos() mejor detallado en la funcion
 		lista_elementos = obtenerElementos()
+		#se invierte el orden de los elementos para trabajar desde el primero
+		#(deberia haber trabajado con colas para no hacer esta estupidez pero bue)
 		lista_elementos.reverse()
+		#esta es una conversion de la lista numeros en enteros, porque estaban como string
 		numeros2 = map(int, numeros)
+		#se define el grupo atomico con la clase GrupoAtomico(n), el n esta definido por la
+		#suma de los elementos de la lista numeros.
 		grupo_atomico = GrupoAtomico(sum(numeros2))
+
+		#esto lo hice para poder trabajar con los elementos y no afectar a la lista_elementos
 		atomos_ga = [grupo_atomico.atomos.insert(0,x) for x in lista_elementos]
 		print grupo_atomico
+
+		#creacion de la matriz 
 		matriz = np.zeros((grupo_atomico.n+1)**2*4, dtype = object).reshape(4,grupo_atomico.n+1,grupo_atomico.n+1)        # 3d array
 		
 		#eleccion de posicion random para primer elemento
 		indices =  np.random.randint(0, high=3, size=3)
 		x=indices[0]
 		y=indices[1]
+		# el eje z es mas acotado
 		z=random.randint(0,3)
 
 		print "Coordenadas generadas para primer atomo ( x:",x,", y:",y,", z:",z,")"
 
+		#la franja almacena las coordenadas de todos los atomos del gurpo atomico por iteracion
+		#por ahora se almacenan las coordenadas del primer atomo
 		franja.append(almacenarCoord(x,y,z))
 		
+		# en las coordenadas elegidas para el primer atomo se ubica el primer elemento de la lista_elementos
 		matriz[(z,y,x)] = lista_elementos.pop()
 		
+
 		espaciado = 1
+		
+		#Se buscan los vecinos del primer atomo
+		#detalles en la funcion v
 		buscarVecinos(matriz,x,y,z)
+	 	
 	 	#print 'Posibles vecinos: ', posibles_vecinos
 	 	#print matriz
+
 
 		while len(franja) < grupo_atomico.n:
 
 			while len(lista_elementos):
 				#print posibles_vecinos
+
+				#se elige aleatoriamente un posible vecino y se asigna a la variable vecino_candidato
 				vecino_candidato = random.choice(posibles_vecinos)
+				#si el vecino_candidato ya esta en la franja; pass.
 				if vecino_candidato in franja:
 					pass
+				#sino, almacena el elemento en las coordenadas del vecino_candidato
 				else:
 					#print vecino_candidato
 					matriz[(vecino_candidato[2],vecino_candidato[1],vecino_candidato[0])]=lista_elementos.pop()
 					
 					for i in atomos:
+
 						if matriz[(vecino_candidato[2],vecino_candidato[1],vecino_candidato[0])] == i.elemento:
+							#se determina el espaciado dependiendo de la escala del elemento actual
 							espaciado=int(i.escala)
 						else:
 							continue
 					
 					if espaciado > 1:
+						# si el espaciado es mayor a 1 se verifica si existen vecinos directos
 						while existenVecinosDirectos(matriz,vecino_candidato[0],vecino_candidato[1],vecino_candidato[2]):
-							
+							#de existir vecinos directos, se hace una especie de backtracking 8-)
+							#se vuelve a agregar el elemento que se ubicó en la matriz a la lista_elementos
 							lista_elementos.append(matriz[(vecino_candidato[2],vecino_candidato[1],vecino_candidato[0])])
+							#se le vuelve a asignar un 0 a esa coordenada, en vez del elemento
 							matriz[(vecino_candidato[2],vecino_candidato[1],vecino_candidato[0])] = 0
+							#se elimina este candidato de los posibles vecinos para no poder seleccionarlo mas
 							posibles_vecinos.remove((vecino_candidato[0],vecino_candidato[1],vecino_candidato[2]))
 							#print vecino_candidato, posibles_vecinos
+							
+							#se escoge otro candidato de la lista posibles_vecinos y ahora el nuevo_candidato es el vecino_candidato
 							nuevo_candidato = random.choice(posibles_vecinos)
 							vecino_candidato = nuevo_candidato
 							#print lista_elementos
-							
+						#si no existen vecinos directos del vecino_candidato, se convierte en el vecino_escogido
 						else:
 							#print existenVecinosDirectos(matriz, vecino_candidato[0],vecino_candidato[1],vecino_candidato[2])
 							vecino_escogido = vecino_candidato
+							#se agrega el vecino_escogido a la franja de solucion para la iteracion actual
 							franja.append(vecino_escogido)
 							#print espaciado
 							#print 'Vecino escogido: ',(vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
+							
+
+							#Se buscan los posibles vecinos del vecino_escogido actual
 							buscarVecinos(matriz,vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
 							#print 'Posibles vecinos: ', posibles_vecinos
 							#print matriz
+					#si el espaciado es 1, no importa si existen vecinos directos:
 					else:
+						#el vecino_escogido es el vecino candidato y se añaden las coordenadas a la franja
 						vecino_escogido = vecino_candidato
 						franja.append(vecino_escogido)
 						#print espaciado
 						#print 'Vecino escogido: ',(vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
+						
+						#Se buscan los vecinos para el vecino_escogido
 						buscarVecinos(matriz,vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
 						#print 'Posibles vecinos: ', posibles_vecinos
 		print matriz
@@ -269,8 +344,10 @@ def Llamar(iteraciones):
 		iteraciones = iteraciones - 1
 		#guardar(franja)
 		
+		#funcion para obtener una lista de las franjas de solucion por la cantidad de iteraciones determianda
 		obtenerCoordenadas(franja)
 
+		#se reinician estas listas para la nueva iteracion
 		franja = []	
 		coords_list = []
 	
