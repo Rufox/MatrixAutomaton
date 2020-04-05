@@ -140,12 +140,17 @@ while (var.maxConvergencia != convergenciaObtenida):
 			time.sleep(5.0)
 			for i in range(len(sistemasLanzar)):
 				if (lines[i] == 2):
-					print "Malos sera: ",sistemasNombre[i]
-					go.envioCluster(var.GaussianCall,sistemasNombre[i],sistemasNombre[i]+".com",var.Big_variable["core"],queue)
-					print "Enviado"
+					if(Lector.obtenerEnergiaGaussian(sistemasNombre[i]+".out")!=0):
+						lines[i]=0
+						continue
+					else:
+						print "Malos sera: ",sistemasNombre[i]
+						go.envioCluster(var.GaussianCall,sistemasNombre[i],sistemasNombre[i]+".com",var.Big_variable["core"],queue)
+						print "Enviado"
+						lines[i] = 1
 					print lines
-					lines[i] = 1
-					time.sleep(1.0)
+			time.sleep(20.0)
+					# Deben ser eliminados los incorrectos para funcoina bien.
 		else:
 			break
 		pass

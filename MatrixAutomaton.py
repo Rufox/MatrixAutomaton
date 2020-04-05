@@ -28,11 +28,134 @@ class Atomo:
     	return str(self)
 
 
+
+def RotAndTra(lista,matriz,x_centre,y_centre,z_centre):
+    new =[]
+    for elemento in lista:
+        new.append([elemento[0] + z_centre,elemento[1] + y_centre,elemento[2] + x_centre])
+        new.append([elemento[0] + z_centre,elemento[2] + y_centre, elemento[1] + x_centre])
+        new.append([elemento[0] + z_centre, -elemento[1] + y_centre,elemento[2] + x_centre])
+        new.append([elemento[0] + z_centre, -elemento[2] + y_centre, elemento[1] + x_centre])
+        #C7
+        new.append([elemento[0] + z_centre, elemento[1] + y_centre,-elemento[2] + x_centre])
+        new.append([elemento[0] + z_centre, elemento[2] + y_centre,-elemento[1] + x_centre])
+        #C5
+        new.append([elemento[0] + z_centre, -elemento[1] + y_centre,-elemento[2] + x_centre])
+        new.append([elemento[0] + z_centre, -elemento[2] + y_centre, -elemento[1] + x_centre])
+        #C4
+        new.append([-elemento[0] + z_centre,elemento[1] + y_centre,elemento[2] + x_centre])
+        new.append([-elemento[0] + z_centre,elemento[2] + y_centre, elemento[1] + x_centre])
+        #C1
+        new.append([-elemento[0] + z_centre, -elemento[1] + y_centre,elemento[2] + x_centre])
+        new.append([-elemento[0] + z_centre, -elemento[2] + y_centre, elemento[1] + x_centre])
+        #C3
+        new.append([-elemento[0] + z_centre, elemento[1] + y_centre,-elemento[2] + x_centre])
+        new.append([-elemento[0] + z_centre, elemento[2] + y_centre,-elemento[1] + x_centre])
+        #C2
+        new.append([-elemento[0] + z_centre, -elemento[1] + y_centre,-elemento[2] + x_centre])
+        new.append([-elemento[0] + z_centre, -elemento[2] + y_centre, -elemento[1] + x_centre])
+        # Cambio de eje
+        if (elemento[2]!=elemento[0]):
+            new.append([elemento[2] + z_centre,elemento[1] + y_centre,elemento[0] + x_centre])
+            new.append([elemento[2] + z_centre,elemento[0] + y_centre, elemento[1] + x_centre] )
+
+            new.append([elemento[2] + z_centre, -elemento[1] + y_centre,elemento[0] + x_centre] )
+            new.append([elemento[2] + z_centre, -elemento[0] + y_centre, elemento[1] + x_centre] )
+
+            new.append([elemento[2] + z_centre, elemento[1] + y_centre,-elemento[0] + x_centre])
+            new.append([elemento[2] + z_centre, elemento[0] + y_centre,-elemento[1] + x_centre])
+
+            new.append([elemento[2] + z_centre, -elemento[1] + y_centre,-elemento[0] + x_centre])
+            new.append([elemento[2] + z_centre, -elemento[0] + y_centre, -elemento[1] + x_centre] )
+
+            new.append([-elemento[2] + z_centre,elemento[1] + y_centre,elemento[0] + x_centre] )
+            new.append([-elemento[2] + z_centre,elemento[0] + y_centre, elemento[1] + x_centre] )
+
+            new.append([-elemento[2] + z_centre, -elemento[1] + y_centre,elemento[0] + x_centre] )
+            new.append([-elemento[2] + z_centre, -elemento[0] + y_centre, elemento[1] + x_centre] )
+
+            new.append([-elemento[2] + z_centre, elemento[1] + y_centre,-elemento[0] + x_centre] )
+            new.append([-elemento[2] + z_centre, elemento[0] + y_centre,-elemento[1] + x_centre] )
+
+            new.append([-elemento[2] + z_centre, -elemento[1] + y_centre,-elemento[0] + x_centre] )
+            new.append([-elemento[2] + z_centre, -elemento[0] + y_centre, -elemento[1] + x_centre] )
+        #####
+        # Cambio eje
+        if (elemento[1]!=elemento[0] and elemento[1]!=elemento[2 ]):
+        	new.append([elemento[1] + z_centre,elemento[0] + y_centre,elemento[2] + x_centre])
+        	new.append([elemento[1] + z_centre,elemento[2] + y_centre, elemento[0] + x_centre])
+
+        	new.append([elemento[1] + z_centre, -elemento[0] + y_centre,elemento[2] + x_centre])
+        	new.append([elemento[1] + z_centre, -elemento[2] + y_centre, elemento[0] + x_centre])
+        #C7
+        	new.append([elemento[1] + z_centre, elemento[0] + y_centre,-elemento[2] + x_centre])
+        	new.append([elemento[1] + z_centre, elemento[2] + y_centre,-elemento[0] + x_centre])
+        #C5
+        	new.append([elemento[1] + z_centre, -elemento[0] + y_centre,-elemento[2] + x_centre])
+        	new.append([elemento[1] + z_centre, -elemento[2] + y_centre, -elemento[0] + x_centre])
+
+        	new.append([-elemento[1] + z_centre,elemento[0] + y_centre,elemento[2] + x_centre])
+        	new.append([-elemento[1] + z_centre,elemento[2] + y_centre, elemento[0] + x_centre])
+
+        	new.append([-elemento[1] + z_centre, -elemento[0] + y_centre,elemento[2] + x_centre])
+        	new.append([-elemento[1] + z_centre, -elemento[2] + y_centre, elemento[0] + x_centre])
+        #C7
+        	new.append([-elemento[1] + z_centre, elemento[0] + y_centre,-elemento[2] + x_centre])
+        	new.append([-elemento[1] + z_centre, elemento[2] + y_centre,-elemento[0] + x_centre])
+        #C5
+        	new.append([-elemento[1] + z_centre, -elemento[0] + y_centre,-elemento[2] + x_centre])
+        	new.append([-elemento[1] + z_centre, -elemento[2] + y_centre, -elemento[0] + x_centre])
+    tupled_lst = set(map(tuple, new))
+    lst = map(list, tupled_lst)
+    lista_vecinos_circulo =np.array([x for x in lst if x[0]>=0 and x[1]>=0 and x[2]>=0]) # ESTO ELIMINA LOS NEGATICOS)
+    lista_vecinos_circulo =np.array([x for x in lista_vecinos_circulo if x[0]<=grupo_atomico.n and x[1]<=grupo_atomico.n and x[2]<=grupo_atomico.n]) # ESTO ELIMINA LOS muy altos)
+    # IMPRESION MATRIZ
+    #for data in data2:
+    #    matriz[data[0],data[1],data[2]]=1
+    return (lista_vecinos_circulo).tolist()
+
+def midPointCircleDraw(r,z,correctos): 
+  
+    x = r 
+    y = 0
+    correctos.append([z,y,x])
+    P = 1 - r  
+    while (x > y) :    
+        y += 1 
+        # Mid-pois inside or on the  
+        # perimeter  
+        if (P <= 0):  
+            P = P + 2 * y + 1     
+        # Mid-pois outside the perimeter  
+        else:          
+            x -= 1
+            P = P + 2 * y - 2 * x + 1
+          
+        # All the perimeter points have  
+        # already been printed  
+        if (x < y): 
+            break
+        correctos.append([z,y,x])
+    return correctos
+
+def calculateInside(coordinates):
+    bad = []
+    for point in coordinates:
+        for z in range(0,point[0]+1):
+            for y in range(0,point[1]+1):
+                for x in range(0,point[2]):
+                    if(z== 0 and x==0 and y==0):
+                        continue
+                    else:
+                        bad.append([z,y,x])
+    return bad
+# Driver Code 
+
 def almacenarCoord(a,b,c):
 	return a,b,c
 
 #en esta funcion se obtiene la lista de elementos y se realiza el escalamiento de los 
-#elementos en funcion de los valores de radio atómico
+#elementos en funcion de los valores de radio atomico
 def obtenerElementos():
 	global lista_elementos, atomos, conversion, elementos, numeros, elementos_escalados
 	
@@ -52,7 +175,7 @@ def obtenerElementos():
 	    		input_elementos.remove("=")
 	    		for i in input_elementos:
 	    			#si en la linea de chemical_formula se encuentra un numero 
-	    			#se añade a la lista numeros, si no, a la lista elementos.
+	    			#se annade a la lista numeros, si no, a la lista elementos.
 	    			if i.isdigit():
 	    				numeros.append(i)
 	    			else:
@@ -71,7 +194,8 @@ def obtenerElementos():
 			#con el siguiente sort se ordenan los atomos en orden ascendente
 			#dependiendo del radio atomico
 			atomos.sort(key=lambda atomos: atomos.radio_atomico)
-
+			#print "Estamos en la Funcion"
+			#print atomos
 			for l in range(len(atomos)):
 
 				#para el l = 0, o sea para el primero atomo, el de menor radio atomico
@@ -79,7 +203,7 @@ def obtenerElementos():
 					#creo que esta lista conversion no sirve de mucho XD
 					conversion.append(1.0)
 					#se asigna la escala de valor 1, lo que significa que en una funcion posterior
-					#se buscarán sus vecinos directos.
+					#se buscaran sus vecinos directos.
 					atomos[l].escala = 1.0
 					#en esta lista se almacenan los elementos ya escalados
 					elementos_escalados.append(atomos[l].elemento)
@@ -154,23 +278,25 @@ def obtenerCoordenadas(fr):
 	arreglo = np.array(fr)
 	arreglo = arreglo*float(atomos[0].radio_atomico)*2
 	for i in range(len(fr)):
-		coords_list.append(str(matriz[fr[i][2],fr[i][1],fr[i][0]])+' '+str(round(arreglo[i][0],2))+' '+str(round(arreglo[i][1],2))+' '+str(round(arreglo[i][2],2)))
+		coords_list.append(str(matriz[fr[i][0],fr[i][1],fr[i][2]])+' '+str(round(arreglo[i][0],2))+' '+str(round(arreglo[i][1],2))+' '+str(round(arreglo[i][2],2)))
 	coords_list2.append(coords_list)
 	return coords_list2
 
 #def main():
 def Llamar(iteraciones):
+#	iteraciones =2
 	global x, y, z, matriz, franja, coords_list, coords_list2
 	global grupo_atomico
 	global atomic_radii
 	global numeros2
 	global lista
-	global espaciado
+	global espaciado # Radio
 	
 	coords_list = []
-	coords_list2 = []
+	coords_list2 = []	# Lista de Listas, final q se entrega
 	lista = []
-	franja = []	
+	franja = []	# Lista con coordenadass finales de cada iteracion
+	franja_error = [] # Franja con las posiciones incorrectas
 
 	atomic_radii = {'H':'0.31', 'He':'0.28', 'Li':'1.28', 'Be':'0.96',
                     'B' :'0.84', 'C' :'0.76', 'N' :'0.71', 'O' :'0.66',
@@ -225,132 +351,198 @@ def Llamar(iteraciones):
                     'No' :'259.000' ,'Rf':'261'     ,'Lr' :'262'     ,'Db' :'262',
                     'Bh' :'264.000' ,'Sg':'266'     ,'Mt' :'268'     ,'Hs' :'277'}
 
-	f=open('hola.xyz','w+')
+	#f=open('hola.xyz','w+')
 	#iteraciones = 8
-	
+	lista_elementos = obtenerElementos()
+	#print lista_elementos
+	#se invierte el orden de los elementos para trabajar desde el primero
+	#(deberia haber trabajado con colas para no hacer esta estupidez pero bue)
+	#lista_elementos.reverse()
+	np.random.shuffle(lista_elementos)
+	print "Imprimineto lista_elementos"
+	print lista_elementos
+	#esta es una conversion de la lista numeros en enteros, porque estaban como string
+	numeros2 = map(int, numeros)
+	print "Imprimiento lista numeros2"
+	print numeros2
+	#se define el grupo atomico con la clase GrupoAtomico(n), el n esta definido por la
+	#suma de los elementos de la lista numeros.
+	grupo_atomico = GrupoAtomico(sum(numeros2))
+	#print grupo_atomico
+	#esto lo hice para poder trabajar con los elementos y no afectar a la lista_elementos
+	atomos_ga = [grupo_atomico.atomos.insert(0,x) for x in lista_elementos]
+	#print "ACA", grupo_atomico
+
 	while iteraciones > 0:
+		np.random.shuffle(lista_elementos)
+		print "EMPIEZA CICLO\n"
+		posibles_vecinos_completos=[]
 		#Se guardan los elementos en lista_elementos, el funcionamiento de 
 		#obtenerElementos() mejor detallado en la funcion
-		lista_elementos = obtenerElementos()
-		#se invierte el orden de los elementos para trabajar desde el primero
-		#(deberia haber trabajado con colas para no hacer esta estupidez pero bue)
-		lista_elementos.reverse()
-		#esta es una conversion de la lista numeros en enteros, porque estaban como string
-		numeros2 = map(int, numeros)
-		#se define el grupo atomico con la clase GrupoAtomico(n), el n esta definido por la
-		#suma de los elementos de la lista numeros.
-		grupo_atomico = GrupoAtomico(sum(numeros2))
-
-		#esto lo hice para poder trabajar con los elementos y no afectar a la lista_elementos
-		atomos_ga = [grupo_atomico.atomos.insert(0,x) for x in lista_elementos]
-		print grupo_atomico
-
 		#creacion de la matriz 
-		matriz = np.zeros((grupo_atomico.n+1)**2*4, dtype = object).reshape(4,grupo_atomico.n+1,grupo_atomico.n+1)        # 3d array
-		
+		matriz = np.zeros((grupo_atomico.n+1)**3, dtype = object).reshape(grupo_atomico.n+1,grupo_atomico.n+1,grupo_atomico.n+1)        # 3d array
+		#print matriz
 		#eleccion de posicion random para primer elemento
-		indices =  np.random.randint(0, high=3, size=3)
+		indices =  np.random.randint(0, high=grupo_atomico.n+1, size=3)
+		print indices
 		x=indices[0]
 		y=indices[1]
 		# el eje z es mas acotado
-		z=random.randint(0,3)
+		##z=random.randint(0,3)
+		z= indices[2]
 
-		print "Coordenadas generadas para primer atomo ( x:",x,", y:",y,", z:",z,")"
+#		print "Coordenadas generadas para primer atomo ( x:",x,", y:",y,", z:",z,")"
 
 		#la franja almacena las coordenadas de todos los atomos del gurpo atomico por iteracion
 		#por ahora se almacenan las coordenadas del primer atomo
-		franja.append(almacenarCoord(x,y,z))
+		franja.append(almacenarCoord(z,y,x))
 		
 		# en las coordenadas elegidas para el primer atomo se ubica el primer elemento de la lista_elementos
-		matriz[(z,y,x)] = lista_elementos.pop()
-		
+		matriz[(z,y,x)] = lista_elementos[-1]#.pop()
+#		print "Se agrego el atomo: ",lista_elementos[-1]
 
-		espaciado = 1
 		
+		Malos_total=[[z,y,x]]#np.array([x,y,z])
+		#print Malos_total
+#		Malos_total.append([x,y,z])
 		#Se buscan los vecinos del primer atomo
 		#detalles en la funcion v
-		buscarVecinos(matriz,x,y,z)
-	 	
-	 	#print 'Posibles vecinos: ', posibles_vecinos
-	 	#print matriz
+		##buscarVecinos(matriz,x,y,z)
+	 	#exit(1)
+	 	for i in atomos:
+			if matriz[z,y,x] == i.elemento:
+				# 			#se determina el espaciado dependiendo de la escala del elemento actual
+				espaciado = int(i.escala)
+				break
+		#print "Escalas:",i,int(i.escala) 
 
-
-		while len(franja) < grupo_atomico.n:
-
-			while len(lista_elementos):
-				#print posibles_vecinos
-
-				#se elige aleatoriamente un posible vecino y se asigna a la variable vecino_candidato
-				vecino_candidato = random.choice(posibles_vecinos)
-				#si el vecino_candidato ya esta en la franja; pass.
-				if vecino_candidato in franja:
+		#while len(franja) < grupo_atomico.n:
+		aux = 0
+		while aux<len(lista_elementos)-1:
+			#print posibles_vecinos
+			print "Coordenadas en sistema (z,y,x): ",franja
+			print "Se agrego el atomo (pasado): ",lista_elementos[-aux-1]
+			print "Radio trabajado corresponde: ",espaciado
+			correctosX = []
+			bad = []
+			Z = 0
+			# funcion que construye circulo, pide radio, valor de Z (0 ahora) y array a guardar
+			midPointCircleDraw(espaciado, Z, correctosX) 
+		 	franjaX = np.asarray(correctosX)
+			for cara_1 in franjaX:
+				if(cara_1[1] ==0):
 					pass
-				#sino, almacena el elemento en las coordenadas del vecino_candidato
-				else:
-					#print vecino_candidato
-					matriz[(vecino_candidato[2],vecino_candidato[1],vecino_candidato[0])]=lista_elementos.pop()
-					
-					for i in atomos:
+		        else:
+		            Z+=1
+		            midPointCircleDraw(cara_1[2],Z,correctosX)
+	   		if(espaciado!=1):
+	   			bad =calculateInside(correctosX)
+				tupled_lst = set(map(tuple, bad))
+				lst_bad = map(list, tupled_lst)
+				Malos_total.extend(RotAndTra(lst_bad,matriz,franja[aux][2],franja[aux][1],franja[aux][0]))
+	   		
+		 	print 'Posibles vecinos: (No centrados)', correctosX
 
-						if matriz[(vecino_candidato[2],vecino_candidato[1],vecino_candidato[0])] == i.elemento:
-							#se determina el espaciado dependiendo de la escala del elemento actual
-							espaciado=int(i.escala)
-						else:
-							continue
-					
-					if espaciado > 1:
-						# si el espaciado es mayor a 1 se verifica si existen vecinos directos
-						while existenVecinosDirectos(matriz,vecino_candidato[0],vecino_candidato[1],vecino_candidato[2]):
-							#de existir vecinos directos, se hace una especie de backtracking 8-)
-							#se vuelve a agregar el elemento que se ubicó en la matriz a la lista_elementos
-							lista_elementos.append(matriz[(vecino_candidato[2],vecino_candidato[1],vecino_candidato[0])])
-							#se le vuelve a asignar un 0 a esa coordenada, en vez del elemento
-							matriz[(vecino_candidato[2],vecino_candidato[1],vecino_candidato[0])] = 0
-							#se elimina este candidato de los posibles vecinos para no poder seleccionarlo mas
-							posibles_vecinos.remove((vecino_candidato[0],vecino_candidato[1],vecino_candidato[2]))
-							#print vecino_candidato, posibles_vecinos
-							
-							#se escoge otro candidato de la lista posibles_vecinos y ahora el nuevo_candidato es el vecino_candidato
-							nuevo_candidato = random.choice(posibles_vecinos)
-							vecino_candidato = nuevo_candidato
-							#print lista_elementos
-						#si no existen vecinos directos del vecino_candidato, se convierte en el vecino_escogido
-						else:
-							#print existenVecinosDirectos(matriz, vecino_candidato[0],vecino_candidato[1],vecino_candidato[2])
-							vecino_escogido = vecino_candidato
-							#se agrega el vecino_escogido a la franja de solucion para la iteracion actual
-							franja.append(vecino_escogido)
-							#print espaciado
-							#print 'Vecino escogido: ',(vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
-							
 
-							#Se buscan los posibles vecinos del vecino_escogido actual
-							buscarVecinos(matriz,vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
-							#print 'Posibles vecinos: ', posibles_vecinos
-							#print matriz
-					#si el espaciado es 1, no importa si existen vecinos directos:
-					else:
-						#el vecino_escogido es el vecino candidato y se añaden las coordenadas a la franja
-						vecino_escogido = vecino_candidato
-						franja.append(vecino_escogido)
-						#print espaciado
-						#print 'Vecino escogido: ',(vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
+			posibles_vecinos = RotAndTra(correctosX,matriz,franja[aux][2],franja[aux][1],franja[aux][0])
+			print "Final Posibles Ubicaciones:",posibles_vecinos
+			# A todos las buenas posiciones, se eliminan las malas posiciones
+			#posibles_vecinos = [i for i in posibles_vecinos if i not in Malos_total[:]]	
+			#for i in posibles_vecinos:
+			#	for j in Malos_total:
+			#		print i,j
+					#if i==j:
+					#	print "dada"
+
+		 	posibles_vecinos_completos.extend(posibles_vecinos)
+		 	posibles_vecinos_completos = [i for i in posibles_vecinos_completos if i not in Malos_total[:]]	
+		 	#DIBUJO
+		 	#for data in posibles_vecinos:
+		 	#	matriz[data[0],data[1],data[2]]=2
+		 	#print matriz
+		 	#DINUJO
+			#se elige aleatoriamente un posible vecino y se asigna a la variable vecino_candidato
+			vecino_candidato = random.choice(posibles_vecinos_completos)
+			Malos_total.extend([vecino_candidato])
+			#si el vecino_candidato ya esta en la franja; pass.
+			# if vecino_candidato in franja:
+			# 	pass
+			# #sino, almacena el elemento en las coordenadas del vecino_candidato
+			# else:
+			# 	#print vecino_candidato
+			franja.append(almacenarCoord(vecino_candidato[0],vecino_candidato[1],vecino_candidato[2]))
+			print "Atomo a ingresar: ", lista_elementos[-aux-2]
+			matriz[(vecino_candidato[0],vecino_candidato[1],vecino_candidato[2])]=lista_elementos[-aux-2]#.pop()
+			#print matriz
+			#exit(2)	
+			for i in atomos:
+			 	if matriz[(vecino_candidato[0],vecino_candidato[1],vecino_candidato[2])] == i.elemento:
+			# 			#se determina el espaciado dependiendo de la escala del elemento actual
+			 		espaciado=int(i.escala)   #ESCALALAALAL
+			# 		else:
+			# 			continue
+			
+			# 	if espaciado > 1:
+			# 		# si el espaciado es mayor a 1 se verifica si existen vecinos directos
+			# 		while existenVecinosDirectos(matriz,vecino_candidato[0],vecino_candidato[1],vecino_candidato[2]):
+			# 			#de existir vecinos directos, se hace una especie de backtracking 8-)
+			# 			#se vuelve a agregar el elemento que se ubico en la matriz a la lista_elementos
+			# 			lista_elementos.append(matriz[(vecino_candidato[2],vecino_candidato[1],vecino_candidato[0])])
+			# 			#se le vuelve a asignar un 0 a esa coordenada, en vez del elemento
+			# 			matriz[(vecino_candidato[2],vecino_candidato[1],vecino_candidato[0])] = 0
+			# 			#se elimina este candidato de los posibles vecinos para no poder seleccionarlo mas
+			# 			posibles_vecinos.remove((vecino_candidato[0],vecino_candidato[1],vecino_candidato[2]))
+			# 			#print vecino_candidato, posibles_vecinos
 						
-						#Se buscan los vecinos para el vecino_escogido
-						buscarVecinos(matriz,vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
-						#print 'Posibles vecinos: ', posibles_vecinos
-		print matriz
-		print franja
+			# 			#se escoge otro candidato de la lista posibles_vecinos y ahora el nuevo_candidato es el vecino_candidato
+			# 			nuevo_candidato = random.choice(posibles_vecinos)
+			# 			vecino_candidato = nuevo_candidato
+			# 			#print lista_elementos
+			# 		#si no existen vecinos directos del vecino_candidato, se convierte en el vecino_escogido
+			# 		else:
+			# 			#print existenVecinosDirectos(matriz, vecino_candidato[0],vecino_candidato[1],vecino_candidato[2])
+			# 			vecino_escogido = vecino_candidato
+			# 			#se agrega el vecino_escogido a la franja de solucion para la iteracion actual
+			# 			franja.append(vecino_escogido)
+			# 			#print espaciado
+			# 			#print 'Vecino escogido: ',(vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
+						
+
+			# 			#Se buscan los posibles vecinos del vecino_escogido actual
+			# 			buscarVecinos(matriz,vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
+			# 			#print 'Posibles vecinos: ', posibles_vecinos
+			# 			#print matriz
+			# 	#si el espaciado es 1, no importa si existen vecinos directos:
+			# 	else:
+			# 		#el vecino_escogido es el vecino candidato y se annaden las coordenadas a la franja
+			# 		vecino_escogido = vecino_candidato
+			# 		franja.append(vecino_escogido)
+			# 		#print espaciado
+			# 		#print 'Vecino escogido: ',(vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
+					
+			# 		#Se buscan los vecinos para el vecino_escogido
+			# 		buscarVecinos(matriz,vecino_escogido[0],vecino_escogido[1],vecino_escogido[2])
+			# 		#print 'Posibles vecinos: ', posibles_vecinos
+			aux+=1
+			#print "aux:",aux
+			#print "\n"
+		#print "UBICACIONES:",franja
 		iteraciones = iteraciones - 1
 		#guardar(franja)
 		
 		#funcion para obtener una lista de las franjas de solucion por la cantidad de iteraciones determianda
 		obtenerCoordenadas(franja)
-
+		#for data in Malos_total:
+	 	#	matriz[data[0],data[1],data[2]]=0
+	 	#for data in posibles_vecinos_completos:
+	 	#	matriz[data[0],data[1],data[2]]=2
+	 	#for data in franja:
+	 	#	matriz[data[0],data[1],data[2]]="T"
 		#se reinician estas listas para la nueva iteracion
+		#print matriz
 		franja = []	
 		coords_list = []
-	
+	#print Malos_total
 	print coords_list2
 	return coords_list2
 	#MatrixAutomaton.obtenerCoordenadas(franja)

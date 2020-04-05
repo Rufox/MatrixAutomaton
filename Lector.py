@@ -67,6 +67,9 @@ def obtenerTermination(file):
 		rline = archivo.readlines()
 		correcto = 1
 		for i in range(len(rline)):
+			if "combination of multiplicity impossible" in rline[i]:
+				print "ERROR DE COMBINACION DE MULTIPLLICIDAD"
+				exit(1)
 			if "Error termination" in rline[i]:
 				correcto = 2
 				break

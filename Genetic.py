@@ -16,7 +16,7 @@ def rotarMolecula(coordsSist):
 	cordinates = np.array([[row[1], row[2], row[3]] for row in coordsSist])
 	alhpa, beta, gamma = np.random.randint(0,360),np.random.randint(0,360),np.random.randint(0,360)
 	matrix_z= np.array([[np.cos(alhpa),np.sin(alhpa),0],[-np.sin(alhpa),np.cos(alhpa),0],[0,0,1]])
-	matrix_x= np.array([[1,0,0],[0,np.cos(beta),np.sin(beta),],[0,-np.sin(beta),np.cos(beta)]])
+	matrix_x= np.array([[1,0,0],[0,np.cos(beta),np.sin(beta)],[0,-np.sin(beta),np.cos(beta)]])
 	matrix_z2= np.array([[np.cos(gamma),np.sin(gamma),0],[-np.sin(gamma),np.cos(gamma),0],[0,0,1]])
 	final = cordinates.dot(matrix_z.dot(matrix_x.dot(matrix_z2)))
 	for i in range(len(coordsSist)):	# eliminacion de np.array
