@@ -30,6 +30,8 @@ class Atomo:
 
 
 def RotAndTra(lista,matriz,x_centre,y_centre,z_centre):
+    # Odio esta funcion
+    # Rota y traslada cada punto de los 45° (ver abajo) para formar los 360°
     new =[]
     for elemento in lista:
         new.append([elemento[0] + z_centre,elemento[1] + y_centre,elemento[2] + x_centre])
@@ -105,17 +107,16 @@ def RotAndTra(lista,matriz,x_centre,y_centre,z_centre):
         #C5
         	new.append([-elemento[1] + z_centre, -elemento[0] + y_centre,-elemento[2] + x_centre])
         	new.append([-elemento[1] + z_centre, -elemento[2] + y_centre, -elemento[0] + x_centre])
+    # eliminacion de repetidos
     tupled_lst = set(map(tuple, new))
     lst = map(list, tupled_lst)
     lista_vecinos_circulo =np.array([x for x in lst if x[0]>=0 and x[1]>=0 and x[2]>=0]) # ESTO ELIMINA LOS NEGATICOS)
     lista_vecinos_circulo =np.array([x for x in lista_vecinos_circulo if x[0]<=grupo_atomico.n and x[1]<=grupo_atomico.n and x[2]<=grupo_atomico.n]) # ESTO ELIMINA LOS muy altos)
-    # IMPRESION MATRIZ
-    #for data in data2:
-    #    matriz[data[0],data[1],data[2]]=1
-    return (lista_vecinos_circulo).tolist()
+    return (lista_vecinos_circulo).tolist()  # me gusstan mas las listas
 
 def midPointCircleDraw(r,z,correctos): 
-  
+  	# A esta funcion hau que creerle
+  	# Hace un perimetro de un circulo
     x = r 
     y = 0
     correctos.append([z,y,x])
@@ -139,6 +140,9 @@ def midPointCircleDraw(r,z,correctos):
     return correctos
 
 def calculateInside(coordinates):
+	# Odio esta funcion.
+	# revisa todo el interior de un circulo
+	# se toma 0-x, 0-y, 0-(z-1) poruqe asi funciona (abra matematicas por detras, ni idea)
     bad = []
     for point in coordinates:
         for z in range(0,point[0]+1):
@@ -351,13 +355,11 @@ def Llamar(iteraciones):
                     'No' :'259.000' ,'Rf':'261'     ,'Lr' :'262'     ,'Db' :'262',
                     'Bh' :'264.000' ,'Sg':'266'     ,'Mt' :'268'     ,'Hs' :'277'}
 
-	#f=open('hola.xyz','w+')
-	#iteraciones = 8
 	lista_elementos = obtenerElementos()
-	#print lista_elementos
 	#se invierte el orden de los elementos para trabajar desde el primero
 	#(deberia haber trabajado con colas para no hacer esta estupidez pero bue)
 	#lista_elementos.reverse()
+	# Diego: se toman como aleatorio el orden de los elementos
 	np.random.shuffle(lista_elementos)
 	print "Imprimineto lista_elementos"
 	print lista_elementos
@@ -401,7 +403,7 @@ def Llamar(iteraciones):
 		matriz[(z,y,x)] = lista_elementos[-1]#.pop()
 #		print "Se agrego el atomo: ",lista_elementos[-1]
 
-		
+		# Esta lista indica todas las posiciones PROHIBIDAS de las posibles
 		Malos_total=[[z,y,x]]#np.array([x,y,z])
 		#print Malos_total
 #		Malos_total.append([x,y,z])
@@ -417,13 +419,17 @@ def Llamar(iteraciones):
 		#print "Escalas:",i,int(i.escala) 
 
 		#while len(franja) < grupo_atomico.n:
+		# varibla contadora, vital
 		aux = 0
 		while aux<len(lista_elementos)-1:
 			#print posibles_vecinos
 			print "Coordenadas en sistema (z,y,x): ",franja
 			print "Se agrego el atomo (pasado): ",lista_elementos[-aux-1]
 			print "Radio trabajado corresponde: ",espaciado
+			# CorrectosX es una lista con las posiciones de posibles
+			# vecinos de medio cuadrante de circulo (45°), plano XY, perimetro
 			correctosX = []
+			# posicoines incorrectas del mismo plano anterior, interior circulo
 			bad = []
 			Z = 0
 			# funcion que construye circulo, pide radio, valor de Z (0 ahora) y array a guardar
@@ -441,19 +447,14 @@ def Llamar(iteraciones):
 				lst_bad = map(list, tupled_lst)
 				Malos_total.extend(RotAndTra(lst_bad,matriz,franja[aux][2],franja[aux][1],franja[aux][0]))
 	   		
+			# Aca CorrectosX tiene el perimetro 45° de el plano XY, XY Z=1, XY Z=2.... XY Z=X
 		 	print 'Posibles vecinos: (No centrados)', correctosX
 
 
 			posibles_vecinos = RotAndTra(correctosX,matriz,franja[aux][2],franja[aux][1],franja[aux][0])
+			# En este punto posibles_vecinos tiene TODO la superficie de una esfera radio "espaciado"
 			print "Final Posibles Ubicaciones:",posibles_vecinos
 			# A todos las buenas posiciones, se eliminan las malas posiciones
-			#posibles_vecinos = [i for i in posibles_vecinos if i not in Malos_total[:]]	
-			#for i in posibles_vecinos:
-			#	for j in Malos_total:
-			#		print i,j
-					#if i==j:
-					#	print "dada"
-
 		 	posibles_vecinos_completos.extend(posibles_vecinos)
 		 	posibles_vecinos_completos = [i for i in posibles_vecinos_completos if i not in Malos_total[:]]	
 		 	#DIBUJO
@@ -461,6 +462,7 @@ def Llamar(iteraciones):
 		 	#	matriz[data[0],data[1],data[2]]=2
 		 	#print matriz
 		 	#DINUJO
+			
 			#se elige aleatoriamente un posible vecino y se asigna a la variable vecino_candidato
 			vecino_candidato = random.choice(posibles_vecinos_completos)
 			Malos_total.extend([vecino_candidato])
@@ -539,7 +541,6 @@ def Llamar(iteraciones):
 	 	#for data in franja:
 	 	#	matriz[data[0],data[1],data[2]]="T"
 		#se reinician estas listas para la nueva iteracion
-		#print matriz
 		franja = []	
 		coords_list = []
 	#print Malos_total
