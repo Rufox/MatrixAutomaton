@@ -27,7 +27,7 @@ queue = sys.argv[2]
 # Inicializacion de variables globales
 var.init()
 # Verificacion y elminacion de archivos innecesarios (otras pruebas)
-Impresora.crearArchivos()
+#Impresora.crearArchivos()
 # Lectura de archivo de configuracion
 Lector.leerArchivoParametros(sys.argv[1])
 
@@ -62,8 +62,8 @@ while (var.maxConvergencia != convergenciaObtenida):
 		cruzados = 0
 		nuevos = var.Big_variable["numb_conf"]  #CHANGE
 		#lines = [1,1,1,1,1,1,1,1,1,1] #CHANGE
-		#sistemasNombre = ["job01","job02","job03","job04","job05", #CHANGE
-		#		"job06","job07","job08","job09","job10"]#,#"job11"]
+		#sistemasNombre = ["job01","Child1_24","job03","job04","job05", #CHANGE
+		#		"job06","job07","job08","job02","Child1_23"]#,#"job11"]
 
 	# Ciclos 2+
 	else:
@@ -127,6 +127,7 @@ while (var.maxConvergencia != convergenciaObtenida):
 		go.envioCluster(var.GaussianCall,sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 		lines.append(1)
 	#pass
+	toKick = []
 	while True and len(sistemasLanzar):
 		for i in range(len(sistemasLanzar)):
 			if lines[i] != 0:
@@ -151,10 +152,26 @@ while (var.maxConvergencia != convergenciaObtenida):
 					print lines
 			time.sleep(20.0)
 					# Deben ser eliminados los incorrectos para funcoina bien.
+		elif (3 in lines):
+			# Atomos muy cercas 1 con otros ... eliminados
+			for i in range(len(sistemasLanzar)):
+				if (lines[i] == 3):
+					print "Eliminando a uno:",sistemasNombre[i]
+					#sistemasNombre.remove(sistemasNombre[i])
+					toKick.append(i)
+					lines[i]=0
 		else:
 			break
 		pass
-	
+	#print sistemasLanzar
+	#print sistemasNombre
+	#print lines
+	#print toKick
+	toKick.reverse()
+	for i in toKick:
+		del sistemasNombre[i]
+	#print sistemasNombre
+	#exit(1)
 	# Envio de inputs al programa necesario, espera a termino correcto de calculo
 #####################################
 	#Zona 4
@@ -164,12 +181,18 @@ while (var.maxConvergencia != convergenciaObtenida):
 	del energia[:]
 		
 	for file in sistemasNombre:
-		tmp = Lector.obtenerCoordenadaGaussian(file+".out")
-		energy= float(Lector.obtenerEnergiaGaussian(file+".out"))
-		transformarNumeroASimbolo(tmp)
-		coords.append(tmp)
-		energia.append(energy)
+		if file not in toKick:
+			tmp = Lector.obtenerCoordenadaGaussian(file+".out")
+			energy= float(Lector.obtenerEnergiaGaussian(file+".out"))
+			print "tmp, error",tmp
+			transformarNumeroASimbolo(tmp)
+			coords.append(tmp)
+			energia.append(energy)
+		else:
+			sistemasNombre.remove(file)
 ######################################
+	print sistemasNombre
+	print "malos:",toKick
 	#ZOna 5
 	# distribucion de la energia, cual es el mejor, contador del minimo global actual
 	energiaMenor = min(energia)

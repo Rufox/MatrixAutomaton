@@ -42,7 +42,7 @@ def obtenerCoordenadaGaussian(file):
 
 		coords=[]
 		for line in rline[start+5 : end] :
-		    words = int(line.split()[1]),float(line.split()[3]),float(line.split()[4]),float(line.split()[5])
+		    words = int(line.split()[1]),round(float(line.split()[3]),4),round(float(line.split()[4]),4),round(float(line.split()[5]),4)
 		    L=list(words)
 		    coords.append(L)
 		return coords
@@ -70,10 +70,13 @@ def obtenerTermination(file):
 			if "combination of multiplicity impossible" in rline[i]:
 				print "ERROR DE COMBINACION DE MULTIPLLICIDAD"
 				exit(1)
-			if "Error termination" in rline[i]:
+			if "Small interatomic distances encountered:" in rline[i]:
+				correcto = 3
+				break
+			elif "Error termination" in rline[i]:
 				correcto = 2
 				break
-			if "termination" in rline[i]:
+			elif "Normal termination" in rline[i]:
 				correcto = 0
 				break
 		return correcto
