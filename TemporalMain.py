@@ -67,25 +67,26 @@ while (var.maxConvergencia != convergenciaObtenida):
 
 	# Ciclos 2+
 	else:
-		mutados = int(round(var.PcentToMutate * float(var.Big_variable["numb_conf"])))
-		cruzados = int(round(var.PcentToRecombine * float(var.Big_variable["numb_conf"])))
+		mutados = int(hashtotal["all"])#int(round(var.PcentToMutate * float(var.Big_variable["numb_conf"])))
+		cruzados = int(len(indexsAboveCurfew))#int(round(var.PcentToRecombine * float(var.Big_variable["numb_conf"])))
 		nuevos =  int(var.Big_variable["numb_conf"]) - mutados -cruzados #CHANGE
 
 	# Matrix Automaton
-	test = Mat.Llamar(int(nuevos))
-	print "\nEsto Es lo que entrega el programa de MATRICES:\n"
-	for primer in test:
-		print primer
-		aux = 0
-		for i in primer:
-			#print i
-			j=i.split(" ")
-			primer[aux] = j
-			#print j
-			aux+=1
-		sistemasLanzar.append(primer)
-		sistemasNombre.append("Original"+str(generation)+"_")
-	print "\n",test
+	if nuevos > 0:
+		test = Mat.Llamar(int(nuevos))
+		print "\nEsto Es lo que entrega el programa de MATRICES:\n"
+		for primer in test:
+			print primer
+			aux = 0
+			for i in primer:
+				#print i
+				j=i.split(" ")
+				primer[aux] = j
+				#print j
+				aux+=1
+			sistemasLanzar.append(primer)
+			sistemasNombre.append("Original"+str(generation)+"_")
+		print "\n",test
 ##########################################
 	# CROSSING OVER
 	if cruzados != 0:
@@ -181,18 +182,15 @@ while (var.maxConvergencia != convergenciaObtenida):
 	del energia[:]
 		
 	for file in sistemasNombre:
-		if file not in toKick:
-			tmp = Lector.obtenerCoordenadaGaussian(file+".out")
-			energy= float(Lector.obtenerEnergiaGaussian(file+".out"))
-			print "tmp, error",tmp
-			transformarNumeroASimbolo(tmp)
-			coords.append(tmp)
-			energia.append(energy)
-		else:
-			sistemasNombre.remove(file)
+		#if file not in toKick:
+		tmp = Lector.obtenerCoordenadaGaussian(file+".out")
+		energy= float(Lector.obtenerEnergiaGaussian(file+".out"))
+		transformarNumeroASimbolo(tmp)
+		coords.append(tmp)
+		energia.append(energy)
+		#else:
+		#	sistemasNombre.remove(file)
 ######################################
-	print sistemasNombre
-	print "malos:",toKick
 	#ZOna 5
 	# distribucion de la energia, cual es el mejor, contador del minimo global actual
 	energiaMenor = min(energia)

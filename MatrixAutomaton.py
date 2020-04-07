@@ -31,7 +31,7 @@ class Atomo:
 
 def RotAndTra(lista,matriz,x_centre,y_centre,z_centre):
     # Odio esta funcion
-    # Rota y traslada cada punto de los 45° (ver abajo) para formar los 360°
+    # Rota y traslada cada punto de los 45g (ver abajo) para formar los 360g
     new =[]
     for elemento in lista:
         new.append([elemento[0] + z_centre,elemento[1] + y_centre,elemento[2] + x_centre])
@@ -427,7 +427,7 @@ def Llamar(iteraciones):
 			print "Se agrego el atomo (pasado): ",lista_elementos[-aux-1]
 			print "Radio trabajado corresponde: ",espaciado
 			# CorrectosX es una lista con las posiciones de posibles
-			# vecinos de medio cuadrante de circulo (45°), plano XY, perimetro
+			# vecinos de medio cuadrante de circulo (45g), plano XY, perimetro
 			correctosX = []
 			# posicoines incorrectas del mismo plano anterior, interior circulo
 			bad = []
@@ -447,7 +447,7 @@ def Llamar(iteraciones):
 				lst_bad = map(list, tupled_lst)
 				Malos_total.extend(RotAndTra(lst_bad,matriz,franja[aux][2],franja[aux][1],franja[aux][0]))
 	   		
-			# Aca CorrectosX tiene el perimetro 45° de el plano XY, XY Z=1, XY Z=2.... XY Z=X
+			# Aca CorrectosX tiene el perimetro 45g de el plano XY, XY Z=1, XY Z=2.... XY Z=X
 		 	print 'Posibles vecinos: (No centrados)', correctosX
 
 
