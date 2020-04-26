@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
 
-GaussianCall = "Gaussian16.b01"
+GaussianCall = "Gaussian16"
+extension = "log"
 NumberConfig=177
 Numero=20
 # Diccionarios, no cambiar

@@ -102,7 +102,7 @@ while (var.maxConvergencia != convergenciaObtenida):
 
 	# MUTACIONES 0.2 y 0.2 de cualquiera de los alpha
 	if mutados != 0:
-		for muting in range(0 ,mutados):
+		for muting in range(0 ,mutados/2):
 			np.random.shuffle(indexsAboveCurfew)
 			# Muta el primero con dezplazamiento, muta el ultimo con intercambio
 			mutDesp = Genetic.mutacionMovimientoAleatorio(coords[indexsAboveCurfew[0]])
@@ -132,7 +132,7 @@ while (var.maxConvergencia != convergenciaObtenida):
 	while True and len(sistemasLanzar):
 		for i in range(len(sistemasLanzar)):
 			if lines[i] != 0:
-				lines[i] = Lector.obtenerTermination(sistemasNombre[i]+".out")
+				lines[i] = Lector.obtenerTermination(sistemasNombre[i]+"."+var.extension)
 
 		if(1 in lines):
 			print lines
@@ -142,7 +142,7 @@ while (var.maxConvergencia != convergenciaObtenida):
 			time.sleep(5.0)
 			for i in range(len(sistemasLanzar)):
 				if (lines[i] == 2):
-					if(Lector.obtenerEnergiaGaussian(sistemasNombre[i]+".out")!=0):
+					if(Lector.obtenerEnergiaGaussian(sistemasNombre[i]+"."+var.extension)!=0):
 						lines[i]=0
 						continue
 					else:
@@ -183,8 +183,8 @@ while (var.maxConvergencia != convergenciaObtenida):
 		
 	for file in sistemasNombre:
 		#if file not in toKick:
-		tmp = Lector.obtenerCoordenadaGaussian(file+".out")
-		energy= float(Lector.obtenerEnergiaGaussian(file+".out"))
+		tmp = Lector.obtenerCoordenadaGaussian(file+"."+var.extension)
+		energy= float(Lector.obtenerEnergiaGaussian(file+"."+var.extension))
 		transformarNumeroASimbolo(tmp)
 		coords.append(tmp)
 		energia.append(energy)
