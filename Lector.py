@@ -19,6 +19,7 @@ def leerArchivoParametros(configs):
 	for secciones in config.sections():
 		for (variable, valor) in config.items(secciones):
 			agregarVariableGlobal(variable, valor)
+	var.establecerVariablesDefault()
 
 def agregarVariableGlobal(key, dato):
 	var.Big_variable[key]=dato
@@ -93,3 +94,81 @@ def obtenerFrecuenciaGaussian(file):
 	    if "Zero-point correction" in rline[i]:
 	        freq = rline[i].split()[2]
 	return freq
+
+def leerLOGS():
+	#energia, ciclo, pre o post, 
+	ciclo = 0
+	energia = 1
+	converg = 1
+	name = ""
+
+	archivo = open("LOGS","r")
+	rline = archivo.readlines()
+	for i in range(len(rline)):
+		if ( "Ciclo" in rline[i]):
+			ciclo = int(rline[i].split("=")[-1])
+		if ("Energia" in rline[i]):
+			energia = float((rline[i].split(":")[-1]).split()[0])
+		if ("Convergencia" in rline[i]):
+			converg = float(rline[i].split()[1])
+		#if ("Convergencia" in rline[i]):
+		#	converg = int(rline[i].split()[-1])
+	print ciclo, converg, energia
+	#VERIFICA QUE PRECOORDS ciclo+1 existe. SI no funcionara con POSTCORDS ciclo
+	#if
+	toRead=""
+	existe = True
+	try:
+		f = open("PostCoords_"+str(ciclo)+".xyz")
+		f.close()
+	except (OSError, IOError):
+		existe = False
+	if existe == True:
+		toRead= "PostCoords_"+str(ciclo)+".xyz"
+	else:
+		toRead= "PostCoords_"+str(ciclo-1)+".xyz"
+	return ciclo,converg,energia,toRead
+
+def leerInformacionXYZ(file):
+	print "Leyendo ",file
+	archivo = open(file,"r")
+	rline = archivo.readlines()
+	atom = int(rline[0])
+	energy = []
+	coords = []
+
+	aux = 1
+	tmp_c=[]
+	coords = []
+	for i in range(1,len(rline)):
+		#print rline[i]
+		if (aux == 1): # ESTAMOS EN LOS NOMBRES Y ENERGIA
+			tmp = float(rline[i].split()[-2])
+			#print tmp
+			energy.append(tmp)
+		elif aux==0:
+			#print rline[i]
+			pass
+		else:
+#			words = int(line.split()[1]),
+#					round(float(line.split()[3]),4),
+#					round(float(line.split()[4]),4),
+#					round(float(line.split()[5]),4)
+			tmp = rline[i].split()
+			na = int(var.atomic_number.index(tmp[0])+1)
+			words = tmp[0],float(tmp[1]),float(tmp[2]),float(tmp[3]),na
+			L = list(words)
+			coords.append(L)
+			#print words
+			#print na
+		aux+=1
+		if (aux==(atom+2)):
+			#print "LINEA siguiente ",rline[i+1]
+			tmp_c.append(coords)
+			coords = []
+			aux=0
+			#exit(1)
+	#print tmp_c
+	#print energy
+	archivo.close()
+	return energy, tmp_c

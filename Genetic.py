@@ -60,7 +60,9 @@ def combinarMolecula(sistema_1, sistema_2, hashTotal):
 	verificador = dict.fromkeys(hashTotal,0)
 	
 	finalCoords = []
+	print listaCombinada
 	for i in range(0,hashTotal["all"]*2):
+		#print verificador[listaCombinada[i][0]], "<",hashTotal[listaCombinada[i][0]]
 		if( verificador[listaCombinada[i][0]] < hashTotal[listaCombinada[i][0]]):  #Verifica cada atomo
 			finalCoords.append(listaCombinada[i])
 			verificador[listaCombinada[i][0]]+=1
