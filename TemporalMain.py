@@ -44,15 +44,15 @@ hashtotal = var.formulaQuimicaAHash()
 generation = 0
 MinEnergyEver = 0
 reset = False
-now=datetime.now()
+tiempo_inicial=datetime.now()
 
 if var.reset == 1:
 	reset=True
 #Impresion LOG
 if reset == True:
-	Impresora.escribirArchivoLog("Reiniciado el programa  @ " + now.strftime('%m/%d/%Y %H:%M:%S'))	
+	Impresora.escribirArchivoLog("Reiniciado el programa  @ " + tiempo_inicial.strftime('%d/%m/%Y %H:%M:%S'))	
 else:
-	Impresora.escribirArchivoLog("Iniciado el programa @ " + now.strftime('%m/%d/%Y %H:%M:%S'))
+	Impresora.escribirArchivoLog("Iniciado el programa @ " + tiempo_inicial.strftime('%d/%m/%Y %H:%M:%S'))
 # Ciclo principal de vida, funciona mientras se alcance un nivel de energia constante en un numero de ciclos
 while (var.maxConvergencia != convergenciaObtenida):
 	
@@ -299,5 +299,6 @@ while (var.maxConvergencia != convergenciaObtenida):
 	pass
 
 #print "FINALIZADO"
-Impresora.escribirArchivoLog("\nProceso Finalizado @ " + now.strftime('%m/%d/%Y %H:%M:%S'))
+tiempo_final=datetime.now()
+Impresora.escribirArchivoLog("\nProceso Finalizado @ " + tiempo_final.strftime('%d/%m/%Y %H:%M:%S'))
 # exit(0)
