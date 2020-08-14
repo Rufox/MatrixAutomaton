@@ -10,6 +10,8 @@ import numpy as np
 import math
 import sys
 import time
+from datetime import datetime
+
 
 # Caso especial cuando los atomos vienen en formato de numero atomico.
 def transformarNumeroASimbolo(coords):
@@ -42,13 +44,15 @@ hashtotal = var.formulaQuimicaAHash()
 generation = 0
 MinEnergyEver = 0
 reset = False
+now=datetime.now()
+
 if var.reset == 1:
 	reset=True
 #Impresion LOG
 if reset == True:
-	Impresora.escribirArchivoLog("Reiniciado el programa")	
+	Impresora.escribirArchivoLog("Reiniciado el programa  @ " + now.strftime('%m/%d/%Y %H:%M:%S'))	
 else:
-	Impresora.escribirArchivoLog("Iniciado el programa")
+	Impresora.escribirArchivoLog("Iniciado el programa @ " + now.strftime('%m/%d/%Y %H:%M:%S'))
 # Ciclo principal de vida, funciona mientras se alcance un nivel de energia constante en un numero de ciclos
 while (var.maxConvergencia != convergenciaObtenida):
 	
@@ -295,5 +299,5 @@ while (var.maxConvergencia != convergenciaObtenida):
 	pass
 
 #print "FINALIZADO"
-Impresora.escribirArchivoLog("\nProceso Finalizado")
+Impresora.escribirArchivoLog("\nProceso Finalizado @ " + now.strftime('%m/%d/%Y %H:%M:%S'))
 # exit(0)
