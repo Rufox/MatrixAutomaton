@@ -1,5 +1,5 @@
 [GENERAL]
-numb_conf = 50
+numb_conf = 15
 
 mutations = YES
 crossing_over = YES
@@ -13,7 +13,7 @@ maximun_energy = 100
 
 box_size = 
 
-chemical_formula = Li 12 Si 10
+chemical_formula = H 2 O 1
 
 [SOFTWARE]
 software = gaussian
