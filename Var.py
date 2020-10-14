@@ -44,6 +44,8 @@ def init():
     global PcentToMutate
     # % de N a crear en 1D, 2D, 3D (% x cada uno)
     global PcentToCreate
+    # % de cercania de los atomos (default = 1), si es mayor los atomos se alejaran, menor y se acercaran.
+    global PCentCloseness
     #Fitness
     # Valos alpha, no tengo idea que significa, copiado textual del programa anterior
     # FOrmula mejor = exp ^ (-alphaNumber * prob); donde prob = (Ei-Emin) / (Emax -Emin) donde Emin energia minima, Emax energia maxima y Ei energia de cada sistema
@@ -55,6 +57,7 @@ def init():
     global reset
 
     Big_variable = {}
+    PCentCloseness = 1.0
     Pcent1D = 0.1
     Pcent2D = 0.3
     PcentAtomosMutadosMovimiento = 0.3
@@ -93,7 +96,7 @@ def formulaQuimicaAHash():
     valores["all"] = atomos
     return valores#["Si"]
 def establecerVariablesDefault():
-    global Pcent1D,Pcent2D,PcentAtomosMutadosMovimiento,PcentToMutate,PcentToCreate,PcentBestFitness,maxConvergencia,alphanumber,reset
+    global Pcent1D,Pcent2D,PcentAtomosMutadosMovimiento,PcentToMutate,PcentToCreate,PcentBestFitness,maxConvergencia,alphanumber,reset, PCentCloseness
     print(Big_variable)
     
     if "pcent1d" in Big_variable.keys():
@@ -111,6 +114,11 @@ def establecerVariablesDefault():
     if "pcenttocreate" in Big_variable.keys():
         is_number("PcentToCreate",Big_variable["pcenttocreate"])
         PcentToCreate = float(Big_variable["pcenttocreate"])
+
+    if "pcentcloseness" in Big_variable.keys():
+        is_number("PCentCloseness",Big_variable["pcentcloseness"])
+        PCentCloseness = float(Big_variable["pcentcloseness"])
+
     if "pcentbestfitness" in Big_variable.keys():
         is_number("PcentBestFitness",Big_variable["pcentbestfitness"])
         PcentBestFitness = float(Big_variable["pcentbestfitness"])

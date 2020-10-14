@@ -286,7 +286,7 @@ def guardar(fr):
 
 def obtenerCoordenadas(fr):
     arreglo = np.array(fr)
-    arreglo = arreglo*float(atomos[0].radio_atomico)*2
+    arreglo = arreglo*float(atomos[0].radio_atomico)*2*var.PCentCloseness
     for i in range(len(fr)):
         coords_list.append(str(matriz[fr[i][0],fr[i][1],fr[i][2]])+' '+str(round(arreglo[i][0],2))+' '+str(round(arreglo[i][1],2))+' '+str(round(arreglo[i][2],2)))
     coords_list2.append(coords_list)
