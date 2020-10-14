@@ -153,7 +153,7 @@ while (var.maxConvergencia != convergenciaObtenida):
 
     # MUTACIONES 0.2 y 0.2 de cualquiera de los alpha
     if mutados != 0:
-        for muting in range(0 ,mutados/2):
+        for muting in range(0 ,mutados//2):
             np.random.shuffle(indexsAboveCurfew)
             # Muta el primero con dezplazamiento, muta el ultimo con intercambio
             mutDesp = Genetic.mutacionMovimientoAleatorio(coords[indexsAboveCurfew[0]])
