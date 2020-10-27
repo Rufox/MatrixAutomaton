@@ -79,7 +79,7 @@ while (var.maxConvergencia != convergenciaObtenida):
             energia = []
             mutados = 0
             cruzados = 0
-            nuevos = var.Big_variable["numb_conf"]  #CHANGE
+            nuevos = int(var.Big_variable["numb_conf"])  #CHANGE
         #lines = [1,1,1,1,1,1,1,1,1,1] #CHANGE
         #sistemasNombre = ["job01","Child1_24","job03","job04","job05", #CHANGE
         #       "job06","job07","job08","job02","Child1_23"]#,#"job11"]
@@ -93,7 +93,7 @@ while (var.maxConvergencia != convergenciaObtenida):
         
     print("NUEVOS SERAN:",nuevos,mutados,cruzados," Original, Mut, Child")
     # Matrix Automaton
-    if int(nuevos) > 0:
+    if nuevos > 0:
         pob_1d = int(round(float(nuevos)*var.Pcent1D))
         pob_2d = int(round(float(nuevos)*var.Pcent2D))
         pob_3d = int(nuevos)- pob_1d - pob_2d
@@ -153,7 +153,7 @@ while (var.maxConvergencia != convergenciaObtenida):
 
     # MUTACIONES 0.2 y 0.2 de cualquiera de los alpha
     if mutados != 0:
-        for muting in range(0 ,mutados/2):
+        for muting in range(0 ,mutados//2):
             np.random.shuffle(indexsAboveCurfew)
             # Muta el primero con dezplazamiento, muta el ultimo con intercambio
             mutDesp = Genetic.mutacionMovimientoAleatorio(coords[indexsAboveCurfew[0]])
