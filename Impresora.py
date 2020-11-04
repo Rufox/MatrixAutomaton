@@ -51,8 +51,7 @@ def escribirInputGaussian(name,number,origincoords):
 
 def escribirInputOrca(name,number,origincoords):
     coordsList = np.array([[row[0],row[1], row[2], row[3]] for row in origincoords])
-    input = open(name+str(number)+".txt","w+")
-    #input = open(name+str(number)+".inp","w+")
+    input = open(name+str(number)+".inp","w+")
     
     #print (var.Big_variable)
     input.write("%PAL NPROC "+var.Big_variable["core"]+" END\n")
