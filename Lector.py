@@ -95,6 +95,35 @@ def obtenerFrecuenciaGaussian(file):
             freq = rline[i].split()[2]
     return freq
 
+def obtenerCoordenadaOrca(file):
+    try:
+        archivo = open(file,"r")
+        rline = archivo.readlines()
+        count = int(-1)*int(rline[0])
+        coords = []
+        while(count <= -1):
+            index = var.atomic_number.index(rline[count].split()[0])
+            words = int(index),round(float(rline[count].split()[1]),4),round(float(rline[count].split()[2]),4),round(float(rline[count].split()[3]),4)
+            L=list(words)
+            coords.append(L)
+            count = count + 1
+        print(coords)
+        return coords
+    except (OSError, IOError):
+        print("Archivo no encontrado --> ",file)
+        exit(1)
+
+def obtenerEnergiaOrca(file):
+    try:
+        archivo = open(file,"r")
+        rline = archivo.readlines()
+        count = int(-1)*int(rline[0])
+        energy = rline[count-1].split()[5]
+        return energy
+    except (OSError, IOError):
+        print("Archivo no encontrado --> ",file)
+        exit(1)
+
 def leerLOGS():
     #energia, ciclo, pre o post, 
     ciclo = 0
