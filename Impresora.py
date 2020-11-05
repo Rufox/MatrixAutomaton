@@ -49,6 +49,26 @@ def escribirInputGaussian(name,number,origincoords):
     input.write("\n")       #Porque Gaussian es espcial
     input.close()
 
+def escribirInputOrca(name,number,origincoords):
+    coordsList = np.array([[row[0],row[1], row[2], row[3]] for row in origincoords])
+    input = open(name+str(number)+".inp","w+")
+    
+    #print (var.Big_variable)
+    input.write("%PAL NPROC "+var.Big_variable["core"]+" END\n")
+    if var.Big_variable["charge_multi"][2]=="1":
+        input.write("! RKS "+var.Big_variable["header"]+"\n")
+    else:
+        input.write("! UKS "+var.Big_variable["header"]+"\n")
+    input.write("%GEOM\n")
+    input.write("MAXITER 512\n")
+    input.write("END\n")
+    #input.write("Automatic Input "+name+" "+str(number)+"\n")
+    input.write("* xyz "+var.Big_variable["charge_multi"]+"\n")
+    for line in coordsList:
+        input.write(' '.join(map(str, line))+"\n")
+    input.write("*")       # input.write("\n")#Porque Gaussian es espcial
+    input.close()
+
 # Escribe solo 1 sistema a un archivo xyz, si el archivo xyz se llama varia veces se agregaran mas sistemas.
 def escribirArchivoXYZ(name, numeroAtomo, title, coordsList):
     input = open(name+".xyz","a")
