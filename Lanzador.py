@@ -18,7 +18,7 @@ def slurmCluster(nombre, file, proc, cola):
     slrm.write("#SBATCH -c "+proc+"\n")
     slrm.write("#SBATCH --output=/dev/null\n")
     if var.Big_variable["software"] == "orca":
-        slrm.write("\nml orca/B.01\n\n")
+        slrm.write("\nml ORCA/4.1.1-OpenMPI-3.1.3\n\n")
         slrm.write("\nsrun orca "+str(file)+"\n")
     elif var.Big_variable["software"] == "gaussian":
         slrm.write("\nml g16/B.01\n\n")

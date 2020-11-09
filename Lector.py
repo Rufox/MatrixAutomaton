@@ -124,6 +124,22 @@ def obtenerEnergiaOrca(file):
         print("Archivo no encontrado --> ",file)
         exit(1)
 
+def obtenerCoordenada(file):
+    if var.Big_variable["software"] == "orca":
+        obtenerCoordenadaOrca(file)
+    elif var.Big_variable["software"] == "gaussian":
+        obtenerCoordenadaGaussian(file)
+    else:
+        print("Software no disponible, elegir orca o gaussian")
+
+def obtenerEnergia(file):
+    if var.Big_variable["software"] == "orca":
+        obtenerEnergiaOrca(file)
+    elif var.Big_variable["software"] == "gaussian":
+        obtenerEnergiaGaussian(file)
+    else:
+        print("Software no disponible, elegir orca o gaussian")
+
 def leerLOGS():
     #energia, ciclo, pre o post, 
     ciclo = 0
