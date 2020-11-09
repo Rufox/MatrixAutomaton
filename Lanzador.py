@@ -28,3 +28,25 @@ def slurmCluster(nombre, file, proc, cola):
     slrm.close()
     state = sb.Popen(["sbatch",nombre+".slrm"])
 
+def SGECluster(nombre, file, proc, cola):
+    #copiar el archivo Gaussian16 aca
+    slrm = open(nombre+".slrm","w+")
+    slrm.write("#!/bin/bash \n")
+    slrm.write("#$ -cwd\n")
+    slrm.write("#$ -j y\n")    
+    slrm.write("#$ -N "+nombre+"\n")
+    slrm.write("#$ -q "+cola+"\n")
+    #slrm.write("#SBATCH --nodes=1\n")
+    slrm.write("#$ -pe solouno "+proc+"\n")
+    slrm.write("#$ -o /dev/null\n")
+    slrm.write("#$ -S /bin/bash\n")
+    if var.Big_variable["software"] == "orca":
+        slrm.write("\nml ORCA/4.1.1-OpenMPI-3.1.3\n\n")
+        slrm.write("\nsrun orca "+str(file)+"\n")
+    elif var.Big_variable["software"] == "gaussian":
+        slrm.write("\nsource setg16Var\n\n")
+        slrm.write("\ng16 "+str(file)+"\n")
+    else:
+        print("Programa no soportado")
+    slrm.close()
+    state = sb.Popen(["qsub",nombre+".slrm"])

@@ -184,7 +184,8 @@ while (var.maxConvergencia != convergenciaObtenida):
     if reset == False:
         for iden in range(len(sistemasLanzar)):
             #go.envioCluster(var.GaussianCall,sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
-            go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
+            #go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
+            go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
             time.sleep(1.0)
             lines.append(1)
         #pass
@@ -208,7 +209,8 @@ while (var.maxConvergencia != convergenciaObtenida):
                         else:
                             print("Malos sera: ",sistemasNombre[i])
                             #go.envioCluster(var.GaussianCall,sistemasNombre[i],sistemasNombre[i]+".com",var.Big_variable["core"],queue)
-                            go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
+                            #go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
+                            go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
                             print("Enviado")
                             lines[i] = 1
                         print(lines)
