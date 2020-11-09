@@ -69,6 +69,14 @@ def escribirInputOrca(name,number,origincoords):
     input.write("*")       # input.write("\n")#Porque Gaussian es espcial
     input.close()
 
+def escribirInput(name,number,origincoords):
+    if var.Big_variable["software"] == "orca":
+        escribirInputOrca(name,number,origincoords)
+    elif var.Big_variable["software"] == "gaussian":
+        escribirInputGaussian(name,number,origincoords)
+    else:
+        print("Software no disponible, elegir orca o gaussian")
+
 # Escribe solo 1 sistema a un archivo xyz, si el archivo xyz se llama varia veces se agregaran mas sistemas.
 def escribirArchivoXYZ(name, numeroAtomo, title, coordsList):
     input = open(name+".xyz","a")
