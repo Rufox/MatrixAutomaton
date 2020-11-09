@@ -22,7 +22,18 @@ def transformarNumeroASimbolo(coords):
         line[0]=var.atomic_number[line[0]-1]
     nuevo=[coords,nuevo]
     return nuevo
-
+def GestorEnvio(sistemasNombre,queue):
+	if(var.Big_variable["job-scheduler"]=="local"):
+		#modo local
+		print "YAHOOO"
+		exit(1)
+	elif(var.Big_variable["job-scheduler"]=="slurm"):
+		go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
+	elif(var.Big_variable["job-scheduler"]=="sge"):
+		go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
+	else:
+		print("Job-Scheduler not recognized.\nAccepted:\nlocal, slurm or sge\n")
+		exit(1);
 # Cola a enviar
 queue = sys.argv[2]
 
@@ -185,7 +196,8 @@ while (var.maxConvergencia != convergenciaObtenida):
         for iden in range(len(sistemasLanzar)):
             #go.envioCluster(var.GaussianCall,sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
             #go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
-            go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
+            #go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
+            GestorEnvio(sistemasNombre,queue)
             time.sleep(1.0)
             lines.append(1)
         #pass
@@ -210,7 +222,8 @@ while (var.maxConvergencia != convergenciaObtenida):
                             print("Malos sera: ",sistemasNombre[i])
                             #go.envioCluster(var.GaussianCall,sistemasNombre[i],sistemasNombre[i]+".com",var.Big_variable["core"],queue)
                             #go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
-                            go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
+                            #go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
+                            GestorEnvio(sistemasNombre,queue)
                             print("Enviado")
                             lines[i] = 1
                         print(lines)
