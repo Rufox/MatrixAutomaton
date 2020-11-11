@@ -19,7 +19,7 @@ def slurmCluster(nombre, file, proc, cola):
         slrm.write("#SBATCH --nodes="+proc+"\n")
         slrm.write("#SBATCH --ntasks-per-node="+proc+"\n")
         slrm.write("#SBATCH --output="+nombre+".out"+"\n")
-        slrm.write("\nml ORCA/4.2.1-OpenMPI-3.1.4n\n")
+        slrm.write("\nml ORCA/4.2.1-OpenMPI-3.1.4\n")
         slrm.write("\n${EBROOTORCA}/orca "+str(file)+"\n")
     elif var.Big_variable["software"] == "gaussian":
         slrm.write("#SBATCH --nodes=1\n")
