@@ -16,11 +16,11 @@ def slurmCluster(nombre, file, proc, cola):
     slrm.write("#SBATCH --partition="+cola+"\n")
     slrm.write("#SBATCH --nodes=1\n")
     slrm.write("#SBATCH -c "+proc+"\n")
-    slrm.write("#SBATCH --output=/dev/null\n")
     if var.Big_variable["software"] == "orca":
         slrm.write("\nml ORCA/4.1.1-OpenMPI-3.1.3\n\n")
         slrm.write("\nsrun orca "+str(file)+"\n")
     elif var.Big_variable["software"] == "gaussian":
+		slrm.write("#SBATCH --output=/dev/null\n")
         slrm.write("\nml g16/B.01\n\n")
         slrm.write("\nsrun g16 "+str(file)+"\n")
     else:
@@ -38,12 +38,12 @@ def SGECluster(nombre, file, proc, cola):
     slrm.write("#$ -q "+cola+"\n")
     #slrm.write("#SBATCH --nodes=1\n")
     slrm.write("#$ -pe solouno "+proc+"\n")
-    slrm.write("#$ -o /dev/null\n")
     slrm.write("#$ -S /bin/bash\n")
     if var.Big_variable["software"] == "orca":
         slrm.write("\nml ORCA/4.1.1-OpenMPI-3.1.3\n\n")
         slrm.write("\nsrun orca "+str(file)+"\n")
     elif var.Big_variable["software"] == "gaussian":
+		slrm.write("#$ -o /dev/null\n")
         slrm.write("\nsource setg16Var\n\n")
         slrm.write("\ng16 "+str(file)+"\n")
     else:
