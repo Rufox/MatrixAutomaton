@@ -164,17 +164,17 @@ def obtenerEnergiaOrca(file):
 
 def obtenerCoordenada(file):
     if var.Big_variable["software"] == "orca":
-        obtenerCoordenadaOrca(file)
+        return obtenerCoordenadaOrca(file)
     elif var.Big_variable["software"] == "gaussian":
-        obtenerCoordenadaGaussian(file)
+        return obtenerCoordenadaGaussian(file)
     else:
         print("Software no disponible, elegir orca o gaussian")
 
 def obtenerEnergia(file):
     if var.Big_variable["software"] == "orca":
-        obtenerEnergiaOrca(file)
+        return obtenerEnergiaOrca(file)
     elif var.Big_variable["software"] == "gaussian":
-        obtenerEnergiaGaussian(file)
+        return obtenerEnergiaGaussian(file)
     else:
         print("Software no disponible, elegir orca o gaussian")
 
