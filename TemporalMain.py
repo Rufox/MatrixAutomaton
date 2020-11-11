@@ -183,7 +183,7 @@ while (var.maxConvergencia != convergenciaObtenida):
     # Formacion de inputs en formato gaussian u otro programa
     if reset == False:
         for iden in range(len(sistemasLanzar)):
-            Impresora.escribirInputGaussian(sistemasNombre[iden],iden,sistemasLanzar[iden])
+            Impresora.escribirInput(sistemasNombre[iden],iden,sistemasLanzar[iden])
             sistemasNombre[iden]=sistemasNombre[iden]+str(iden)
             # Impresion data
             Impresora.escribirArchivoXYZ("PreCoords_"+str(generation),hashtotal["all"],sistemasNombre[iden],sistemasLanzar[iden])
@@ -215,7 +215,7 @@ while (var.maxConvergencia != convergenciaObtenida):
                 time.sleep(5.0)
                 for i in range(len(sistemasLanzar)):
                     if (lines[i] == 2):
-                        if(Lector.obtenerEnergiaGaussian(sistemasNombre[i]+"."+var.extension)!=0):
+                        if(Lector.obtenerEnergia(sistemasNombre[i]+"."+var.extension)!=0):
                             lines[i]=0
                             continue
                         else:
@@ -259,8 +259,8 @@ while (var.maxConvergencia != convergenciaObtenida):
         del energia[:]
         for file in sistemasNombre:
             #if file not in toKick:
-            tmp = Lector.obtenerCoordenadaGaussian(file+"."+var.extension)
-            energy= float(Lector.obtenerEnergiaGaussian(file+"."+var.extension))
+            tmp = Lector.obtenerCoordenada(file+"."+var.extension)
+            energy= float(Lector.obtenerEnergia(file+"."+var.extension))
             transformarNumeroASimbolo(tmp)
             coords.append(tmp)
             energia.append(energy)
