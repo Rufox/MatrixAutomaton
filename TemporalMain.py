@@ -59,6 +59,8 @@ generation = 0
 MinEnergyEver = 0
 reset = False
 tiempo_inicial=datetime.now()
+if var.Big_variable["software"] == "orca":
+	var.extension = "out"
 
 if var.reset == 1:
     reset=True
