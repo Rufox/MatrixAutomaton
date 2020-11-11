@@ -134,33 +134,41 @@ def obtenerFrecuenciaGaussian(file):
     return freq
 
 def obtenerCoordenadaOrca(file):
+    start=0
     try:
         archivo = open(file,"r")
         rline = archivo.readlines()
-        count = int(-1)*int(rline[0])
+        for i in range (len(rline)):
+            if "FINAL ENERGY EVALUATION AT THE STATIONARY POINT" in rline[i]:
+                start = i
+        for m in range (start + 6, len(rline)):
+            if "---" in rline[m]:
+                end = m
+                break
+        if start==0:
+            return 0
+        
         coords = []
-        while(count <= -1):
-            index = var.atomic_number.index(rline[count].split()[0])
-            words = int(index),round(float(rline[count].split()[1]),4),round(float(rline[count].split()[2]),4),round(float(rline[count].split()[3]),4)
+        for line in rline[start+6 : end-1]:
+            words = int(var.atomic_number.index(line.split()[0])+1),round(float(line.split()[1]),4),round(float(line.split()[2]),4),round(float(line.split()[3]),4)
             L=list(words)
             coords.append(L)
-            count = count + 1
         print(coords)
         return coords
+
     except (OSError, IOError):
         print("Archivo no encontrado --> ",file)
         exit(1)
 
 def obtenerEnergiaOrca(file):
-    try:
-        archivo = open(file,"r")
-        rline = archivo.readlines()
-        count = int(-1)*int(rline[0])
-        energy = rline[count-1].split()[5]
-        return energy
-    except (OSError, IOError):
-        print("Archivo no encontrado --> ",file)
-        exit(1)
+    energy=0
+    archivo = open(file,"r")
+    rline = archivo.readlines()
+    for i in range (len(rline)):
+        if "OPTIMIZATION RUN DONE" in rline[i]:
+            energy = rline[i-3].split()[4]
+    print(energy)
+    return energy
 
 def obtenerCoordenada(file):
     if var.Big_variable["software"] == "orca":
