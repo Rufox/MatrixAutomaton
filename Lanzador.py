@@ -14,13 +14,16 @@ def slurmCluster(nombre, file, proc, cola):
     slrm.write("#!/bin/bash \n")
     slrm.write("#SBATCH --job-name="+nombre+"\n")
     slrm.write("#SBATCH --partition="+cola+"\n")
-    slrm.write("#SBATCH --nodes=1\n")
-    slrm.write("#SBATCH -c "+proc+"\n")
+    
     if var.Big_variable["software"] == "orca":
+        slrm.write("#SBATCH --nodes="+proc+"\n")
+        slrm.write("#SBATCH --ntasks-per-node="+proc+"\n")
         slrm.write("#SBATCH --output="+nombre+".out"+"\n")
-        slrm.write("\nml ORCA/4.1.1-OpenMPI-3.1.3\n\n")
-        slrm.write("\nsrun orca "+str(file)+"\n")
+        slrm.write("\nml ORCA/4.2.1-OpenMPI-3.1.4n\n")
+        slrm.write("\n${EBROOTORCA}/orca "+str(file)+"\n")
     elif var.Big_variable["software"] == "gaussian":
+        slrm.write("#SBATCH --nodes=1\n")
+        slrm.write("#SBATCH -c "+proc+"\n")
         slrm.write("#SBATCH --output=/dev/null\n")
         slrm.write("\nml g16/B.01\n\n")
         slrm.write("\nsrun g16 "+str(file)+"\n")
