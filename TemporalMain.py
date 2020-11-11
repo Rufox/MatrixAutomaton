@@ -28,7 +28,10 @@ def GestorEnvio(sistemasNombre,queue):
 		print("YAHOOO")
 		exit(1)
 	elif(var.Big_variable["job-scheduler"]=="slurm"):
-		go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
+		if var.Big_variable["software"]=="gaussian":
+			go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
+		if var.Big_variable["software"]=="orca":
+			go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".inp",var.Big_variable["core"],queue)
 	elif(var.Big_variable["job-scheduler"]=="sge"):
 		go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 	else:
