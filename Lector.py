@@ -61,28 +61,66 @@ def obtenerEnergiaGaussian(file):
         if "SCF Done:" in rline[i]:
             energy = rline[i].split()[4]
     return energy
+
 def obtenerTermination(file):
-    print ("llamasdo a",file)
+    print("llamasdo a", file)
     try:
         archivo = open(file,"r")
         rline = archivo.readlines()
         correcto = 1
         for i in range(len(rline)):
-            if "combination of multiplicity impossible" in rline[i]:
-                print("ERROR DE COMBINACION DE MULTIPLLICIDAD")
-                exit(1)
-            if "Small interatomic distances encountered:" in rline[i]:
-                correcto = 3
-                break
-            elif "Error termination" in rline[i]:
-                correcto = 2
-                break
-            elif "Normal termination" in rline[i]:
-                correcto = 0
-                break
+            if var.Big_variable["software"]=="gaussian":
+                if "combination of multiplicity impossible" in rline[i]:
+                    print("ERROR DE COMBINACION DE MULTIPLICIDAD")
+                    exit(1)
+                if "Small interatomic distances encountered:" in rline[i]:
+                    correcto = 3
+                    break
+                elif "Error termination" in rline[i]:
+                    correcto = 2
+                    break
+                elif "Normal termination" in rline[i]:
+                    correcto = 0
+                    break
+            if var.Big_variable["software"]=="orca":
+                if "Error: multiplicity" in rline[i]:
+                    print("ERROR DE COMBINACION DE MULTIPLICIDAD")
+                    exit(1)
+                if "SERIOUS PROBLEM IN SOSCF" in rline[i]:
+                    print("HUGE, UNRELIABLE STEP WAS ABOUT TO BE TAKEN")
+                    exit(1)
+                elif "THE CP-SCF CALCULATION IS UNCONVERGED" in rline[i]:
+                    correcto = 2
+                    break
+                elif "ORCA TERMINATED NORMALLY" in rline[i]:
+                    correcto = 0
+                    break
         return correcto
     except (OSError, IOError):
         return 1
+
+#def obtenerTermination(file):
+#    print ("llamasdo a",file)
+#    try:
+#        archivo = open(file,"r")
+#        rline = archivo.readlines()
+#        correcto = 1
+#        for i in range(len(rline)):
+#            if "combination of multiplicity impossible" in rline[i]:
+#                print("ERROR DE COMBINACION DE MULTIPLLICIDAD")
+#                exit(1)
+#            if "Small interatomic distances encountered:" in rline[i]:
+#                correcto = 3
+#                break
+#            elif "Error termination" in rline[i]:
+#                correcto = 2
+#                break
+#            elif "Normal termination" in rline[i]:
+#                correcto = 0
+#                break
+#        return correcto
+#    except (OSError, IOError):
+#        return 1
     #return archivo.read().splitlines()[-1]
 # EL programa original toma las coordenadas de la frecuencias y le SUMA dicha correccion
 # a las coordenadas originales
