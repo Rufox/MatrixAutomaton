@@ -70,9 +70,9 @@ def escribirInputOrca(name,number,origincoords):
     input.close()
 
 def escribirInput(name,number,origincoords):
-    if var.Big_variable["software"] == "orca":
+    if var.Big_variable["software"].lower() == "orca":
         escribirInputOrca(name,number,origincoords)
-    elif var.Big_variable["software"] == "gaussian":
+    elif var.Big_variable["software"].lower() == "gaussian":
         escribirInputGaussian(name,number,origincoords)
     else:
         print("Software no disponible, elegir orca o gaussian")
