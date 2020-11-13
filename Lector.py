@@ -89,7 +89,7 @@ def obtenerTermination(file):
                 if "SERIOUS PROBLEM IN SOSCF" in rline[i]:
                     print("HUGE, UNRELIABLE STEP WAS ABOUT TO BE TAKEN")
                     exit(1)
-                elif "THE CP-SCF CALCULATION IS UNCONVERGED" in rline[i]:
+                elif "THE CP-SCF CALCULATION IS UNCONVERGED" or "ORCA finished by error termination in GSTEP" in rline[i]:
                     correcto = 2
                     break
                 elif "ORCA TERMINATED NORMALLY" in rline[i]:
@@ -153,9 +153,26 @@ def obtenerCoordenadaOrca(file):
             words = int(var.atomic_number.index(line.split()[0])+1),round(float(line.split()[1]),4),round(float(line.split()[2]),4),round(float(line.split()[3]),4)
             L=list(words)
             coords.append(L)
-        print(coords)
         return coords
 
+    except (OSError, IOError):
+        print("Archivo no encontrado --> ",file)
+        exit(1)
+
+def obtenerCoordenadaOrca_trj(file):
+    file = file.split('.')[0]+"_trj.xyz"
+    try:
+        archivo = open(file,"r")
+        rline = archivo.readlines()
+        count = int(-1)*int(rline[0])
+        coords = []
+        while(count <= -1):
+            index = var.atomic_number.index(rline[count].split()[0])+1
+            words = int(index),round(float(rline[count].split()[1]),4),round(float(rline[count].split()[2]),4),round(float(rline[count].split()[3]),4)
+            L=list(words)
+            coords.append(L)
+            count = count + 1
+        return coords
     except (OSError, IOError):
         print("Archivo no encontrado --> ",file)
         exit(1)
@@ -170,21 +187,42 @@ def obtenerEnergiaOrca(file):
     print(energy)
     return energy
 
+def obtenerEnergiaOrca_trj(file):
+    file = file.split('.')[0]+"_trj.xyz"
+    energy=0
+    archivo = open(file,"r")
+    rline = archivo.readlines()
+    count = int(-1)*int(rline[0])
+    energy = rline[count-1].split()[5]
+    return energy
+
 def obtenerCoordenada(file):
     if var.Big_variable["software"] == "orca":
-        return obtenerCoordenadaOrca(file)
+        if obtenerCoordenadaOrca(file) == 0:
+            return obtenerCoordenadaOrca_trj(file)
+        if obtenerCoordenadaOrca(file) != 0:
+            return obtenerCoordenadaOrca(file)
+        else:
+            exit(1)
     elif var.Big_variable["software"] == "gaussian":
         return obtenerCoordenadaGaussian(file)
     else:
         print("Software no disponible, elegir orca o gaussian")
+        exit(1)
 
 def obtenerEnergia(file):
     if var.Big_variable["software"] == "orca":
-        return obtenerEnergiaOrca(file)
+        if obtenerEnergiaOrca(file) == 0:
+            return obtenerEnergiaOrca_trj(file)
+        if obtenerEnergiaOrca(file) != 0:
+            return obtenerEnergiaOrca(file)
+        else:
+            exit(1)
     elif var.Big_variable["software"] == "gaussian":
-        return obtenerEnergiaGaussian(file)
+        obtenerEnergiaGaussian(file)
     else:
         print("Software no disponible, elegir orca o gaussian")
+        exit(1)
 
 def leerLOGS():
     #energia, ciclo, pre o post, 
