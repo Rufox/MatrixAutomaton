@@ -89,7 +89,10 @@ def obtenerTermination(file):
                 if "SERIOUS PROBLEM IN SOSCF" in rline[i]:
                     print("HUGE, UNRELIABLE STEP WAS ABOUT TO BE TAKEN")
                     exit(1)
-                elif "THE CP-SCF CALCULATION IS UNCONVERGED" or "ORCA finished by error termination in GSTEP" in rline[i]:
+                elif "THE CP-SCF CALCULATION IS UNCONVERGED" in rline[i]:
+                    correcto = 2
+                    break
+                elif "ORCA finished by error termination in GSTEP" in rline[i]:
                     correcto = 2
                     break
                 elif "ORCA TERMINATED NORMALLY" in rline[i]:
