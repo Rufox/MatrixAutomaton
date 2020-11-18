@@ -95,6 +95,9 @@ def obtenerTermination(file):
                 elif "ORCA finished by error termination in GSTEP" in rline[i]:
                     correcto = 2
                     break
+                elif "SCF NOT CONVERGED" in rline[i]:
+                    correcto = 2
+                    break
                 elif "ORCA TERMINATED NORMALLY" in rline[i]:
                     correcto = 0
                     break
