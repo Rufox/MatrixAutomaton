@@ -128,11 +128,11 @@ while (var.maxConvergencia != convergenciaObtenida):
 			cruzados = 0
 			nuevos = int(var.Big_variable["numb_conf"])  #CHANGE
 		#TESTls
-		nuevos=0
-		lines = [1,1,1,1,1] #CHANGE
-		sistemasNombre = ["job01","job11","job21","job31", #CHANGE
-			   "job41"]#],"job51"]#,"job08","job02","Child1_23"]#,#"job11"]
-		sistemasLanzar=[1,2,3,4,5]
+		#nuevos=0
+		#lines = [1,1,1,1,1] #CHANGE
+		#sistemasNombre = ["job01","job11","job21","job31", #CHANGE
+		#	   "job41"]#],"job51"]#,"job08","job02","Child1_23"]#,#"job11"]
+		#sistemasLanzar=[1,2,3,4,5]
 
 
 	# Ciclos 2+	
@@ -225,11 +225,11 @@ while (var.maxConvergencia != convergenciaObtenida):
 	if reset == False:
 		for iden in range(len(sistemasLanzar)):
 			#EDIT no va break
-			##Impresora.escribirInput(sistemasNombre[iden],iden,sistemasLanzar[iden])
-			##sistemasNombre[iden]=sistemasNombre[iden]+str(iden)
+			Impresora.escribirInput(sistemasNombre[iden],iden,sistemasLanzar[iden])
+			sistemasNombre[iden]=sistemasNombre[iden]+str(iden)
 			# Impresion data
-			##Impresora.escribirArchivoXYZ("PreCoords_"+str(generation),hashtotal["all"],sistemasNombre[iden],sistemasLanzar[iden])
-			break
+			Impresora.escribirArchivoXYZ("PreCoords_"+str(generation),hashtotal["all"],sistemasNombre[iden],sistemasLanzar[iden])
+			#break
 
 #####################################
 	# Zona 3
@@ -242,10 +242,10 @@ while (var.maxConvergencia != convergenciaObtenida):
 			#go.envioCluster(var.GaussianCall,sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 			#go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 			#go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
-		#	GestorEnvio(sistemasNombre,queue,iden,0)
-		#	time.sleep(0.25)
+			GestorEnvio(sistemasNombre,queue,iden,0)
+			time.sleep(1.00)
 			# Flag estado
-		#	lines.append(1)
+			lines.append(1)
 			# Contador envio calculo
 			print("Enviando a lanzar")
 			Opportunities.append(1)
@@ -298,8 +298,8 @@ while (var.maxConvergencia != convergenciaObtenida):
 						lines[i]=0
 			elif(1 in lines):
 				print("Todos son 1")
-				time.sleep(1.0)
-				break
+				time.sleep(10.0)
+				#break
 			elif(4 in lines):
 				print("Envio rezagados modo local")
 				GestorEnvio(sistemasNombre,queue,-1,contador)
@@ -321,7 +321,7 @@ while (var.maxConvergencia != convergenciaObtenida):
 #####################################
 	#Zona 4
 	# Recopilacion de datos.
-	exit(1)
+	#exit(1)
 	if reset == False:
 		del fitness[:]
 		del coords[:]
