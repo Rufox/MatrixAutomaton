@@ -67,4 +67,20 @@ def LocalMode(name,file, LANZ):
     slrm.write(var.Big_variable["command"]+" "+file+"\n")
 
 def SendLocal(name,LANZ):
-    state = sb.Popen(["sh","BATCH-"+ name+str(LANZ)+".slrm","&"])
+    #state = sb.Popen(["sh","BATCH-"+ name+str(LANZ)+".slrm","&"])
+    #stdout, stderr = state.communicate()
+    #print(stdout, stderr)
+    #print(state.returncode )
+    if(os.path.exists("BATCH-"+ name+str(LANZ)+".slrm")):
+        #try:
+        #sb.check_output(["sh","BATCH-"+ name+str(LANZ)+".slrm","&"])
+        state = sb.Popen(["sh","BATCH-"+ name+str(LANZ)+".slrm","&"],stdout=sb.PIPE,stderr=sb.PIPE)
+        #stdout, stderr = state.communicate()
+        #print(state.returncode)
+        #print(stderr, stdout)
+        #if(stderr == None):
+        #print(stderr)
+    #except sb.CalledProcessError  as e:
+        #   print("Error Catastrofico\n")
+        #   exit(1)
+        #raise e

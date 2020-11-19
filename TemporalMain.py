@@ -36,14 +36,6 @@ def GestorEnvio(sistemasNombre,queue,iden,reset):
 			go.SendLocal(str(reset),LANZ)
 		elif(reset!=0):
 			return 4
-		elif(reset!=0 and iden==-1): #Procede a tirar todos los BACTH
-			for i in range(0,var.bloque):
-				go.SendLocal(str(reset),i)
-				pass
-		#	print("Estamos en reset: ",reset)
-		#	go.SendLocal(str(reset),LANZ)
-		#	aux=0
-		#	time.sleep(2)
 	elif(var.Big_variable["job-scheduler"].lower()=="slurm"):
 		go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+"."+var.software_extensions[var.Big_variable["software"].lower()],var.Big_variable["core"],queue)
 		return 1
@@ -67,13 +59,8 @@ Lector.leerArchivoParametros(sys.argv[1])
 
 
 if(var.Big_variable["job-scheduler"]=="local"):
-#	print( "LOCAL")
 	var.distribucionCalculos()
-	#os.remove("*.slrm")
-	#print(var.bloque)
 
-#exit(1)
-#print (list(var.Big_variable))
 
 # Inicializaicon de variables locales
 convergenciaObtenida = 0
@@ -229,7 +216,6 @@ while (var.maxConvergencia != convergenciaObtenida):
 			sistemasNombre[iden]=sistemasNombre[iden]+str(iden)
 			# Impresion data
 			Impresora.escribirArchivoXYZ("PreCoords_"+str(generation),hashtotal["all"],sistemasNombre[iden],sistemasLanzar[iden])
-			#break
 
 #####################################
 	# Zona 3
@@ -243,11 +229,11 @@ while (var.maxConvergencia != convergenciaObtenida):
 			#go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 			#go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 			GestorEnvio(sistemasNombre,queue,iden,0)
-			time.sleep(1.00)
+			time.sleep(1.25)
 			# Flag estado
 			lines.append(1)
 			# Contador envio calculo
-			print("Enviando a lanzar")
+		#	print("Enviando a lanzar")
 			Opportunities.append(1)
 		#pass
 		toKick = []
@@ -259,11 +245,9 @@ while (var.maxConvergencia != convergenciaObtenida):
 			for i in range(len(sistemasLanzar)):
 				if lines[i] != 0 and lines[i]!=4:
 					lines[i] = Lector.obtenerTermination(sistemasNombre[i]+"."+var.extension)
-			print(lines)
-			#if(1 in lines):
-			#	print("UNO CORRIENDO")
-			#	print(lines)
-			#	time.sleep(1.0)
+					time.sleep(0.5)
+			print("LINES: ",lines)
+
 			if (2 in lines):
 				print("Casos erroneos")
 				time.sleep(1.0)
@@ -275,16 +259,13 @@ while (var.maxConvergencia != convergenciaObtenida):
 							continue
 						elif(Opportunities[i] < var.treshold):
 							print("Malos sera: ",sistemasNombre[i])
-							#go.envioCluster(var.GaussianCall,sistemasNombre[i],sistemasNombre[i]+".com",var.Big_variable["core"],queue)
-							#go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
-							#go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 							lines[i] = GestorEnvio(sistemasNombre,queue,i,contador)
 							Opportunities[i]+=1
 						else:
 							print("Eliminando a uno:",sistemasNombre[i])
 							toKick.append(i)
 							lines[i]=0
-						print(lines)
+						#print(lines)
 				time.sleep(2.0)
 						# Deben ser eliminados los incorrectos para funcoina bien.
 			elif (3 in lines):
@@ -302,7 +283,14 @@ while (var.maxConvergencia != convergenciaObtenida):
 				#break
 			elif(4 in lines):
 				print("Envio rezagados modo local")
-				GestorEnvio(sistemasNombre,queue,-1,contador)
+				#GestorEnvio(sistemasNombre,queue,-1,contador)
+				lines = [1 if (x==4) else x for x in lines]
+				print("LINES QUEDAN: ",lines)
+				print(var.bloque)
+				for i in range(0,var.bloque):
+					go.SendLocal(str(contador),i)
+					time.sleep(1.0)
+				#go.SendLocal(str(contador),i for i in range(0,var.bloque))
 				contador+=1
 			else:
 				break
@@ -315,8 +303,6 @@ while (var.maxConvergencia != convergenciaObtenida):
 		for i in toKick:
 			print("Eliminado el ",sistemasNombre[i])
 			del sistemasNombre[i]
-	#print sistemasNombre
-	#exit(1)
 	# Envio de inputs al programa necesario, espera a termino correcto de calculo
 #####################################
 	#Zona 4
@@ -329,8 +315,8 @@ while (var.maxConvergencia != convergenciaObtenida):
 		for file in sistemasNombre:
 			#if file not in toKick:
 			tmp = Lector.obtenerCoordenada(file+"."+var.extension)
-			print(tmp)
-			print(Lector.obtenerEnergia(file+"."+var.extension))
+			#print(tmp)
+			#print(Lector.obtenerEnergia(file+"."+var.extension))
 			energy= float(Lector.obtenerEnergia(file+"."+var.extension))
 			transformarNumeroASimbolo(tmp)
 			coords.append(tmp)

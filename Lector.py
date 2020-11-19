@@ -55,13 +55,13 @@ def obtenerCoordenadaGaussian(file):
 # Busca inforamcion energetica de archivo gaussian de salida. En caso de error retorna 0
 def obtenerEnergiaGaussian(file):
     energy=0
-    print("Scando energia al ",file)
+    #print("Scando energia al ",file)
     archivo = open(file,"r")
     rline = archivo.readlines()
     for i in range (len(rline)):
         if "SCF Done:" in rline[i]:
             energy = rline[i].split()[4]
-    print( energy)
+    #print( energy)
     return energy
 
 def obtenerTermination(file):
@@ -108,6 +108,7 @@ def obtenerTermination(file):
         print("Se concluye que ",file, " Es ",correcto)
         return correcto
     except (OSError, IOError):
+        print(OSError, IOError)
         print("Error desconocido")
         return 1
 
