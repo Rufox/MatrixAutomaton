@@ -70,6 +70,7 @@ def escribirInputOrca(name,number,origincoords):
     input.close()
 
 def escribirInput(name,number,origincoords):
+    print(name,number,origincoords)
     if var.Big_variable["software"].lower() == "orca":
         escribirInputOrca(name,number,origincoords)
     elif var.Big_variable["software"].lower() == "gaussian":

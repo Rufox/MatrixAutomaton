@@ -31,14 +31,25 @@ def GestorEnvio(sistemasNombre,queue,iden,reset):
 		print("LANZ = ",LANZ, iden,var.bloque)
 		go.LocalMode(str(reset),sistemasNombre[iden]+"."+var.software_extensions[var.Big_variable["software"].lower()], LANZ)
 		
-		if (LANZ_Futuro != LANZ or (iden+1)==int(var.Big_variable["numb_conf"])) :
+		if ((LANZ_Futuro != LANZ or (iden+1)==int(var.Big_variable["numb_conf"])) and reset==0) :
 			print("Se envia el BATCH",LANZ)
 			go.SendLocal(str(reset),LANZ)
-			
+		elif(reset!=0):
+			return 4
+		elif(reset!=0 and iden==-1): #Procede a tirar todos los BACTH
+			for i in range(0,var.bloque):
+				go.SendLocal(str(reset),i)
+				pass
+		#	print("Estamos en reset: ",reset)
+		#	go.SendLocal(str(reset),LANZ)
+		#	aux=0
+		#	time.sleep(2)
 	elif(var.Big_variable["job-scheduler"].lower()=="slurm"):
 		go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+"."+var.software_extensions[var.Big_variable["software"].lower()],var.Big_variable["core"],queue)
+		return 1
 	elif(var.Big_variable["job-scheduler"].lower()=="sge"):
 		go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+"."+var.software_extensions[var.Big_variable["software"].lower()],var.Big_variable["core"],queue)
+		return 1
 	else:
 		print("Job-Scheduler not recognized.\nAccepted:\nlocal, slurm or sge\n")
 		exit(1);
@@ -88,6 +99,7 @@ else:
 # Ciclo principal de vida, funciona mientras se alcance un nivel de energia constante en un numero de ciclos
 while (var.maxConvergencia != convergenciaObtenida):
 	for filename in glob.glob("BATCH*"):
+		print("Eliminacion de Archivos residuales")
 		os.remove(filename) 
 
 	sistemasNombre = []
@@ -115,11 +127,15 @@ while (var.maxConvergencia != convergenciaObtenida):
 			mutados = 0
 			cruzados = 0
 			nuevos = int(var.Big_variable["numb_conf"])  #CHANGE
-		#lines = [1,1,1,1,1,1,1,1,1,1] #CHANGE
-		#sistemasNombre = ["job01","Child1_24","job03","job04","job05", #CHANGE
-		#       "job06","job07","job08","job02","Child1_23"]#,#"job11"]
+		#TESTls
+		nuevos=0
+		lines = [1,1,1,1,1] #CHANGE
+		sistemasNombre = ["job01","job11","job21","job31", #CHANGE
+			   "job41"]#],"job51"]#,"job08","job02","Child1_23"]#,#"job11"]
+		sistemasLanzar=[1,2,3,4,5]
 
-	# Ciclos 2+
+
+	# Ciclos 2+	
 	else:
 		print("VOLVIENDO")
 		mutados = int(round(var.PcentToMutate * float(var.Big_variable["numb_conf"]))) #int(hashtotal["all"])#
@@ -205,45 +221,56 @@ while (var.maxConvergencia != convergenciaObtenida):
 
 	#ZONA 2
 	# Formacion de inputs en formato gaussian u otro programa
+	print("zona 2")
 	if reset == False:
 		for iden in range(len(sistemasLanzar)):
-			Impresora.escribirInput(sistemasNombre[iden],iden,sistemasLanzar[iden])
-			sistemasNombre[iden]=sistemasNombre[iden]+str(iden)
+			#EDIT no va break
+			##Impresora.escribirInput(sistemasNombre[iden],iden,sistemasLanzar[iden])
+			##sistemasNombre[iden]=sistemasNombre[iden]+str(iden)
 			# Impresion data
-			Impresora.escribirArchivoXYZ("PreCoords_"+str(generation),hashtotal["all"],sistemasNombre[iden],sistemasLanzar[iden])
+			##Impresora.escribirArchivoXYZ("PreCoords_"+str(generation),hashtotal["all"],sistemasNombre[iden],sistemasLanzar[iden])
+			break
 
 #####################################
 	# Zona 3
 	# Envio de input a programa de calculo
+	print(sistemasLanzar)
 	print(var.maxConvergencia, "MAX CONVGENCIA")
 	if reset == False:
 		for iden in range(len(sistemasLanzar)):
+			#EDIT
 			#go.envioCluster(var.GaussianCall,sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 			#go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 			#go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
-			GestorEnvio(sistemasNombre,queue,iden,0)
-			time.sleep(0.25)
+		#	GestorEnvio(sistemasNombre,queue,iden,0)
+		#	time.sleep(0.25)
 			# Flag estado
-			lines.append(1)
+		#	lines.append(1)
 			# Contador envio calculo
+			print("Enviando a lanzar")
 			Opportunities.append(1)
 		#pass
 		toKick = []
 		contador=1
 		while True and len(sistemasLanzar):
+			print ("Oportunidades")
+			print (Opportunities)
+		
 			for i in range(len(sistemasLanzar)):
-				if lines[i] != 0:
+				if lines[i] != 0 and lines[i]!=4:
 					lines[i] = Lector.obtenerTermination(sistemasNombre[i]+"."+var.extension)
-
-			if(1 in lines):
-				print(lines)
-				time.sleep(10.0)
-			elif (2 in lines):
+			print(lines)
+			#if(1 in lines):
+			#	print("UNO CORRIENDO")
+			#	print(lines)
+			#	time.sleep(1.0)
+			if (2 in lines):
 				print("Casos erroneos")
-				time.sleep(5.0)
+				time.sleep(1.0)
 				for i in range(len(sistemasLanzar)):
 					if (lines[i] == 2):
 						if(Lector.obtenerEnergia(sistemasNombre[i]+"."+var.extension)!=0):
+							print("Existe Energia para:", sistemasNombre[i])
 							lines[i]=0
 							continue
 						elif(Opportunities[i] < var.treshold):
@@ -251,18 +278,17 @@ while (var.maxConvergencia != convergenciaObtenida):
 							#go.envioCluster(var.GaussianCall,sistemasNombre[i],sistemasNombre[i]+".com",var.Big_variable["core"],queue)
 							#go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 							#go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
-							GestorEnvio(sistemasNombre,queue,i,contador)
-							print("Enviado")
-							lines[i] = 1
+							lines[i] = GestorEnvio(sistemasNombre,queue,i,contador)
 							Opportunities[i]+=1
 						else:
 							print("Eliminando a uno:",sistemasNombre[i])
 							toKick.append(i)
 							lines[i]=0
 						print(lines)
-				time.sleep(20.0)
+				time.sleep(2.0)
 						# Deben ser eliminados los incorrectos para funcoina bien.
 			elif (3 in lines):
+				print("Caso especial : 3!!!")
 				# Atomos muy cercas 1 con otros ... eliminados
 				for i in range(len(sistemasLanzar)):
 					if (lines[i] == 3):
@@ -270,16 +296,24 @@ while (var.maxConvergencia != convergenciaObtenida):
 						#sistemasNombre.remove(sistemasNombre[i])
 						toKick.append(i)
 						lines[i]=0
+			elif(1 in lines):
+				print("Todos son 1")
+				time.sleep(1.0)
+				break
+			elif(4 in lines):
+				print("Envio rezagados modo local")
+				GestorEnvio(sistemasNombre,queue,-1,contador)
+				contador+=1
 			else:
 				break
-			contador+=1
 			pass
-	#print sistemasLanzar
+	#print(sistemasLanzar)
 	#print sistemasNombre
 	#print lines
-	#print toKick
+		toKick.sort()
 		toKick.reverse()
 		for i in toKick:
+			print("Eliminado el ",sistemasNombre[i])
 			del sistemasNombre[i]
 	#print sistemasNombre
 	#exit(1)
@@ -287,6 +321,7 @@ while (var.maxConvergencia != convergenciaObtenida):
 #####################################
 	#Zona 4
 	# Recopilacion de datos.
+	exit(1)
 	if reset == False:
 		del fitness[:]
 		del coords[:]
@@ -294,6 +329,8 @@ while (var.maxConvergencia != convergenciaObtenida):
 		for file in sistemasNombre:
 			#if file not in toKick:
 			tmp = Lector.obtenerCoordenada(file+"."+var.extension)
+			print(tmp)
+			print(Lector.obtenerEnergia(file+"."+var.extension))
 			energy= float(Lector.obtenerEnergia(file+"."+var.extension))
 			transformarNumeroASimbolo(tmp)
 			coords.append(tmp)

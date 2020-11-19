@@ -55,11 +55,13 @@ def obtenerCoordenadaGaussian(file):
 # Busca inforamcion energetica de archivo gaussian de salida. En caso de error retorna 0
 def obtenerEnergiaGaussian(file):
     energy=0
+    print("Scando energia al ",file)
     archivo = open(file,"r")
     rline = archivo.readlines()
     for i in range (len(rline)):
         if "SCF Done:" in rline[i]:
             energy = rline[i].split()[4]
+    print( energy)
     return energy
 
 def obtenerTermination(file):
@@ -69,9 +71,11 @@ def obtenerTermination(file):
         rline = archivo.readlines()
         correcto = 1
         for i in range(len(rline)):
-            if var.Big_variable["software"]=="gaussian":
-                if "combination of multiplicity impossible" in rline[i]:
-                    print("ERROR DE COMBINACION DE MULTIPLICIDAD")
+            if var.Big_variable["software"].lower()=="gaussian":
+                if "combination of multiplicity" in rline[i] and "impossible" in rline[i]:
+                    print("Incorrecto uso de carga/multiplicidad")
+                    print("\nProgram returned:\n")
+                    print(rline[i])
                     exit(1)
                 if "Small interatomic distances encountered:" in rline[i]:
                     correcto = 3
@@ -82,7 +86,7 @@ def obtenerTermination(file):
                 elif "Normal termination" in rline[i]:
                     correcto = 0
                     break
-            if var.Big_variable["software"]=="orca":
+            if var.Big_variable["software"].lower()=="orca":
                 if "Error: multiplicity" in rline[i]:
                     print("ERROR DE COMBINACION DE MULTIPLICIDAD")
                     exit(1)
@@ -98,8 +102,10 @@ def obtenerTermination(file):
                 elif "ORCA TERMINATED NORMALLY" in rline[i]:
                     correcto = 0
                     break
+        print("Se concluye que ",file, " Es ",correcto)
         return correcto
     except (OSError, IOError):
+        print("Error desconocido")
         return 1
 
 #def obtenerTermination(file):
@@ -200,29 +206,29 @@ def obtenerEnergiaOrca_trj(file):
     return energy
 
 def obtenerCoordenada(file):
-    if var.Big_variable["software"] == "orca":
+    if var.Big_variable["software"].lower() == "orca":
         if obtenerCoordenadaOrca(file) == 0:
             return obtenerCoordenadaOrca_trj(file)
         if obtenerCoordenadaOrca(file) != 0:
             return obtenerCoordenadaOrca(file)
         else:
             exit(1)
-    elif var.Big_variable["software"] == "gaussian":
+    elif var.Big_variable["software"].lower() == "gaussian":
         return obtenerCoordenadaGaussian(file)
     else:
         print("Software no disponible, elegir orca o gaussian")
         exit(1)
 
 def obtenerEnergia(file):
-    if var.Big_variable["software"] == "orca":
+    if var.Big_variable["software"].lower() == "orca":
         if obtenerEnergiaOrca(file) == 0:
             return obtenerEnergiaOrca_trj(file)
         if obtenerEnergiaOrca(file) != 0:
             return obtenerEnergiaOrca(file)
         else:
             exit(1)
-    elif var.Big_variable["software"] == "gaussian":
-        obtenerEnergiaGaussian(file)
+    elif var.Big_variable["software"].lower() == "gaussian":
+        return obtenerEnergiaGaussian(file)
     else:
         print("Software no disponible, elegir orca o gaussian")
         exit(1)
