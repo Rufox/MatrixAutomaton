@@ -179,15 +179,18 @@ while (var.maxConvergencia != convergenciaObtenida):
 ##########################################
 	# CROSSING OVER
 	if cruzados != 0:
-		for Crossing in range(0, cruzados):
-			np.random.shuffle(indexsAboveCurfew)
-			plano = Genetic.createRandomPlane()
-			Genetic.posicionEnPlano(plano,coords[indexsAboveCurfew[0]])
-			Genetic.posicionEnPlano(plano,coords[indexsAboveCurfew[1]])
-			finalCoords= Genetic.combinarMolecula(coords[indexsAboveCurfew[0]],coords[indexsAboveCurfew[1]],hashtotal)
-			sistemasLanzar.append(finalCoords)
-			sistemasNombre.append("Child_"+str(generation)+"_")
-			pass
+		if(len(indexsAboveCurfew) != 1):
+			for Crossing in range(0, cruzados):
+				np.random.shuffle(indexsAboveCurfew)
+				plano = Genetic.createRandomPlane()
+				Genetic.posicionEnPlano(plano,coords[indexsAboveCurfew[0]])
+				Genetic.posicionEnPlano(plano,coords[indexsAboveCurfew[1]])
+				finalCoords= Genetic.combinarMolecula(coords[indexsAboveCurfew[0]],coords[indexsAboveCurfew[1]],hashtotal)
+				sistemasLanzar.append(finalCoords)
+				sistemasNombre.append("Child_"+str(generation)+"_")
+				pass
+		else:
+			mutados+=cruzados  #Caso Especial: Solo 1 estrcutura en indexAboveCurfew.
 
 	# MUTACIONES 0.2 y 0.2 de cualquiera de los alpha
 	if mutados != 0:
