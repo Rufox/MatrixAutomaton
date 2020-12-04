@@ -24,7 +24,7 @@ def transformarNumeroASimbolo(coords):
 	nuevo=[coords,nuevo]
 	return nuevo
 def GestorEnvio(sistemasNombre,queue,iden,reset):
-	if(var.Big_variable["job-scheduler"].lower()=="local"):
+	if(var.job_scheduler=="local"):
 		#modo local
 		LANZ = int(math.ceil((iden)/var.bloque))
 		LANZ_Futuro = int(math.ceil((iden+1)/var.bloque))
@@ -36,10 +36,10 @@ def GestorEnvio(sistemasNombre,queue,iden,reset):
 			go.SendLocal(str(reset),LANZ)
 		elif(reset!=0):
 			return 4
-	elif(var.Big_variable["job-scheduler"].lower()=="slurm"):
+	elif(var.job_scheduler=="slurm"):
 		go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+"."+var.software_extensions[var.Big_variable["software"].lower()],var.Big_variable["core"],queue)
 		return 1
-	elif(var.Big_variable["job-scheduler"].lower()=="sge"):
+	elif(var.job_scheduler=="sge"):
 		go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+"."+var.software_extensions[var.Big_variable["software"].lower()],var.Big_variable["core"],queue)
 		return 1
 	else:

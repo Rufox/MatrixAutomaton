@@ -60,6 +60,10 @@ def init():
     global reset
     # Varbiales caso calculo local
     global bloque, resto
+    # Variables ejecucion
+    global job_scheduler, parallel, command
+
+    global shuffleElements
 
     Big_variable = {}
     PCentCloseness = 1.0
@@ -73,6 +77,8 @@ def init():
     alphaNumber = 3
     maxConvergencia = 9
     reset = 0
+
+    shuffleElements = 1
 
 def is_number(d,n):
     is_number = True
@@ -110,6 +116,8 @@ def distribucionCalculos():
 
 def establecerVariablesDefault():
     global Pcent1D,Pcent2D,PcentAtomosMutadosMovimiento,PcentToMutate,PcentToCreate,PcentBestFitness,maxConvergencia,alphanumber,reset, PCentCloseness
+    global job_scheduler,command,parallel
+    global shuffleElements
     print(Big_variable)
     
     if "pcent1d" in Big_variable.keys():
@@ -145,6 +153,18 @@ def establecerVariablesDefault():
     if "reset" in Big_variable.keys():
         is_number("reset",Big_variable["reset"])
         reset = int(Big_variable["reset"])
+
+    if "job-scheduler" in Big_variable.keys():
+        job_scheduler = Big_variable["job-scheduler"].lower()
+    if "parallel" in Big_variable.keys():
+        is_number("parallel",Big_variable["parallel"])
+        parallel = int(Big_variable["parallel"])
+    if "command" in Big_variable.keys():
+        command = Big_variable["command"]
+
+    if "shuffleelements" in Big_variable.keys():
+        is_number("shuffleElements",Big_variable["shuffleelements"])
+        shuffleElements = int(Big_variable["shuffleelements"])
 
 ##
 # VERIFICAR QUE COMMAND EXISTE SI JOB-SCHULDER ES LOCAL

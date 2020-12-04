@@ -203,7 +203,6 @@ def obtenerElementos():
             #print "Estamos en la Funcion"
             #print "ATOMSO",atomos
             for l in range(len(atomos)):
-                print("COSAS")
                 #para el l = 0, o sea para el primero atomo, el de menor radio atomico
                 if l == 0:
                     #creo que esta lista conversion no sirve de mucho XD
@@ -363,14 +362,15 @@ def Llamar(iteraciones, tipo):
                     'Bh' :'264.000' ,'Sg':'266'     ,'Mt' :'268'     ,'Hs' :'277'}
 
     lista_elementos = obtenerElementos()
-    print(lista_elementos)
     #se invierte el orden de los elementos para trabajar desde el primero
     #(deberia haber trabajado con colas para no hacer esta estupidez pero bue)
     #lista_elementos.reverse()
     # Diego: se toman como aleatorio el orden de los elementos
-    np.random.shuffle(lista_elementos)
+    if(var.shuffleElements == 1):
+        np.random.shuffle(lista_elementos)
     #print "Imprimineto lista_elementos"
-    #print lista_elementos
+    print("Orden de adicion: ",lista_elementos)
+    exit(1)
     #esta es una conversion de la lista numeros en enteros, porque estaban como string
     numeros2 = map(int, numeros)
     #print "Imprimiento lista numeros2"
