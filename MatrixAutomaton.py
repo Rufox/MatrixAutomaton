@@ -370,7 +370,7 @@ def Llamar(iteraciones, tipo):
         np.random.shuffle(lista_elementos)
     #print "Imprimineto lista_elementos"
     print("Orden de adicion: ",lista_elementos)
-    exit(1)
+    #exit(1)
     #esta es una conversion de la lista numeros en enteros, porque estaban como string
     numeros2 = map(int, numeros)
     #print "Imprimiento lista numeros2"
