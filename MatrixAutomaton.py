@@ -400,7 +400,8 @@ def Llamar(iteraciones, tipo):
     #print "ACA", grupo_atomico
 
     while iteraciones > 0:
-        np.random.shuffle(lista_elementos)
+        if(var.shuffleElements == 1):
+            np.random.shuffle(lista_elementos)
         print("EMPIEZA CICLO\n")
         posibles_vecinos_completos=[]
         #Se guardan los elementos en lista_elementos, el funcionamiento de 
