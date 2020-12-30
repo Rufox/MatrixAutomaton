@@ -67,7 +67,7 @@ convergenciaObtenida = 0
 calculosterminados = 1 
 hashtotal = var.formulaQuimicaAHash()
 generation = 0
-MinEnergyEver = 0
+MinEnergyEver = 1000
 reset = False
 tiempo_inicial=datetime.now()
 
