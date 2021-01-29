@@ -38,7 +38,7 @@ charge_multi = 0 1
 header = PBE1PBE/SDDAll scf=(maxcycle=512) opt=(cartesian,maxcycle=512)
 ```
 
-### Archivos de salida
+## Archivos de salida
 Luego de una ejecución exitosa del programa, se generarán varios archivos de salida en su directorio de trabajo:
 + 01Finalscoords.xyz: Archivo de formato XYZ que entrega las coordenadas finales de cada especie ordenado de mayor a menor energía.
 + Original\*D_i_j: Población inicial creada con el programa de matrices.
