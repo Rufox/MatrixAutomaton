@@ -6,25 +6,37 @@ El propósito de AUTOMATON 2.0 es encontrar la estructura más estable de un cl�
 + El programa está escrito en el lenguaje computacional Python en sus versiones 2.7 y 3.5.
 + Para la optimización geométrica local y cálculos de energía se utiliza el software de uso comercial para química teórica Gaussian 16, el uso de este software está restringido a los usuarios que dispongan de una licencia válida para la versión de Gaussian y será necesaria para cualquiera de los Sistemas Operativos soportados. En caso de no poseer licencia para Gaussian, se puede utilizar ORCA, que no necesita una licencia pagada para ser ejecutado.
 
-##Archivos de entrada
+## Archivos de entrada
 Config.in es el archivo de configuración, desde donde se obtienen las variables a utilizar por AUTOMATON y por Gaussian/ORCA cuando sea necesario. La mayoría de las variables de este archivo se mantienen iguales independiente del grupo atómico a definir, las variables que deben cambiarse en el archivo de entrada son:
 + Número de estructuras (5N, N = cantidad de átomos). Por ejemplo, si N = 12:
-`numb_conf = 60`
+```plain
+numb_conf = 60
+```
 + Sistema de gestión de trabajos (slurm, sge, local):
-`job-scheduler = slurm`
+```plain
+job-scheduler = slurm
+```
 + Fórmula química para el sistema:
-`chemical_formula = B 8 Be 4`
+```plain
+chemical_formula = B 8 Be 4
+```
 + Software que será utilizado (gaussian u orca):
-`software = gaussian`
+```plain
+software = gaussian
+```
 + Procesador y memoria (GB) que será utilizado para cada cálculo:
 ```plain
 core = 4 
 memory = 4
 ```
 + Carga y multiplicidad del candidato (separados por un espacio):
-`charge_multi = 0 1`
+```plain
+charge_multi = 0 1
+```
 + Palabras clave para Gaussian (header de Gaussian):
-`header = PBE1PBE/SDDAll scf=(maxcycle=512) opt=(cartesian,maxcycle=512)`
+```
+header = PBE1PBE/SDDAll scf=(maxcycle=512) opt=(cartesian,maxcycle=512)
+```
 
 ### Archivos de salida
 Luego de una ejecución exitosa del programa, se generarán varios archivos de salida en su directorio de trabajo:
