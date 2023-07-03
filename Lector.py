@@ -271,7 +271,7 @@ def leerLOGS():
         toRead= "PostCoords_"+str(ciclo-1)+".xyz"
     return ciclo,converg,energia,toRead
 
-def leerInformacionXYZ(file):
+def leerInformacionXYZ(file, type):
     print("Leyendo ",file)
     archivo = open(file,"r")
     rline = archivo.readlines()
@@ -284,20 +284,24 @@ def leerInformacionXYZ(file):
     coords = []
     for i in range(1,len(rline)):
         #print rline[i]
-        if (aux == 1): # ESTAMOS EN LOS NOMBRES Y ENERGIA
+        if (aux == 1 and type==1): # ESTAMOS EN LOS NOMBRES Y ENERGIA
             tmp = float(rline[i].split()[-2])
             #print tmp
             energy.append(tmp)
-        elif aux==0:
-            #print rline[i]
+        elif aux==0 or (aux==1 and type==2):
+            #print ("Segundo else {}".format(rline[i]))
             pass
         else:
 #           words = int(line.split()[1]),
 #                   round(float(line.split()[3]),4),
 #                   round(float(line.split()[4]),4),
 #                   round(float(line.split()[5]),4)
+            #print(rline[i])
             tmp = rline[i].split()
-            na = int(var.atomic_number.index(tmp[0])+1)
+            try:
+                na = int(var.atomic_number.index(tmp[0])+1)
+            except ValueError as e:
+                na = tmp[0]
             words = tmp[0],float(tmp[1]),float(tmp[2]),float(tmp[3]),na
             L = list(words)
             coords.append(L)
@@ -305,12 +309,12 @@ def leerInformacionXYZ(file):
             #print na
         aux+=1
         if (aux==(atom+2)):
-            #print "LINEA siguiente ",rline[i+1]
+            #print ("LINEA siguiente ",rline[i+1])
             tmp_c.append(coords)
             coords = []
             aux=0
             #exit(1)
-    #print tmp_c
+    #print( tmp_c)
     #print energy
     archivo.close()
     return energy, tmp_c

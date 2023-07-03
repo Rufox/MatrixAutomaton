@@ -4,8 +4,10 @@ numb_conf = 15
 
 [CLUSTER]
 
+job-scheduler = sge
 chemical_formula = H 2 O 1
-
+KnownPoblation = 1
+FillPoblation = 1
 [SOFTWARE]
 software = gaussian
 

@@ -91,3 +91,10 @@ def escribirArchivoLog(info):
     input = open("LOGS","a")
     input.write(str(info)+"\n")
     pass
+def GestionManyInputs(name,coordsList):
+    sistemaNombre=[]
+    for xyz in range(0,len(coordsList)):
+        #print(xyz)
+        escribirInput(name,xyz,coordsList[xyz])
+        sistemaNombre.append("{}{}".format(name,xyz))
+    return sistemaNombre

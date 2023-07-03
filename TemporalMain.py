@@ -50,7 +50,11 @@ def GestorEnvio(sistemasNombre,queue,iden,reset):
 
 # Inicializacion de variables globales
 var.init()
-queue = sys.argv[2]
+try:
+	queue = sys.argv[2]
+except IndexError as e:
+	queue = None
+
 # Verificacion y elminacion de archivos innecesarios (otras pruebas)
 #Impresora.crearArchivos()
 # Lectura de archivo de configuracion
@@ -83,6 +87,7 @@ if reset == True:
 	Impresora.escribirArchivoLog("Reiniciado el programa  @ " + tiempo_inicial.strftime('%d/%m/%Y %H:%M:%S'))   
 else:
 	Impresora.escribirArchivoLog("Iniciado el programa @ " + tiempo_inicial.strftime('%d/%m/%Y %H:%M:%S'))
+
 # Ciclo principal de vida, funciona mientras se alcance un nivel de energia constante en un numero de ciclos
 while (var.maxConvergencia != convergenciaObtenida):
 	for filename in glob.glob("BATCH*"):
@@ -93,16 +98,35 @@ while (var.maxConvergencia != convergenciaObtenida):
 	sistemasLanzar = []
 	lines = []
 	Opportunities = []
+	#nuevos = 0
 	# ZONA 1
 	# Creacion de inputs: 
 	# 1 MatrixAutomaton, 2 Recombinacion, 3 Mutacion
 	
 	#Caso especial ciclo 0
 	if calculosterminados != 0:
-		if reset == True:
+		#print(var.KnownPoblation)
+		#print(var.reset)
+		if var.KnownPoblation == 1: 	#hay que lanzar otra
+			#print("OCURRE")
+			blank, coords = Lector.leerInformacionXYZ("KnowPoblation.xyz",2)
+			print(len(coords))
+			#sistemasNombre = Impresora.GestionManyInputs("KP_",coords)
+			#print(sistemasNombre)
+			#nuevos = int(var.Big_variable["numb_conf"]) - len(sistemasNombre)
+			nuevos = int(var.Big_variable["numb_conf"]) - len(coords)
+			mutados = 0
+			cruzados = 0
+			if (nuevos < 0 ):
+				nuevos=0
+			fitness = []
+			energia = []
+			if(var.FillPoblation == 1):
+				nuevos = 0
+		elif reset == True:
 			# Coords = Simbolo X Y Z NumAtomic
 			generation,convergenciaObtenida,MinEnergyEver,read =Lector.leerLOGS()
-			energia, coords =Lector.leerInformacionXYZ(read)
+			energia, coords =Lector.leerInformacionXYZ(read,1)
 			#print "RESET ",generation,convergenciaObtenida,MinEnergyEver
 			#print energia
 			mutados = cruzados = nuevos = 0
@@ -131,7 +155,10 @@ while (var.maxConvergencia != convergenciaObtenida):
 		
 	print("NUEVOS SERAN:",nuevos,mutados,cruzados," Original, Mut, Child")
 	# Matrix Automaton
+	
 	if nuevos > 0:
+		print("nuevos serian: {}".format(nuevos))
+		#exit(0)
 		pob_1d = int(round(float(nuevos)*var.Pcent1D))
 		pob_2d = int(round(float(nuevos)*var.Pcent2D))
 		pob_3d = int(nuevos)- pob_1d - pob_2d
@@ -178,6 +205,7 @@ while (var.maxConvergencia != convergenciaObtenida):
 		#exit(1)
 ##########################################
 	# CROSSING OVER
+#	exit(1)
 	if cruzados != 0:
 		if(len(indexsAboveCurfew) != 1):
 			for Crossing in range(0, cruzados):
@@ -208,10 +236,13 @@ while (var.maxConvergencia != convergenciaObtenida):
 			sistemasNombre.append("MutD_"+str(generation)+"_")
 			sistemasLanzar.append(mutDesp)
 #####################################
-
+	#exit(1)
 	#ZONA 2
 	# Formacion de inputs en formato gaussian u otro programa
 	print("zona 2")
+	#print(sistemasNombre)
+	#print(sistemasLanzar)
+	#exit(1)
 	if reset == False:
 		for iden in range(len(sistemasLanzar)):
 			#EDIT no va break
@@ -219,19 +250,27 @@ while (var.maxConvergencia != convergenciaObtenida):
 			sistemasNombre[iden]=sistemasNombre[iden]+str(iden)
 			# Impresion data
 			Impresora.escribirArchivoXYZ("PreCoords_"+str(generation),hashtotal["all"],sistemasNombre[iden],sistemasLanzar[iden])
+		if (var.KnownPoblation == 1 and calculosterminados != 0):
+			#sistemaNombre = sistemasNombre + (Impresora.GestionManyInputs("KP_",coords))
+			sistemasNombre.extend(Impresora.GestionManyInputs("KP_",coords))
 
 #####################################
 	# Zona 3
 	# Envio de input a programa de calculo
-	print(sistemasLanzar)
-	print(var.maxConvergencia, "MAX CONVGENCIA")
+	#print(sistemasNombre)
+	#print(sistemasLanzar)
+	#print(len(sistemasLanzar))
+	#print(len(sistemasNombre))
+	print(var.maxConvergencia, "MAX CONVERGENCIA")
+	#exit(1)
 	if reset == False:
-		for iden in range(len(sistemasLanzar)):
+		for iden in range(len(sistemasNombre)):
 			#EDIT
 			#go.envioCluster(var.GaussianCall,sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 			#go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 			#go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 			GestorEnvio(sistemasNombre,queue,iden,0)
+	#		print("Enviando {} a cola {} numero {}".format(sistemasNombre[iden],queue,iden))
 			time.sleep(1.25)
 			# Flag estado
 			lines.append(1)
@@ -241,11 +280,11 @@ while (var.maxConvergencia != convergenciaObtenida):
 		#pass
 		toKick = []
 		contador=1
-		while True and len(sistemasLanzar):
+		while True and len(sistemasNombre):
 			print ("Oportunidades")
 			print (Opportunities)
 		
-			for i in range(len(sistemasLanzar)):
+			for i in range(len(sistemasNombre)):
 				if lines[i] != 0 and lines[i]!=4:
 					lines[i] = Lector.obtenerTermination(sistemasNombre[i]+"."+var.extension)
 					time.sleep(0.5)
@@ -254,7 +293,7 @@ while (var.maxConvergencia != convergenciaObtenida):
 			if (2 in lines):
 				print("Casos erroneos")
 				time.sleep(1.0)
-				for i in range(len(sistemasLanzar)):
+				for i in range(len(sistemasNombre)):
 					if (lines[i] == 2):
 						if(Lector.obtenerEnergia(sistemasNombre[i]+"."+var.extension)!=0):
 							print("Existe Energia para:", sistemasNombre[i])
@@ -274,7 +313,7 @@ while (var.maxConvergencia != convergenciaObtenida):
 			elif (3 in lines):
 				print("Caso especial : 3!!!")
 				# Atomos muy cercas 1 con otros ... eliminados
-				for i in range(len(sistemasLanzar)):
+				for i in range(len(sistemasNombre)):
 					if (lines[i] == 3):
 						print("Eliminando a uno:",sistemasNombre[i])
 						#sistemasNombre.remove(sistemasNombre[i])
