@@ -13,7 +13,7 @@ import sys
 import time
 from datetime import datetime
 
-
+import Sorty
 # Caso especial cuando los atomos vienen en formato de numero atomico.
 def transformarNumeroASimbolo(coords):
 	nuevo=coords
@@ -419,5 +419,6 @@ while (var.maxConvergencia != convergenciaObtenida):
 
 #print "FINALIZADO"
 tiempo_final=datetime.now()
+Sorty.main("-l")
 Impresora.escribirArchivoLog("\nProceso Finalizado @ " + tiempo_final.strftime('%d/%m/%Y %H:%M:%S'))
 # exit(0)
