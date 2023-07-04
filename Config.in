@@ -1,6 +1,6 @@
 [GENERAL]
 numb_conf = 15
-
+Extension = log
 
 [CLUSTER]
 

@@ -78,6 +78,11 @@ tiempo_inicial=datetime.now()
 if var.Big_variable["software"] == "orca":
 	var.extension = "out"
 
+try:
+	var.extension = var.Big_variable["extension"]
+except KeyError:
+	pass
+
 if var.reset == 1:
 	reset=True
 
@@ -269,9 +274,9 @@ while (var.maxConvergencia != convergenciaObtenida):
 			#go.envioCluster(var.GaussianCall,sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 			#go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 			#go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
-			GestorEnvio(sistemasNombre,queue,iden,0)
+	#		GestorEnvio(sistemasNombre,queue,iden,0)
 	#		print("Enviando {} a cola {} numero {}".format(sistemasNombre[iden],queue,iden))
-			time.sleep(1.25)
+			time.sleep(0.25)
 			# Flag estado
 			lines.append(1)
 			# Contador envio calculo
