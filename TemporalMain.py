@@ -11,6 +11,7 @@ import os,glob
 import math
 import sys
 import time
+import shutil
 from datetime import datetime
 
 import Sorty
@@ -422,3 +423,21 @@ tiempo_final=datetime.now()
 Sorty.main("-l")
 Impresora.escribirArchivoLog("\nProceso Finalizado @ " + tiempo_final.strftime('%d/%m/%Y %H:%M:%S'))
 # exit(0)
+
+if not os.path.exists("Inputs"):
+    os.makedirs("Inputs")
+if not os.path.exists("Outputs"):
+    os.makedirs("Outputs")
+
+files = glob.glob("*.com")
+for file in files:
+	shutil.move(file,"Inputs")
+files = glob.glob("*.slrm")
+for file in files:
+	shutil.move(file,"Inputs")
+files = glob.glob("*.log")
+for file in files:
+	shutil.move(file,"Outputs")
+files = glob.glob("*.out")
+for file in files:
+	shutil.move(file,"Outputs")
