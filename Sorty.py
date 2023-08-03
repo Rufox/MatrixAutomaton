@@ -51,10 +51,16 @@ def process_file(file):
                 if re.search(r"Full point group", line):
                     pGroup = line.split()[3]
                 if re.search(r"Alpha  occ. eigenvalues", line):
-                    HOMO = float(line.split()[-1])
+                    try:
+                        HOMO = float(line.split()[-1])
+                    except ValueError as e:
+                        pass
                     LUMOFlag = False
                 if (re.search(r"Alpha virt. eigenvalues", line) and LUMOFlag is False):
-                    LUMO = float(line.split()[4])
+                    try:
+                        LUMO = float(line.split()[4])
+                    except ValueError as e:
+                        pass
                     LUMOFlag = True
         if HOMO is not None and LUMO is not None:
             GAP = round(((LUMO - HOMO) * 27.2114),4)
