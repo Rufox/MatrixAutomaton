@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 import Lector
 import Impresora
 import Var as var
@@ -275,8 +275,8 @@ while (var.maxConvergencia != convergenciaObtenida):
 			#go.envioCluster(var.GaussianCall,sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 			#go.slurmCluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
 			#go.SGECluster(sistemasNombre[iden],sistemasNombre[iden]+".com",var.Big_variable["core"],queue)
-	#		GestorEnvio(sistemasNombre,queue,iden,0)
-	#		print("Enviando {} a cola {} numero {}".format(sistemasNombre[iden],queue,iden))
+			GestorEnvio(sistemasNombre,queue,iden,0)
+			print("Enviando {} a cola {} numero {}".format(sistemasNombre[iden],queue,iden))
 			time.sleep(0.25)
 			# Flag estado
 			lines.append(1)
