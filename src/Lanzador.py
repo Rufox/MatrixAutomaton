@@ -31,7 +31,7 @@ def slurmCluster(nombre, file, proc, cola):
         slrm.write("mkdir $D \n")
         slrm.write("cp {}.slrm $D \n".format(nombre))
         slrm.write("cd $D \n")
-        slrm.write("\ng16 <"+str(file)+" > ${SLURM_SUBMIT_DIR}/{}.{}\n".format(nombre,Big_variable.extension))
+        slrm.write("\ng16 <"+str(file)+" > ${SLURM_SUBMIT_DIR}/{}.{}\n".format(nombre,var.Big_variable["extension"]))
     else:
         print("Programa no soportado")
     slrm.close()
