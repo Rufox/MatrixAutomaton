@@ -29,7 +29,7 @@ def slurmCluster(nombre, file, proc, cola):
         slrm.write("\nml g16/B.01\n\n")
         slrm.write("D=\"/tmp/${USER}_${SLURM_JOB_ID}\"\n")
         slrm.write("mkdir $D \n")
-        slrm.write("cp {}.slrm $D \n".format(nombre))
+        slrm.write("cp {} $D \n".format(file))
         slrm.write("cd $D \n")
         slrm.write("\ng16 <"+str(file))
         slrm.write(" > ${SLURM_SUBMIT_DIR}/")
