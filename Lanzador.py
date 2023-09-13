@@ -27,7 +27,7 @@ def slurmCluster(nombre, file, proc, cola):
         slrm.write("#SBATCH -c "+proc+"\n")
         slrm.write("#SBATCH --output=/dev/null\n")
         slrm.write("\nml g16/B.01\n\n")
-        slrm.write("\nsrun g16 "+str(file)+"\n")
+        slrm.write("\ng16 "+str(file)+"\n")
     else:
         print("Programa no soportado")
     slrm.close()
