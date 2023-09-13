@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+import sys
+sys.path.append("src")
+
+
 import Lector
 import Impresora
 import Var as var
@@ -9,7 +13,6 @@ import MatrixAutomaton as Mat
 import numpy as np
 import os,glob
 import math
-import sys
 import time
 import shutil
 from datetime import datetime
