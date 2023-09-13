@@ -27,7 +27,11 @@ def slurmCluster(nombre, file, proc, cola):
         slrm.write("#SBATCH -c "+proc+"\n")
         slrm.write("#SBATCH --output=/dev/null\n")
         slrm.write("\nml g16/B.01\n\n")
-        slrm.write("\ng16 "+str(file)+"\n")
+        slrm.write("D=\"/tmp/${USER}_${SLURM_JOB_ID}\"\n")
+        slrm.write("mkdir $D \n")
+        slrm.write("cp {}.slrm $D \n".format(nombre))
+        slrm.write("cd $D \n")
+        slrm.write("\ng16 <"+str(file)+" > ${SLURM_SUBMIT_DIR}/{}.{}\n".format(nombre,Big_variable.extension))
     else:
         print("Programa no soportado")
     slrm.close()

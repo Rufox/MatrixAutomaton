@@ -2,7 +2,7 @@
 import math
 
 GaussianCall = "Gaussian16"
-extension = "lag"
+extension = "log"
 treshold = 3
 # Diccionarios, no cambiar
 software_extensions = {"orca":"inp", "gaussian":"com"}
