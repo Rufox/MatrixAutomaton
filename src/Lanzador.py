@@ -14,7 +14,6 @@ def slurmCluster(nombre, file, proc, cola):
     slrm = open(nombre+".slrm","w+")
     slrm.write("#!/bin/bash \n")
     slrm.write("#SBATCH --job-name="+nombre+"\n")
-    slrm.write("#SBATCH --partition="+cola+"\n")
     
     if var.Big_variable["software"].lower() == "orca":
         slrm.write("#SBATCH --nodes="+proc+"\n")
@@ -25,8 +24,12 @@ def slurmCluster(nombre, file, proc, cola):
     elif var.Big_variable["software"].lower() == "gaussian":
         slrm.write("#SBATCH --nodes=1\n")
         slrm.write("#SBATCH -c "+proc+"\n")
+        if(var.Big_variable["runonnodes"]!=-1):
+            slrm.write("#SBATCH --nodelist={}\n".format(var.Big_variable["runonnodes"]))
+        else:
+            slrm.write("#SBATCH --partition="+cola+"\n")            
         slrm.write("#SBATCH --output=/dev/null\n")
-        slrm.write("\nml g16/B.01\n\n")
+        slrm.write("\nml g16\n\n")
         slrm.write("D=\"/tmp/${USER}_${SLURM_JOB_ID}\"\n")
         slrm.write("mkdir $D \n")
         slrm.write("cp {} $D \n".format(file))

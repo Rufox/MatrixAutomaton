@@ -118,7 +118,7 @@ while (var.maxConvergencia != convergenciaObtenida):
 		#print(var.reset)
 		if var.KnownPoblation == 1: 	#hay que lanzar otra
 			#print("OCURRE")
-			blank, coords = Lector.leerInformacionXYZ("KnowPoblation.xyz",2)
+			blank, coords = Lector.leerInformacionXYZ("KnownPoblation.xyz",2)
 			print(len(coords))
 			#sistemasNombre = Impresora.GestionManyInputs("KP_",coords)
 			#print(sistemasNombre)

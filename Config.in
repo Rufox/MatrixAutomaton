@@ -1,20 +1,25 @@
 [GENERAL]
 numb_conf = 15
 Extension = log
+chemical_formula = H 2 O 1
 
 [CLUSTER]
 
-job-scheduler = sge
-chemical_formula = H 2 O 1
-KnownPoblation = 1
-FillPoblation = 1
-[SOFTWARE]
-software = gaussian
+job-scheduler = slurm
 
+# La opcion KnownPoblation sirve para leer una poblacion inicial como parte del proceso de busqeuda. el archivo KnownPoblation.xyz debe existir en carpeta para realizar tarea. Si=1, No=0
+KnownPoblation = 0
+# Opcion unida a la anterior, si la poblacion es entregada con anteriorirdad pero no alcanza al numb_conf se llenara con poblacion aleatoria. Si=1, No=0
+FillPoblation = 1
+
+#nodes = esta opcion para listar los nodos a usar en el proceso de optimizacion con gaussian. Los valores debe ir como: n01,n02 (sin espacio)
+#RunOnNodes = n001,n004
+
+[SOFTWARE]
+
+software = gaussian
 core = 4
 memory = 4
-
 charge_multi = 0 1
-
 header = PBE1PBE/SDDAll scf=(maxcycle=512) opt=(cartesian,maxcycle=512)
 

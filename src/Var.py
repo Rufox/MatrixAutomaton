@@ -67,6 +67,7 @@ def init():
 
     global KnownPoblation,FillPoblation
 
+    global RunOnNodes
     Big_variable = {}
     PCentCloseness = 1.0
     Pcent1D = 0.1
@@ -83,6 +84,8 @@ def init():
     shuffleElements = 1
     KnownPoblation = 0      # 0 Poblacion de 0, 1 poblacion Conocida
     FillPoblation = 0       # 0 Rellenar, 1 No rellenar
+
+    RunOnNodes=-1
 def is_number(d,n):
     is_number = True
     try:
@@ -122,6 +125,7 @@ def establecerVariablesDefault():
     global job_scheduler,command,parallel
     global shuffleElements
     global KnownPoblation,FillPoblation
+    global RunOnNodes
     print(Big_variable)
 
     if "pcent1d" in Big_variable.keys():
@@ -176,6 +180,8 @@ def establecerVariablesDefault():
     if "fillpoblation" in Big_variable.keys():
         is_number("FillPoblation",Big_variable["fillpoblation"])
         FillPoblation = int(Big_variable["fillpoblation"])
+    if "runonnodes" in Big_variable.keys():
+        RunOnNodes = Big_variable["runonnodes"]
 ##
-##
+##RunOnNodes
 # VERIFICAR QUE COMMAND EXISTE SI JOB-SCHULDER ES LOCAL
